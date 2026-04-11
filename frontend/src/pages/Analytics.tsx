@@ -3,6 +3,8 @@ import { campaignsApi, analyticsApi } from "../lib/api";
 import { PerformanceTrends } from "../components/dashboard/PerformanceTrends";
 import { FunnelVisualization } from "../components/analytics/FunnelVisualization";
 import { AudienceInsights } from "../components/analytics/AudienceInsights";
+import { TopCreatives } from "../components/analytics/TopCreatives";
+import { PeakConversions } from "../components/analytics/PeakConversions";
 import { Header } from "../components/shared/Header";
 import { useState } from "react";
 import type { Campaign } from "../types";
@@ -184,10 +186,24 @@ export function Analytics() {
         )}
 
         {/* Funnel + Audience */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {loadingFunnel ? <Skeleton className="h-96" /> : <FunnelVisualization steps={funnel} />}
           {loadingAudience ? <Skeleton className="h-96" /> : <AudienceInsights segments={audience} />}
         </div>
+
+        {/* Creative Performance + Peak Conversions */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <span className="material-symbols-outlined text-primary text-lg">layers</span>
+            <h3 className="font-serif text-xl font-bold text-on-surface">Creative & Time Intelligence</h3>
+            <div className="flex-1 h-px bg-outline-variant/20" />
+          </div>
+          <p className="text-stone-400 text-sm -mt-1">Identify which creatives convert best and when your audience is most active.</p>
+        </div>
+
+        <TopCreatives />
+        <PeakConversions />
+
       </main>
     </div>
   );

@@ -45,9 +45,6 @@ class BudgetStrategist(BaseAgent):
             optimization = await self.ai.optimize_budget(perf_data, total_daily_budget, user_goals)
 
             created = 0
-            # Sort campaigns: underperformers first (low ROAS)
-            sorted_campaigns = sorted(perf_data, key=lambda x: x.get("roas", 0))
-
             for campaign in perf_data:
                 roas = campaign.get("roas", 0)
                 target_roas = user.target_roas or 3.0
