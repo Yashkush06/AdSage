@@ -53,13 +53,6 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* New Campaign Button */}
-      <div className="mt-auto p-2">
-        <button className="w-full bg-gradient-to-br from-primary to-primary-container text-white py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-medium shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all active:scale-[0.98]">
-          <span className="material-symbols-outlined text-sm">add</span>
-          <span className="text-[11px] font-sans font-bold uppercase tracking-widest">New Campaign</span>
-        </button>
-      </div>
 
       {/* User Context */}
       <div className="mt-4 pt-4 border-t border-outline-variant/20 px-2">
