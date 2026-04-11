@@ -5,6 +5,8 @@ import { Header } from "../components/shared/Header";
 import { useState } from "react";
 import type { Campaign, CampaignInsights } from "../types";
 import { formatCurrency, formatRoas } from "../lib/utils";
+import { motion } from "framer-motion";
+import { Reveal, Revealstagger } from "../components/shared/Reveal";
 
 function CampaignRow({ campaign, onSelect, selected }: {
   campaign: Campaign;
@@ -24,9 +26,12 @@ function CampaignRow({ campaign, onSelect, selected }: {
   };
 
   return (
-    <tr
+    <motion.tr
+      initial={{ opacity: 0, x: -10 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
       onClick={() => onSelect(campaign)}
-      className={`group hover:bg-surface-container-low/30 transition-colors cursor-pointer ${selected ? "bg-secondary-container/10" : ""}`}
+      className={`group hover:bg-white/5 transition-colors cursor-pointer ${selected ? "bg-primary/10" : ""}`}
     >
       <td className="px-6 py-6">
         <div className="flex items-center gap-4">
@@ -68,7 +73,7 @@ function CampaignRow({ campaign, onSelect, selected }: {
           <span className="material-symbols-outlined text-xl">more_horiz</span>
         </button>
       </td>
-    </tr>
+    </motion.tr>
   );
 }
 
@@ -90,39 +95,43 @@ export function Campaigns() {
       <Header title="Campaign Archives" subtitle="Inventory of Marketing Efforts" />
       
       <main className="p-8 max-w-7xl mx-auto space-y-8 animate-fade-in w-full">
-        {/* Bento Stats Header */}
-        <div className="grid grid-cols-12 gap-6 mb-12">
-          <div className="col-span-12 lg:col-span-7 bg-surface-container-lowest rounded-xl p-8 border border-outline-variant/10 shadow-sm relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-container/5 rounded-full -mr-20 -mt-20 blur-3xl group-hover:bg-primary-container/10 transition-colors duration-500"></div>
-            <div className="relative z-10">
-              <span className="label-md text-primary font-bold tracking-widest text-[10px] uppercase mb-4 block">Archive Efficiency</span>
-              <h3 className="display-sm text-4xl font-serif text-on-surface mb-2">3.4x ROAS</h3>
-              <p className="text-stone-500 body-md max-w-md">Your active campaigns are outperforming the seasonal benchmark by 24%. Recommended: Scale active assets.</p>
-              <div className="mt-8 flex gap-4">
-                <button className="text-primary text-[12px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:translate-x-1 transition-transform">
-                  Explore Insights <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                </button>
+        <Revealstagger>
+          {/* Bento Stats Header */}
+          <Reveal delay={0.1}>
+            <div className="grid grid-cols-12 gap-6 mb-12">
+              <div className="col-span-12 lg:col-span-7 glass-card p-8 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-20 -mt-20 blur-3xl group-hover:bg-primary/10 transition-colors duration-500"></div>
+                <div className="relative z-10">
+                  <span className="label-md text-primary font-bold tracking-widest text-[10px] uppercase mb-4 block">Archive Efficiency</span>
+                  <h3 className="display-sm text-4xl font-serif text-white mb-2">3.4x ROAS</h3>
+                  <p className="text-stone-400 body-md max-w-md">Your active campaigns are outperforming the seasonal benchmark by 24%. Recommended: Scale active assets.</p>
+                  <div className="mt-8 flex gap-4">
+                    <button className="text-primary text-[12px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                      Explore Insights <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="col-span-6 lg:col-span-2 bg-primary/10 backdrop-blur-md rounded-2xl p-6 border border-white/5 flex flex-col justify-between">
+                <span className="material-symbols-outlined text-primary mb-4">payments</span>
+                <div>
+                  <p className="text-stone-500 text-[10px] uppercase tracking-widest mb-1 font-bold">Total Spend</p>
+                  <p className="text-xl font-serif text-white">$12,480</p>
+                </div>
+              </div>
+              <div className="col-span-6 lg:col-span-3 bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/5 relative">
+                <div className="flex items-start justify-between mb-8">
+                  <span className="material-symbols-outlined text-primary">trending_up</span>
+                  <div className="px-2 py-1 bg-primary/20 rounded-full text-[10px] text-primary font-bold">+12%</div>
+                </div>
+                <div>
+                  <p className="text-stone-500 text-[10px] uppercase tracking-widest mb-1 font-bold">Conversion Growth</p>
+                  <p className="text-xl font-serif text-white">Across 12 Active</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-span-6 lg:col-span-2 bg-secondary-container/30 rounded-xl p-6 border border-outline-variant/10 flex flex-col justify-between">
-            <span className="material-symbols-outlined text-primary mb-4">payments</span>
-            <div>
-              <p className="text-stone-400 text-[10px] uppercase tracking-widest mb-1">Total Spend</p>
-              <p className="text-xl font-serif text-on-surface">$12,480</p>
-            </div>
-          </div>
-          <div className="col-span-6 lg:col-span-3 bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 relative">
-            <div className="flex items-start justify-between mb-8">
-              <span className="material-symbols-outlined text-primary">trending_up</span>
-              <div className="px-2 py-1 bg-secondary-container rounded-full text-[10px] text-on-secondary-container font-bold">+12%</div>
-            </div>
-            <div>
-              <p className="text-stone-400 text-[10px] uppercase tracking-widest mb-1">Conversion Growth</p>
-              <p className="text-xl font-serif text-on-surface">Across 12 Active</p>
-            </div>
-          </div>
-        </div>
+          </Reveal>
+        </Revealstagger>
 
         {/* Filters */}
         <div className="flex items-center justify-between mb-6">
@@ -147,7 +156,8 @@ export function Campaigns() {
         </div>
 
         {/* Table */}
-        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden mb-12">
+        <Reveal delay={0.4} y={40}>
+          <div className="glass-card overflow-hidden mb-12">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-container-low/50">
@@ -182,6 +192,7 @@ export function Campaigns() {
             </div>
           </div>
         </div>
+        </Reveal>
       </main>
     </div>
   );

@@ -5,7 +5,7 @@ import { LoadingSpinner } from "../components/shared/LoadingStates";
 import { Header } from "../components/shared/Header";
 
 export function Settings() {
-  const { user, setUser } = useAppStore();
+  const { user, setUser, performanceMode } = useAppStore();
   const [form, setForm] = useState({
     business_name: user?.business_name || "",
     industry:      user?.industry || "",
@@ -55,7 +55,7 @@ export function Settings() {
     <div className="space-y-2">
       <label className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">{label}</label>
       <input
-        className="w-full bg-white border border-outline-variant/30 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-on-surface"
+        className="w-full bg-[#1a1c24] border border-outline-variant/30 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-white"
         type={type}
         value={form[key]}
         onChange={(e) => setForm({ ...form, [key]: e.target.value })}
@@ -119,7 +119,7 @@ export function Settings() {
            
            <div className="flex items-center gap-4">
               <select
-                className="bg-white border border-outline-variant/30 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium"
+                className="bg-[#1a1c24] border border-outline-variant/30 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium text-white"
                 value={simHours}
                 onChange={(e) => setSimHours(Number(e.target.value))}
               >
@@ -130,13 +130,43 @@ export function Settings() {
               <button 
                 onClick={simulate} 
                 disabled={simming}
-                className="flex-[2] py-4 bg-white border border-outline-variant/30 text-stone-600 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-stone-50 transition-colors flex items-center justify-center gap-2"
+                className="flex-[2] py-4 bg-surface-container border border-outline-variant/30 text-stone-400 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-surface-container-high hover:text-white transition-colors flex items-center justify-center gap-2"
               >
                 {simming ? <LoadingSpinner size={14} /> : <span className="material-symbols-outlined text-lg">fast_forward</span>}
                 Simulate Shift
               </button>
            </div>
            {simMsg && <p className="text-xs font-bold text-primary animate-fade-in">{simMsg}</p>}
+        </section>
+
+        {/* Performance / Fidelity */}
+        <section className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/10 shadow-sm space-y-6">
+           <div className="flex items-center gap-2 text-primary mb-2">
+              <span className="material-symbols-outlined text-xl">speed</span>
+              <h3 className="font-serif text-xl font-bold">Observatory Fidelity</h3>
+           </div>
+           <p className="text-sm text-stone-500 leading-relaxed max-w-md">
+             Adjust the rendering density of the 3D ecosystem. "Auto" will dynamically scale based on your hardware.
+           </p>
+           
+           <div className="flex bg-[#1a1c24] p-1 rounded-xl border border-outline-variant/20">
+              {(['auto', 'low', 'high'] as const).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => {
+                    const { setPerformanceMode } = useAppStore.getState();
+                    setPerformanceMode(mode);
+                  }}
+                  className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${
+                    performanceMode === mode 
+                      ? 'bg-primary text-white shadow-lg' 
+                      : 'text-stone-500 hover:text-stone-300'
+                  }`}
+                >
+                  {mode}
+                </button>
+              ))}
+           </div>
         </section>
 
         {/* Security / Info */}

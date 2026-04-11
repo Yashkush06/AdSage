@@ -4,7 +4,7 @@ import { useAppStore } from "../../lib/store";
 const items = [
   { to: "/",          icon: "dashboard", label: "Dashboard" },
   { to: "/campaigns", icon: "campaign",  label: "Campaigns" },
-  { to: "/creative-studio", icon: "draw", label: "Creative Studio" },
+  { to: "/activity",  icon: "history",   label: "Activity" },
   { to: "/analytics", icon: "analytics", label: "Analytics" },
   { to: "/approvals", icon: "fact_check", label: "Approvals" },
   { to: "/settings",  icon: "settings",   label: "Settings" },
@@ -14,7 +14,7 @@ export function Sidebar() {
   const { user } = useAppStore();
 
   return (
-    <aside className="h-screen w-64 fixed left-0 top-0 bg-[#f6f3ee] flex flex-col p-4 gap-2 z-50">
+    <aside className="h-screen w-64 fixed left-0 top-0 bg-[#0b0c11] border-r border-outline-variant/10 flex flex-col p-4 gap-2 z-50">
       {/* Brand Logo */}
       <div className="px-2 py-4 mb-6">
         <div className="flex items-center gap-3">
@@ -40,8 +40,8 @@ export function Sidebar() {
             className={({ isActive }) => 
               `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 group ${
                 isActive 
-                  ? "bg-[#e5e2dd] text-primary" 
-                  : "text-stone-500 hover:text-primary hover:bg-[#e5e2dd]/50"
+                  ? "bg-primary text-white shadow-lg shadow-primary/20" 
+                  : "text-stone-500 hover:text-white hover:bg-white/5"
               }`
             }
           >
@@ -53,6 +53,13 @@ export function Sidebar() {
         ))}
       </nav>
 
+      {/* New Campaign Button */}
+      <div className="mt-auto p-2">
+        <button className="w-full bg-gradient-to-br from-primary to-primary-container text-white py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-medium shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all active:scale-[0.98]">
+          <span className="material-symbols-outlined text-sm">add</span>
+          <span className="text-[11px] font-sans font-bold uppercase tracking-widest">New Campaign</span>
+        </button>
+      </div>
 
       {/* User Context */}
       <div className="mt-4 pt-4 border-t border-outline-variant/20 px-2">

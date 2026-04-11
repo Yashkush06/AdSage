@@ -1,5 +1,5 @@
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
+  Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, AreaChart, Area,
 } from "recharts";
 import type { DailyTrendRow } from "../../types";
@@ -46,7 +46,7 @@ export function PerformanceTrends({ data, title = "Performance Trend" }: Props) 
     }));
 
   return (
-    <div className="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/20 shadow-sm relative overflow-hidden h-full">
+    <div className="bg-surface-container p-8 rounded-xl border border-outline-variant/10 shadow-sm relative overflow-hidden h-full">
       <div className="flex justify-between items-center mb-12">
         <div>
           <h4 className="font-serif text-2xl font-bold">{title}</h4>
@@ -69,11 +69,11 @@ export function PerformanceTrends({ data, title = "Performance Trend" }: Props) 
           <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#566252" stopOpacity={0.1}/>
-                <stop offset="95%" stopColor="#566252" stopOpacity={0}/>
+                <stop offset="5%" stopColor="#FF3B3B" stopOpacity={0.2}/>
+                <stop offset="95%" stopColor="#FF3B3B" stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <CartesianGrid stroke="#e5e2dd" vertical={false} strokeDasharray="3 3" opacity={0.5} />
+            <CartesianGrid stroke="#374151" vertical={false} strokeDasharray="3 3" opacity={0.2} />
             <XAxis
               dataKey="date"
               tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 700 }}
@@ -92,17 +92,17 @@ export function PerformanceTrends({ data, title = "Performance Trend" }: Props) 
               type="monotone"
               dataKey="revenue"
               name="Revenue"
-              stroke="#566252"
+              stroke="#FF3B3B"
               strokeWidth={3}
               fillOpacity={1}
               fill="url(#colorRev)"
-              activeDot={{ r: 6, strokeWidth: 0, fill: "#566252" }}
+              activeDot={{ r: 6, strokeWidth: 0, fill: "#FF3B3B" }}
             />
             <Line
                 type="monotone"
                 dataKey="spend"
                 name="Expenditure"
-                stroke="#a8b5a2"
+                stroke="#690005"
                 strokeWidth={2}
                 dot={false}
                 strokeDasharray="5 5"

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import type { AgentActivity } from "../../types";
 import { timeAgo } from "../../lib/utils";
 
@@ -49,7 +50,7 @@ export function AgentActivityFeed({ activity, isLoading }: Props) {
         ) : (
           activity.slice(0, 15).map((log) => (
             <div key={log.id} className="relative pl-10 flex flex-col gap-1 animate-fade-in group">
-              <div className="absolute left-0 top-1.5 w-8 h-8 rounded-full bg-white border border-outline-variant/40 flex items-center justify-center z-10 shadow-sm group-hover:border-primary transition-all">
+              <div className="absolute left-0 top-1.5 w-8 h-8 rounded-full bg-[#1a1c24] border border-outline-variant/30 flex items-center justify-center z-10 shadow-sm group-hover:border-primary transition-all">
                 <span className={`material-symbols-outlined text-[16px] ${AGENT_COLORS[log.agent_name] || 'text-primary'}`}>
                   {AGENT_ICONS[log.agent_name] || 'info'}
                 </span>
@@ -67,9 +68,11 @@ export function AgentActivityFeed({ activity, isLoading }: Props) {
         <div ref={bottomRef} />
       </div>
       
-      <button className="w-full mt-8 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-primary border border-primary/20 rounded-xl hover:bg-primary/5 transition-all">
-        View Full History
-      </button>
+      <Link to="/activity" className="w-full">
+        <button className="w-full mt-8 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-primary border border-primary/20 rounded-xl hover:bg-primary/5 transition-all">
+          View Full History
+        </button>
+      </Link>
     </div>
   );
 }

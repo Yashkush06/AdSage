@@ -11,7 +11,7 @@ interface Props {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white p-4 rounded-xl border border-outline-variant shadow-xl font-body text-[10px] uppercase font-bold tracking-widest text-primary">
+    <div className="bg-[#1a1c24] p-4 rounded-xl border border-outline-variant shadow-xl font-body text-[10px] uppercase font-bold tracking-widest text-[#FF3B3B]">
       <p className="border-b border-outline-variant/10 pb-2 mb-2">{label}</p>
       {payload.map((p: any) => (
         <div key={p.dataKey} className="flex justify-between gap-4 py-0.5" style={{ color: p.color }}>
@@ -45,7 +45,7 @@ export function AudienceInsights({ segments }: Props) {
           <h4 className="font-serif text-xl font-bold">Audience Pulse</h4>
           <p className="text-stone-400 text-xs tracking-tight">Performance by Demographics</p>
         </div>
-        <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest bg-white border border-outline-variant/20 px-4 py-2 rounded-full shadow-sm">
+        <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest bg-[#1a1c24] border border-outline-variant/20 px-4 py-2 rounded-full shadow-sm">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-primary"></div>
             <span>Male</span>
@@ -60,7 +60,7 @@ export function AudienceInsights({ segments }: Props) {
       <div className="h-56 w-full mb-8">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 0, right: 0, left: -25, bottom: 0 }}>
-            <CartesianGrid stroke="#e5e2dd" vertical={false} strokeDasharray="3 3" opacity={0.5} />
+            <CartesianGrid stroke="#374151" vertical={false} strokeDasharray="3 3" opacity={0.2} />
             <XAxis 
               dataKey="age" 
               tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 700 }} 
@@ -73,9 +73,9 @@ export function AudienceInsights({ segments }: Props) {
               axisLine={false} 
               tickFormatter={(v) => `${v}x`} 
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f6f3ee' }} />
-            <Bar dataKey="Male ROAS" fill="#566252" radius={[4, 4, 0, 0]} barSize={24} />
-            <Bar dataKey="Female ROAS" fill="#a8b5a2" radius={[4, 4, 0, 0]} barSize={24} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: '#1a1c24' }} />
+            <Bar dataKey="Male ROAS" fill="#FF3B3B" radius={[4, 4, 0, 0]} barSize={24} />
+            <Bar dataKey="Female ROAS" fill="#690005" radius={[4, 4, 0, 0]} barSize={24} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -88,7 +88,7 @@ export function AudienceInsights({ segments }: Props) {
           .map((s) => (
             <div
               key={`${s.age}-${s.gender}`}
-              className="group flex items-center justify-between p-4 bg-white border border-outline-variant/30 rounded-xl hover:border-primary transition-all duration-300"
+              className="group flex items-center justify-between p-4 bg-[#1a1c24] border border-outline-variant/10 rounded-xl hover:border-primary transition-all duration-300"
             >
               <div className="flex items-center gap-4">
                 <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center">

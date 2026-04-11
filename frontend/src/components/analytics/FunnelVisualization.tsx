@@ -34,8 +34,8 @@ export function FunnelVisualization({ steps }: Props) {
             <div key={step.step} className="group relative">
               <div className="flex justify-between items-end mb-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-white border border-outline-variant/30 flex items-center justify-center shadow-sm group-hover:border-primary transition-colors">
-                    <span className="material-symbols-outlined text-[16px] text-stone-500">
+                  <div className="w-8 h-8 rounded-lg bg-[#1a1c24] border border-outline-variant/30 flex items-center justify-center shadow-sm group-hover:border-primary transition-colors">
+                    <span className="material-symbols-outlined text-[16px] text-stone-400">
                       {getStepIcon(step.label)}
                     </span>
                   </div>
@@ -54,9 +54,9 @@ export function FunnelVisualization({ steps }: Props) {
                 </div>
               </div>
               
-              <div className="h-2 bg-stone-100/50 rounded-full overflow-hidden border border-outline-variant/10">
+              <div className="h-2 bg-white/5 rounded-full overflow-hidden border border-outline-variant/10">
                 <div
-                  className="h-full bg-primary rounded-full transition-all duration-1000 ease-out group-hover:bg-primary-container"
+                  className="h-full bg-primary rounded-full transition-all duration-1000 ease-out group-hover:bg-primary-container shadow-[0_0_8px_rgba(255,59,59,0.3)]"
                   style={{ width: `${pct}%` }}
                 />
               </div>
