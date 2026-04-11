@@ -83,3 +83,10 @@ async def get_insights(current_user: User = Depends(get_current_user)):
             perf_data.append({**c, **ins})
     insights = await ai.generate_insights(overview, perf_data)
     return {"success": True, "insights": insights}
+
+
+@router.post("/agent/run")
+async def run_agent(db: Session = Depends(get_db)):
+    orchestrator = AgentOrchestrator(user_id=1)
+    result = await orchestrator.run_cycle(db=db)
+    return {"status": "done", "result": result}
