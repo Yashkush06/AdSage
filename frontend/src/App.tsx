@@ -8,6 +8,7 @@ import { Campaigns }  from "./pages/Campaigns";
 import { Settings }   from "./pages/Settings";
 import { Onboarding } from "./pages/Onboarding";
 import { CsvImport } from "./pages/CsvImport";
+import { CreativeStudio } from "./pages/CreativeStudio";
 import { useAppStore } from "./lib/store";
 
 const qc = new QueryClient({
@@ -29,6 +30,7 @@ function AppLayout() {
           <Route path="/approvals" element={<Approvals />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/csv-import" element={<CsvImport />} />
+          <Route path="/creative-studio" element={<CreativeStudio />} />
           <Route path="/campaigns" element={<Campaigns />} />
           <Route path="/settings"  element={<Settings />} />
         </Routes>

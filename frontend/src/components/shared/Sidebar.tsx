@@ -4,6 +4,7 @@ import { useAppStore } from "../../lib/store";
 const items = [
   { to: "/",          icon: "dashboard", label: "Dashboard" },
   { to: "/campaigns", icon: "campaign",  label: "Campaigns" },
+  { to: "/creative-studio", icon: "draw", label: "Creative Studio" },
   { to: "/analytics", icon: "analytics", label: "Analytics" },
   { to: "/approvals", icon: "fact_check", label: "Approvals" },
   { to: "/settings",  icon: "settings",   label: "Settings" },

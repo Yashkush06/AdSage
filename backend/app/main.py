@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import create_tables, SessionLocal
-from app.api import auth, campaigns, approvals, analytics, websocket, csv_upload
+from app.api import auth, campaigns, approvals, analytics, websocket, csv_upload, creative_studio
 from app.models import *  # noqa: F401 — ensure all models are registered
 from app.services.scheduler import start_scheduler, stop_scheduler
 import logging
@@ -34,7 +34,8 @@ app.include_router(campaigns.router, prefix="/api/campaigns", tags=["Campaigns"]
 app.include_router(approvals.router, prefix="/api/approvals", tags=["Approvals"])
 app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"])
 app.include_router(websocket.router,    tags=["WebSocket"])
-app.include_router(csv_upload.router,  prefix="/api/csv", tags=["CSV Import"])
+app.include_router(csv_upload.router,        prefix="/api/csv",             tags=["CSV Import"])
+app.include_router(creative_studio.router,   prefix="/api/creative-studio",  tags=["Creative Studio"])
 
 
 def _ensure_demo_user():
