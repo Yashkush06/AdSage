@@ -1,0 +1,49 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Sidebar } from "./components/shared/Sidebar";
+import { Dashboard } from "./pages/Dashboard";
+import { Approvals }  from "./pages/Approvals";
+import { Analytics }  from "./pages/Analytics";
+import { Campaigns }  from "./pages/Campaigns";
+import { Settings }   from "./pages/Settings";
+import { Onboarding } from "./pages/Onboarding";
+import { useAppStore } from "./lib/store";
+
+const qc = new QueryClient({
+  defaultOptions: {
+    queries: { retry: 1, staleTime: 30_000 },
+  },
+});
+
+function AppLayout() {
+  const { onboarded } = useAppStore();
+  if (!onboarded) return <Navigate to="/onboarding" replace />;
+
+  return (
+    <div style={{ display: "flex", minHeight: "100vh" }}>
+      <Sidebar />
+      <main style={{ flex: 1, overflowY: "auto", background: "var(--bg-base)" }}>
+        <Routes>
+          <Route path="/"          element={<Dashboard />} />
+          <Route path="/approvals" element={<Approvals />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/campaigns" element={<Campaigns />} />
+          <Route path="/settings"  element={<Settings />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <QueryClientProvider client={qc}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/*"          element={<AppLayout />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
+  );
+}
