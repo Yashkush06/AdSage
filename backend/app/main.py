@@ -4,6 +4,7 @@ from app.core.config import settings
 from app.core.database import create_tables, SessionLocal
 from app.api import auth, campaigns, approvals, analytics, websocket
 from app.models import *  # noqa: F401 — ensure all models are registered
+from app.services.scheduler import start_scheduler, stop_scheduler
 import logging
 
 logging.basicConfig(
@@ -66,7 +67,18 @@ async def startup():
     logger.info(f"Starting {settings.APP_NAME} — HACKATHON DEMO MODE")
     create_tables()
     _ensure_demo_user()
+    # Start background agent scheduler
+    start_scheduler(
+        interval_seconds=getattr(settings, "AGENT_CYCLE_INTERVAL_SECONDS", 300),
+        demo_user_id=settings.DEMO_USER_ID,
+    )
     logger.info("Ready ✓")
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    stop_scheduler()
+    logger.info("Scheduler stopped")
 
 
 @app.get("/")

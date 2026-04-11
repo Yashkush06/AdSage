@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     # Agent Configuration
     AUTO_PAUSE_CPA_MULTIPLIER: float = 3.0
     AUTO_SCALE_ROAS_THRESHOLD: float = 3.5
+    AGENT_CYCLE_INTERVAL_SECONDS: int = 300  # 5 minutes
 
     # Demo hardcoded user
     DEMO_USER_ID: int = 1

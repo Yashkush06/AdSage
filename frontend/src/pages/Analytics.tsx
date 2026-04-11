@@ -47,7 +47,11 @@ export function Analytics() {
   const trends   = trendRes?.data?.trends || [];
   const funnel   = funnelRes?.data?.funnel?.funnel_steps || [];
   const audience = audienceRes?.data?.breakdown?.audience_segments || [];
-  const insights = insightsRes?.data?.insights;
+  const rawInsights = insightsRes?.data?.insights;
+  // Only use insights if it has the expected weekly narrative shape
+  const insights = rawInsights?.headline && rawInsights?.week_rating != null
+    ? rawInsights
+    : null;
 
   return (
     <div style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>

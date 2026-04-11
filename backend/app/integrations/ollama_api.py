@@ -1,7 +1,7 @@
 """
 Ollama Cloud API client.
-Sends campaign data to gpt-oss:120b-cloud for AI analysis.
-Falls back gracefully with structured mock if API key is missing.
+Uses https://ollama.com/api/chat (native Ollama format) with deepseek-v3.1:671b-cloud.
+Falls back gracefully to structured mock if API key is missing or unreachable.
 """
 
 import httpx
@@ -12,45 +12,68 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
+# Keys that should be treated as "not configured" → use mock
+_PLACEHOLDER_KEYS = {"", "your_ollama_api_key_here", "your-api-key", "sk-xxx"}
+
 
 class OllamaClient:
     def __init__(self):
-        self.base_url = settings.OLLAMA_API_URL.rstrip("/")
+        # Ollama Cloud native endpoint — always https://ollama.com/api
+        self.base_url = "https://ollama.com/api"
         self.api_key = settings.OLLAMA_API_KEY
-        self.model = settings.OLLAMA_MODEL
+        self.model = settings.OLLAMA_MODEL          # e.g. deepseek-v3.1:671b-cloud
         self.max_tokens = settings.AI_MAX_TOKENS
         self.temperature = settings.AI_TEMPERATURE
         self.timeout = settings.AI_TIMEOUT
 
     async def _chat(self, system: str, user: str) -> str:
-        """Low-level chat completion call"""
-        if not self.api_key:
-            logger.warning("No Ollama API key — returning mock AI response")
+        """
+        Calls https://ollama.com/api/chat (Ollama native format).
+        Falls back to mock on missing key or any network/API error.
+        """
+        if not self.api_key or self.api_key.strip() in _PLACEHOLDER_KEYS:
+            logger.info("Ollama API key not configured — using mock AI response")
             return self._mock_response(user)
 
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
         }
+        # Ollama Cloud native format — NOT OpenAI /v1/chat/completions
         payload = {
             "model": self.model,
             "messages": [
                 {"role": "system", "content": system},
                 {"role": "user",   "content": user},
             ],
-            "max_tokens": self.max_tokens,
-            "temperature": self.temperature,
+            "stream": False,
+            "options": {
+                "temperature": self.temperature,
+                "num_predict": self.max_tokens,
+            },
         }
 
-        async with httpx.AsyncClient(timeout=self.timeout) as client:
-            resp = await client.post(
-                f"{self.base_url}/chat/completions",
-                headers=headers,
-                json=payload,
-            )
-            resp.raise_for_status()
-            data = resp.json()
-            return data["choices"][0]["message"]["content"]
+        try:
+            logger.info(f"Calling Ollama Cloud: POST {self.base_url}/chat model={self.model}")
+            async with httpx.AsyncClient(timeout=self.timeout) as client:
+                resp = await client.post(
+                    f"{self.base_url}/chat",
+                    headers=headers,
+                    json=payload,
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                # Ollama native response: {"message": {"role": "assistant", "content": "..."}}
+                return data["message"]["content"]
+        except httpx.ConnectError as e:
+            logger.warning(f"Ollama unreachable ({e}) — using mock AI response")
+            return self._mock_response(user)
+        except httpx.HTTPStatusError as e:
+            logger.warning(f"Ollama HTTP {e.response.status_code} — {e.response.text[:200]} — using mock")
+            return self._mock_response(user)
+        except Exception as e:
+            logger.warning(f"Ollama error ({type(e).__name__}: {e}) — using mock AI response")
+            return self._mock_response(user)
 
     # ------------------------------------------------------------------
     # Agent methods
@@ -107,6 +130,23 @@ class OllamaClient:
         raw = await self._chat(system, user)
         return self._parse_json(raw, {"scaling_candidates": [], "overall_growth_potential": "medium"})
 
+    async def analyze_creative(
+        self, campaign_data: List[Dict]
+    ) -> Dict:
+        system = (
+            "You are a Meta Ads creative strategist. Analyse ad CTR and creative fatigue signals. "
+            "Return ONLY valid JSON."
+        )
+        user = (
+            f"Campaign data: {json.dumps(campaign_data, indent=2)}\n\n"
+            "Return JSON with keys: fatigued_campaigns (list of campaign names), "
+            "format_recommendations (list of {{campaign_id, recommended_formats}}), "
+            "creative_health (excellent|good|fair|poor), "
+            "summary (str)."
+        )
+        raw = await self._chat(system, user)
+        return self._parse_json(raw, self._default_creative_analysis())
+
     async def generate_insights(self, overview: Dict, campaign_data: List[Dict]) -> Dict:
         system = (
             "You are a Meta Ads strategist writing a weekly performance report. "
@@ -141,15 +181,21 @@ class OllamaClient:
 
     def _mock_response(self, prompt: str) -> str:
         """Deterministic mock when no API key is set"""
-        if "analyze_performance" in prompt or "Campaign data" in prompt:
+        p = prompt.lower()
+        # generate_insights prompt contains 'account overview' and asks for 'week_rating'
+        if "account overview" in p or "week_rating" in p or "weekly" in p:
+            return json.dumps(self._default_insights())
+        if "creative strategist" in p or "ctr" in p or "fatigue" in p:
+            return json.dumps(self._default_creative_analysis())
+        if "campaign data" in p and "problems" in p:
             return json.dumps(self._default_analysis())
-        if "optimize_budget" in prompt or "budget" in prompt.lower():
+        if "budget" in p and "allocations" in p:
             return json.dumps({
                 "strategy": "Shift 20% budget from underperformers to top ROAS campaigns",
                 "allocations": [],
                 "expected_roas_lift": 0.3,
             })
-        if "scaling" in prompt.lower():
+        if "scaling" in p:
             return json.dumps({"scaling_candidates": [], "overall_growth_potential": "high"})
         return json.dumps(self._default_insights())
 
@@ -165,6 +211,17 @@ class OllamaClient:
                 "Expand Sneaker Drop to similar audiences",
             ],
             "overall_health": "fair",
+        }
+
+    def _default_creative_analysis(self) -> Dict:
+        return {
+            "fatigued_campaigns": ["Hoodie Promo - Winter Sale", "Video Campaign - Product Showcase"],
+            "format_recommendations": [
+                {"campaign_id": "demo_1_2", "recommended_formats": ["instagram_reels", "ugc_style"]},
+                {"campaign_id": "demo_1_5", "recommended_formats": ["carousel", "story_ads"]},
+            ],
+            "creative_health": "fair",
+            "summary": "Two campaigns show clear creative fatigue with CTR below 60% of objective benchmark. Immediate refreshes recommended.",
         }
 
     def _default_insights(self) -> Dict:
