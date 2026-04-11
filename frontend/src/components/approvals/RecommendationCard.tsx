@@ -1,7 +1,6 @@
-import { CheckCircle, XCircle, AlertTriangle, Clock, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import type { Recommendation } from "../../types";
-import { formatCurrency, timeAgo, priorityColor, riskColor } from "../../lib/utils";
+import { timeAgo } from "../../lib/utils";
 
 interface Props {
   rec: Recommendation;
@@ -10,166 +9,140 @@ interface Props {
   isLoading?: boolean;
 }
 
-const TYPE_LABELS: Record<string, string> = {
-  PAUSE_CAMPAIGN:    "Pause Campaign",
-  BUDGET_INCREASE:   "Increase Budget",
-  BUDGET_DECREASE:   "Reduce Budget",
-  SCALE_CAMPAIGN:    "Scale Campaign",
-  DUPLICATE_CAMPAIGN:"Duplicate Campaign",
-  AUDIENCE_EXPANSION:"Audience Expansion",
-  CREATIVE_REFRESH:  "Creative Refresh",
+const TYPE_ICONS: Record<string, string> = {
+  PAUSE_CAMPAIGN:    "pause_circle",
+  BUDGET_INCREASE:   "add_circle",
+  BUDGET_DECREASE:   "remove_circle",
+  SCALE_CAMPAIGN:    "rocket_launch",
+  DUPLICATE_CAMPAIGN:"content_copy",
+  AUDIENCE_EXPANSION:"group_add",
+  CREATIVE_REFRESH:  "auto_fix_high",
 };
 
 const AGENT_COLORS: Record<string, string> = {
-  "Performance Detective": "#6366f1",
-  "Budget Strategist":     "#10b981",
-  "Growth Executor":       "#f59e0b",
+  "Performance Detective": "text-primary",
+  "Budget Strategist":     "text-secondary",
+  "Growth Executor":       "text-tertiary",
 };
 
 export function RecommendationCard({ rec, onApprove, onReject, isLoading }: Props) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div
-      className="glass-card animate-slide-up"
-      style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.875rem" }}
-    >
-      {/* Header */}
-      <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.375rem", marginBottom: "0.5rem" }}>
-            <span className={`badge ${priorityColor(rec.priority)}`}>{rec.priority.toUpperCase()}</span>
-            <span className={`badge ${riskColor(rec.risk_level)}`}>Risk: {rec.risk_level}</span>
-            <span className="badge badge-gray">{TYPE_LABELS[rec.type] || rec.type}</span>
+    <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant/20 shadow-sm overflow-hidden animate-slide-up group">
+      <div className="p-8">
+        {/* Header Section */}
+        <div className="flex justify-between items-start gap-6 mb-6">
+          <div className="flex-1 space-y-3">
+             <div className="flex flex-wrap gap-2">
+                <span className={`px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest rounded-md ${
+                  rec.priority === 'high' ? 'bg-error-container text-on-error-container' : 'bg-secondary-container text-on-secondary-container'
+                }`}>
+                  {rec.priority} PRIORITY
+                </span>
+                <span className="px-2 py-0.5 bg-surface-container-high text-stone-500 text-[9px] font-bold uppercase tracking-widest rounded-md">
+                   Risk: {rec.risk_level}
+                </span>
+             </div>
+             <h3 className="font-serif text-2xl font-bold text-on-surface leading-tight">
+               {rec.title}
+             </h3>
+             <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-stone-400">
+                <span className={`font-black ${AGENT_COLORS[rec.agent_name] || "text-primary"}`}>
+                   {rec.agent_name}
+                </span>
+                <span>•</span>
+                <span>{timeAgo(rec.created_at)}</span>
+             </div>
           </div>
-          <h3 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.3 }}>
-            {rec.title}
-          </h3>
-        </div>
-        {/* Confidence ring */}
-        <div style={{ textAlign: "center", flexShrink: 0 }}>
-          <div
-            style={{
-              width: 48, height: 48, borderRadius: "50%",
-              background: `conic-gradient(#6366f1 ${rec.confidence_score * 3.6}deg, rgba(255,255,255,0.06) 0deg)`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}
-          >
-            <div
-              style={{
-                width: 36, height: 36, borderRadius: "50%",
-                background: "var(--bg-card)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: "0.7rem", fontWeight: 700, color: "var(--text-primary)",
-              }}
-            >
-              {rec.confidence_score}%
-            </div>
+
+          {/* Confidence Circle */}
+          <div className="relative w-16 h-16 shrink-0 flex items-center justify-center">
+             <svg className="w-full h-full -rotate-90">
+                <circle 
+                  cx="32" cy="32" r="28" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="4" 
+                  className="text-outline-variant/20"
+                />
+                <circle 
+                  cx="32" cy="32" r="28" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="4" 
+                  strokeDasharray={`${2 * Math.PI * 28}`}
+                  strokeDashoffset={`${2 * Math.PI * 28 * (1 - rec.confidence_score / 100)}`}
+                  className="text-primary"
+                  strokeLinecap="round"
+                />
+             </svg>
+             <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-xs font-bold text-primary">{rec.confidence_score}%</span>
+                <span className="text-[7px] font-bold text-stone-400 uppercase tracking-tighter">Match</span>
+             </div>
           </div>
         </div>
-      </div>
 
-      {/* Agent + time */}
-      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <span
-          style={{
-            fontSize: "0.75rem", fontWeight: 600,
-            color: AGENT_COLORS[rec.agent_name] || "#64748b",
-          }}
+        {/* Narrative */}
+        <p className="text-stone-500 text-sm leading-relaxed mb-6 italic">
+          "{rec.description}"
+        </p>
+
+        {/* Detail Toggle */}
+        <button 
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-primary hover:underline mb-4"
         >
-          {rec.agent_name}
-        </span>
-        <span style={{ color: "var(--text-faint)", fontSize: "0.75rem" }}>•</span>
-        <Clock size={11} color="var(--text-faint)" />
-        <span style={{ fontSize: "0.75rem", color: "var(--text-faint)" }}>{timeAgo(rec.created_at)}</span>
-      </div>
+          <span className="material-symbols-outlined text-sm">
+            {expanded ? "expand_less" : "expand_more"}
+          </span>
+          {expanded ? "Hide Rationale" : "Full Agent Reasoning"}
+        </button>
 
-      {/* Description */}
-      <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: 1.6 }}>
-        {rec.description}
-      </p>
+        {expanded && (
+          <div className="p-6 bg-surface-container-low rounded-xl border border-outline-variant/10 space-y-6 mb-6 animate-fade-in">
+             <div>
+                <p className="text-[10px] font-bold uppercase text-stone-400 tracking-widest mb-2">Internal Logic</p>
+                <p className="text-sm text-on-surface-variant leading-relaxed">
+                  {rec.reasoning}
+                </p>
+             </div>
+             {Object.keys(rec.predicted_impact).length > 0 && (
+               <div className="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/10">
+                  {Object.entries(rec.predicted_impact).map(([k, v]) => (
+                    <div key={k}>
+                       <p className="text-[9px] uppercase text-stone-400 font-bold mb-1">{k.replace(/_/g, ' ')}</p>
+                       <p className="text-sm font-bold text-primary">{String(v)}</p>
+                    </div>
+                  ))}
+               </div>
+             )}
+          </div>
+        )}
 
-      {/* Expandable details */}
-      <button
-        className="btn-ghost"
-        onClick={() => setExpanded(!expanded)}
-        style={{ fontSize: "0.8rem", padding: "0.375rem 0.75rem", alignSelf: "flex-start" }}
-      >
-        {expanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-        {expanded ? "Less detail" : "More detail"}
-      </button>
-
-      {expanded && (
-        <div
-          style={{
-            background: "rgba(255,255,255,0.025)",
-            borderRadius: 10,
-            padding: "0.875rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.75rem",
-          }}
-        >
-          {rec.reasoning && (
-            <div>
-              <p style={{ margin: "0 0 0.25rem", fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)" }}>
-                Reasoning
-              </p>
-              <p style={{ margin: 0, fontSize: "0.82rem", color: "var(--text-muted)" }}>{rec.reasoning}</p>
-            </div>
-          )}
-          {Object.keys(rec.predicted_impact).length > 0 && (
-            <div>
-              <p style={{ margin: "0 0 0.5rem", fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)" }}>
-                Predicted Impact
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                {Object.entries(rec.predicted_impact).map(([k, v]) => (
-                  <div
-                    key={k}
-                    style={{
-                      background: "rgba(99,102,241,0.1)",
-                      border: "1px solid rgba(99,102,241,0.2)",
-                      borderRadius: 8,
-                      padding: "0.375rem 0.625rem",
-                    }}
-                  >
-                    <p style={{ margin: 0, fontSize: "0.7rem", color: "#818cf8" }}>
-                      {k.replace(/_/g, " ")}
-                    </p>
-                    <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--text-primary)", fontWeight: 600 }}>
-                      {String(v)}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+        {/* Control Surface */}
+        <div className="flex gap-4 border-t border-outline-variant/10 pt-8">
+           <button 
+             onClick={() => onApprove(rec.id)}
+             disabled={isLoading}
+             className="flex-1 py-4 bg-primary text-white rounded-xl text-xs font-bold uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+           >
+             <span className="material-symbols-outlined text-sm">verified</span>
+             Authorize Change
+           </button>
+           <button 
+             onClick={() => onReject(rec.id)}
+             disabled={isLoading}
+             className="px-6 py-4 bg-error-container/20 text-error rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-error-container/40 transition-colors disabled:opacity-50"
+           >
+             Dismiss
+           </button>
         </div>
-      )}
-
-      {/* Actions */}
-      <div style={{ display: "flex", gap: "0.625rem" }}>
-        <button
-          id={`approve-btn-${rec.id}`}
-          className="btn-primary"
-          onClick={() => onApprove(rec.id)}
-          disabled={isLoading}
-          style={{ flex: 1, justifyContent: "center" }}
-        >
-          <CheckCircle size={14} />
-          Approve & Execute
-        </button>
-        <button
-          id={`reject-btn-${rec.id}`}
-          className="btn-danger"
-          onClick={() => onReject(rec.id)}
-          disabled={isLoading}
-        >
-          <XCircle size={14} />
-          Reject
-        </button>
       </div>
+      
+      {/* Decorative Agent Stripe */}
+      <div className={`h-1.5 w-full ${rec.agent_name === 'Performance Detective' ? 'bg-primary' : rec.agent_name === 'Budget Strategist' ? 'bg-secondary' : 'bg-tertiary'}`}></div>
     </div>
   );
 }

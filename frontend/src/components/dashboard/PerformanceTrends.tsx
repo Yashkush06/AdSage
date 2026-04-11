@@ -1,6 +1,6 @@
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Legend,
+  ResponsiveContainer, AreaChart, Area,
 } from "recharts";
 import type { DailyTrendRow } from "../../types";
 import { formatCurrency } from "../../lib/utils";
@@ -13,26 +13,19 @@ interface Props {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div
-      style={{
-        background: "var(--bg-elevated)",
-        border: "1px solid var(--border-dim)",
-        borderRadius: 8,
-        padding: "0.75rem 1rem",
-        fontSize: "0.8rem",
-      }}
-    >
-      <p style={{ margin: "0 0 0.5rem", color: "var(--text-muted)", fontWeight: 600 }}>{label}</p>
+    <div className="bg-surface p-4 rounded-xl border border-outline-variant/30 shadow-xl font-body text-xs">
+      <p className="font-bold text-on-surface mb-2 border-b border-outline-variant/10 pb-1">{label}</p>
       {payload.map((p: any) => (
-        <div key={p.dataKey} style={{ color: p.color, margin: "0.2rem 0" }}>
-          {p.name}: <strong>{p.dataKey === "roas" ? `${p.value}x` : formatCurrency(p.value)}</strong>
+        <div key={p.dataKey} className="flex justify-between gap-4 py-0.5" style={{ color: p.color }}>
+          <span className="opacity-80 font-medium">{p.name}:</span>
+          <span className="font-bold">{p.dataKey === "roas" ? `${p.value}x` : formatCurrency(p.value)}</span>
         </div>
       ))}
     </div>
   );
 };
 
-export function PerformanceTrends({ data, title = "30-Day Performance Trends" }: Props) {
+export function PerformanceTrends({ data, title = "Performance Trend" }: Props) {
   // Aggregate by date if multiple campaigns
   const byDate: Record<string, { spend: number; revenue: number; roas_sum: number; count: number }> = {};
   data.forEach((row) => {
@@ -53,73 +46,77 @@ export function PerformanceTrends({ data, title = "30-Day Performance Trends" }:
     }));
 
   return (
-    <div className="glass-card" style={{ padding: "1.25rem" }}>
-      <h3 style={{ margin: "0 0 1.25rem", fontSize: "0.9rem", fontWeight: 600, color: "var(--text-primary)" }}>
-        {title}
-      </h3>
-      <ResponsiveContainer width="100%" height={220}>
-        <LineChart data={chartData} margin={{ top: 5, right: 20, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="rgba(255,255,255,0.04)" vertical={false} />
-          <XAxis
-            dataKey="date"
-            tick={{ fontSize: 11, fill: "var(--text-faint)" }}
-            tickLine={false}
-            axisLine={false}
-            interval={6}
-          />
-          <YAxis
-            tick={{ fontSize: 11, fill: "var(--text-faint)" }}
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(v) => `₹${Math.round(v / 1000)}K`}
-            yAxisId="left"
-          />
-          <YAxis
-            yAxisId="right"
-            orientation="right"
-            tick={{ fontSize: 11, fill: "var(--text-faint)" }}
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(v) => `${v}x`}
-            domain={[0, 7]}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend
-            wrapperStyle={{ fontSize: "0.75rem", paddingTop: "0.5rem" }}
-          />
-          <Line
-            yAxisId="left"
-            type="monotone"
-            dataKey="spend"
-            name="Spend"
-            stroke="#6366f1"
-            strokeWidth={2}
-            dot={false}
-            activeDot={{ r: 4, fill: "#6366f1" }}
-          />
-          <Line
-            yAxisId="left"
-            type="monotone"
-            dataKey="revenue"
-            name="Revenue"
-            stroke="#10b981"
-            strokeWidth={2}
-            dot={false}
-            activeDot={{ r: 4, fill: "#10b981" }}
-          />
-          <Line
-            yAxisId="right"
-            type="monotone"
-            dataKey="roas"
-            name="ROAS"
-            stroke="#f59e0b"
-            strokeWidth={2}
-            strokeDasharray="4 2"
-            dot={false}
-            activeDot={{ r: 4, fill: "#f59e0b" }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/20 shadow-sm relative overflow-hidden h-full">
+      <div className="flex justify-between items-center mb-12">
+        <div>
+          <h4 className="font-serif text-2xl font-bold">{title}</h4>
+          <p className="text-stone-400 text-sm">Revenue vs Expenditure over 30 days</p>
+        </div>
+        <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-tighter">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-primary"></div>
+            <span>Revenue</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-primary-container"></div>
+            <span>Expenditure</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="h-64 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <defs>
+              <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#566252" stopOpacity={0.1}/>
+                <stop offset="95%" stopColor="#566252" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid stroke="#e5e2dd" vertical={false} strokeDasharray="3 3" opacity={0.5} />
+            <XAxis
+              dataKey="date"
+              tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 700 }}
+              tickLine={false}
+              axisLine={false}
+              padding={{ left: 10, right: 10 }}
+            />
+            <YAxis
+              tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 700 }}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(v) => `₹${Math.round(v / 1000)}k`}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Area
+              type="monotone"
+              dataKey="revenue"
+              name="Revenue"
+              stroke="#566252"
+              strokeWidth={3}
+              fillOpacity={1}
+              fill="url(#colorRev)"
+              activeDot={{ r: 6, strokeWidth: 0, fill: "#566252" }}
+            />
+            <Line
+                type="monotone"
+                dataKey="spend"
+                name="Expenditure"
+                stroke="#a8b5a2"
+                strokeWidth={2}
+                dot={false}
+                strokeDasharray="5 5"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="mt-4 flex justify-between px-2 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
+        <span>WK 01</span>
+        <span>WK 02</span>
+        <span>WK 03</span>
+        <span>WK 04</span>
+      </div>
     </div>
   );
 }

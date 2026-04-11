@@ -20,9 +20,9 @@ function AppLayout() {
   if (!onboarded) return <Navigate to="/onboarding" replace />;
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
+    <div className="flex min-h-screen">
       <Sidebar />
-      <main style={{ flex: 1, overflowY: "auto", background: "var(--bg-base)" }}>
+      <main className="flex-1 ml-64 min-h-screen bg-surface">
         <Routes>
           <Route path="/"          element={<Dashboard />} />
           <Route path="/approvals" element={<Approvals />} />

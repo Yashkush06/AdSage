@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAppStore } from "../lib/store";
 import { authApi, campaignsApi } from "../lib/api";
 import { LoadingSpinner } from "../components/shared/LoadingStates";
-import { Save, FastForward } from "lucide-react";
+import { Header } from "../components/shared/Header";
 
 export function Settings() {
   const { user, setUser } = useAppStore();
@@ -31,9 +31,9 @@ export function Settings() {
       });
       const meRes = await authApi.me();
       setUser(meRes.data);
-      setMsg("✓ Saved");
+      setMsg("✓ Protocol Updated");
     } catch {
-      setMsg("Save failed");
+      setMsg("Update failed");
     }
     setSaving(false);
     setTimeout(() => setMsg(""), 4000);
@@ -43,7 +43,7 @@ export function Settings() {
     setSimming(true);
     try {
       await campaignsApi.simulateTime(simHours);
-      setSimMsg(`✓ Simulated ${simHours}h of progression`);
+      setSimMsg(`✓ {simHours}h time dilation complete`);
     } catch {
       setSimMsg("Simulation failed");
     }
@@ -52,82 +52,102 @@ export function Settings() {
   }
 
   const field = (label: string, key: keyof typeof form, type = "text", hint?: string) => (
-    <div style={{ display: "flex", flexDirection: "column", gap: "0.375rem" }}>
-      <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-muted)" }}>{label}</label>
+    <div className="space-y-2">
+      <label className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">{label}</label>
       <input
-        className="input"
+        className="w-full bg-white border border-outline-variant/30 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-on-surface"
         type={type}
         value={form[key]}
         onChange={(e) => setForm({ ...form, [key]: e.target.value })}
       />
-      {hint && <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-faint)" }}>{hint}</p>}
+      {hint && <p className="text-[10px] text-stone-400 italic">Directive: {hint}</p>}
     </div>
   );
 
   return (
-    <div style={{ padding: "2rem", maxWidth: 600, display: "flex", flexDirection: "column", gap: "2rem" }}>
-      <div>
-        <h1 className="gradient-text" style={{ margin: 0, fontSize: "1.6rem", fontWeight: 800 }}>Settings</h1>
-        <p style={{ margin: "0.25rem 0 0", color: "var(--text-muted)", fontSize: "0.875rem" }}>
-          Business profile and agent thresholds
-        </p>
-      </div>
-
-      {/* Business profile */}
-      <div className="glass-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-        <h2 style={{ margin: 0, fontSize: "1rem", fontWeight: 600, color: "var(--text-primary)" }}>
-          Business Profile
-        </h2>
-        {field("Business Name", "business_name")}
-        {field("Industry", "industry")}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-          {field("Target CPA (₹)", "target_cpa",   "number", "Agents pause campaigns exceeding 3× this")}
-          {field("Target ROAS",    "target_roas",  "number", "Agents scale campaigns above 3.5×")}
+    <div className="flex flex-col min-h-screen">
+      <Header title="Observatory Settings" subtitle="Ecosystem Configuration" />
+      
+      <main className="p-8 max-w-2xl mx-auto space-y-12 animate-fade-in w-full pb-20">
+        
+        <div className="space-y-1">
+          <h2 className="font-serif text-4xl font-bold tracking-tight text-on-surface">Configuration</h2>
+          <p className="text-stone-500 font-medium">Fine-tuning the parameters of your agent network.</p>
         </div>
-        {field("Monthly Budget (₹)", "monthly_budget", "number")}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <button className="btn-primary" onClick={save} disabled={saving} id="save-settings-btn">
-            {saving ? <LoadingSpinner size={14} /> : <Save size={14} />}
-            Save Changes
-          </button>
-          {msg && <span style={{ fontSize: "0.8rem", color: "#10b981" }}>{msg}</span>}
-        </div>
-      </div>
 
-      {/* Demo Controls */}
-      <div className="glass-card" style={{ padding: "1.5rem" }}>
-        <h2 style={{ margin: "0 0 0.5rem", fontSize: "1rem", fontWeight: 600, color: "var(--text-primary)" }}>
-          Demo Controls
-        </h2>
-        <p style={{ margin: "0 0 1rem", fontSize: "0.82rem", color: "var(--text-muted)" }}>
-          Simulate time passing — improving campaigns will show better metrics, declining ones get worse.
-        </p>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
-          <select
-            className="input"
-            value={simHours}
-            onChange={(e) => setSimHours(Number(e.target.value))}
-            style={{ width: 140 }}
-          >
-            {[1, 4, 8, 24, 48].map((h) => (
-              <option key={h} value={h}>{h} hour{h > 1 ? "s" : ""}</option>
-            ))}
-          </select>
-          <button className="btn-ghost" onClick={simulate} disabled={simming}>
-            {simming ? <LoadingSpinner size={14} /> : <FastForward size={14} />}
-            Simulate
-          </button>
-          {simMsg && <span style={{ fontSize: "0.8rem", color: "#10b981" }}>{simMsg}</span>}
-        </div>
-      </div>
+        {/* Business profile */}
+        <section className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/10 shadow-sm space-y-8">
+           <div className="flex items-center gap-2 text-primary mb-4">
+              <span className="material-symbols-outlined text-xl">identity_platform</span>
+              <h3 className="font-serif text-xl font-bold">Business Core</h3>
+           </div>
+           
+           <div className="space-y-6">
+             {field("Business Name", "business_name")}
+             {field("Industry Vector", "industry")}
+             
+             <div className="grid grid-cols-2 gap-6">
+               {field("Target CPA (₹)", "target_cpa", "number", "Agent pause threshold")}
+               {field("Target ROAS (x)", "target_roas", "number", "Agent scale threshold")}
+             </div>
 
-      {/* Mode badge */}
-      <div style={{ padding: "0.75rem 1rem", background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.15)", borderRadius: 10 }}>
-        <p style={{ margin: 0, fontSize: "0.82rem", color: "#818cf8" }}>
-          🎭 <strong>Hackathon Demo Mode</strong> — no real Meta API, no authentication required.
-          All campaign data is simulated.
-        </p>
-      </div>
+             {field("Monthly Budget (₹)", "monthly_budget", "number")}
+           </div>
+
+           <div className="flex items-center gap-4 pt-4 border-t border-outline-variant/10">
+             <button 
+               onClick={save} 
+               disabled={saving}
+               className="flex-1 py-4 bg-primary text-white rounded-xl text-xs font-bold uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+             >
+               {saving ? <LoadingSpinner size={16} /> : <span className="material-symbols-outlined text-lg">save</span>}
+               Save Parameters
+             </button>
+             {msg && <span className="text-xs font-bold text-primary animate-fade-in">{msg}</span>}
+           </div>
+        </section>
+
+        {/* Temporal Simulation */}
+        <section className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/10 shadow-sm space-y-6">
+           <div className="flex items-center gap-2 text-stone-600 mb-2">
+              <span className="material-symbols-outlined text-xl">timelapse</span>
+              <h3 className="font-serif text-xl font-bold">Time Dilation</h3>
+           </div>
+           <p className="text-sm text-stone-500 leading-relaxed max-w-md">
+             Accelerate the ecosystem to observe agent decisions and campaign evolution in the simulated market.
+           </p>
+           
+           <div className="flex items-center gap-4">
+              <select
+                className="bg-white border border-outline-variant/30 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium"
+                value={simHours}
+                onChange={(e) => setSimHours(Number(e.target.value))}
+              >
+                {[1, 4, 8, 24, 48].map((h) => (
+                  <option key={h} value={h}>{h} hour{h > 1 ? "s" : ""}</option>
+                ))}
+              </select>
+              <button 
+                onClick={simulate} 
+                disabled={simming}
+                className="flex-[2] py-4 bg-white border border-outline-variant/30 text-stone-600 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-stone-50 transition-colors flex items-center justify-center gap-2"
+              >
+                {simming ? <LoadingSpinner size={14} /> : <span className="material-symbols-outlined text-lg">fast_forward</span>}
+                Simulate Shift
+              </button>
+           </div>
+           {simMsg && <p className="text-xs font-bold text-primary animate-fade-in">{simMsg}</p>}
+        </section>
+
+        {/* Security / Info */}
+        <div className="p-6 bg-primary/5 border border-primary/20 rounded-2xl flex items-start gap-4">
+           <span className="material-symbols-outlined text-primary">security</span>
+           <p className="text-[10px] text-stone-500 font-medium leading-relaxed uppercase tracking-wider">
+             Observatory Security: All business parameters are locally encrypted. This session is in <strong>Simulation Mode</strong>. No real-world financial consequences are active.
+           </p>
+        </div>
+
+      </main>
     </div>
   );
 }

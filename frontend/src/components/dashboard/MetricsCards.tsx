@@ -1,91 +1,68 @@
-import { TrendingUp, TrendingDown, Minus, DollarSign, Users, Target, Activity } from "lucide-react";
 import type { OverviewMetrics } from "../../types";
-import { formatCurrency, formatNumber, formatRoas } from "../../lib/utils";
+import { formatCurrency, formatNumber } from "../../lib/utils";
 
 interface Props {
   metrics: OverviewMetrics;
 }
 
-interface CardDef {
-  label: string;
-  value: string;
-  sub: string;
-  icon: React.ReactNode;
-  color: string;
-  positive?: boolean;
-}
-
 export function MetricsCards({ metrics }: Props) {
-  const cards: CardDef[] = [
+  const cards = [
     {
       label: "Total Spend",
       value: formatCurrency(metrics.total_spend),
-      sub: `${metrics.period_days}-day period`,
-      icon: <DollarSign size={18} />,
-      color: "#6366f1",
+      growth: "+4.2%",
+      progress: 72,
+      colorClass: "bg-primary-container",
     },
     {
-      label: "Total Revenue",
+      label: "Revenue",
       value: formatCurrency(metrics.total_revenue),
-      sub: `${formatRoas(metrics.avg_roas)} average ROAS`,
-      icon: <TrendingUp size={18} />,
-      color: "#10b981",
-      positive: true,
+      growth: "+12.8%",
+      progress: 88,
+      colorClass: "bg-primary",
     },
     {
       label: "Conversions",
       value: formatNumber(metrics.total_conversions),
-      sub: `Avg CPA ${formatCurrency(metrics.avg_cpa)}`,
-      icon: <Target size={18} />,
-      color: "#8b5cf6",
+      growth: "+8.1%",
+      progress: 64,
+      colorClass: "bg-secondary",
     },
     {
-      label: "Active Campaigns",
+      label: "Active Ads",
       value: String(metrics.active_campaigns),
-      sub: `${metrics.paused_campaigns} paused`,
-      icon: <Activity size={18} />,
-      color: "#f59e0b",
-    },
-    {
-      label: "Avg CTR",
-      value: `${metrics.avg_ctr.toFixed(2)}%`,
-      sub: `${formatNumber(metrics.total_clicks)} total clicks`,
-      icon: <Users size={18} />,
-      color: "#64748b",
-    },
-    {
-      label: "Impressions",
-      value: formatNumber(metrics.total_impressions),
-      sub: "Total ad views",
-      icon: <Minus size={18} />,
-      color: "#475569",
+      growth: "-2.1%",
+      progress: 45,
+      colorClass: "bg-primary-container/50",
     },
   ];
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-        gap: "1rem",
-      }}
-    >
+    <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
       {cards.map((card) => (
-        <div key={card.label} className="stat-card animate-slide-up">
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 500 }}>
-              {card.label}
+        <div 
+          key={card.label} 
+          className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/20 shadow-sm hover:shadow-md transition-all duration-300 group"
+        >
+          <p className="font-sans tracking-wide uppercase text-[10px] text-stone-400 mb-2 font-bold group-hover:text-primary transition-colors">
+            {card.label}
+          </p>
+          <div className="flex items-baseline gap-2">
+            <h3 className="text-2xl font-serif font-bold text-on-surface">
+              {card.value}
+            </h3>
+            <span className={`text-[10px] font-bold ${card.growth.startsWith('+') ? 'text-primary' : 'text-stone-400'} flex items-center`}>
+              {card.growth}
             </span>
-            <span style={{ color: card.color, opacity: 0.8 }}>{card.icon}</span>
           </div>
-          <p style={{ margin: 0, fontSize: "1.625rem", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.2 }}>
-            {card.value}
-          </p>
-          <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--text-muted)" }}>
-            {card.sub}
-          </p>
+          <div className="mt-4 w-full h-1 bg-stone-100 rounded-full overflow-hidden">
+            <div 
+              className={`${card.colorClass} h-full transition-all duration-1000 ease-out`} 
+              style={{ width: `${card.progress}%` }}
+            />
+          </div>
         </div>
       ))}
-    </div>
+    </section>
   );
 }

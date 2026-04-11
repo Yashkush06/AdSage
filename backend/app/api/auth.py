@@ -3,13 +3,14 @@ Hackathon auth router.
 No real auth — just a /setup endpoint to update demo user profile & goals.
 """
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import Optional
 from app.core.database import get_db
 from app.core.security import get_current_user
 from app.models.user import User
+from app.core.config import settings
 
 router = APIRouter()
 
@@ -23,7 +24,10 @@ class SetupRequest(BaseModel):
 
 
 @router.get("/me")
-async def me(current_user: User = Depends(get_current_user)):
+async def me(db: Session = Depends(get_db)):
+    current_user = db.query(User).filter(User.id == settings.DEMO_USER_ID).first()
+    if not current_user:
+        raise HTTPException(status_code=404, detail="Demo user not found")
     return {
         "id": current_user.id,
         "email": current_user.email,
@@ -38,9 +42,20 @@ async def me(current_user: User = Depends(get_current_user)):
 @router.patch("/me")
 async def update_profile(
     req: SetupRequest,
-    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    current_user = db.query(User).filter(User.id == settings.DEMO_USER_ID).first()
+    if not current_user:
+        # Auto-create demo user if missing
+        current_user = User(
+            id=settings.DEMO_USER_ID,
+            email=settings.DEMO_USER_EMAIL,
+            hashed_password="no-auth-needed",
+            business_name=settings.DEMO_BUSINESS_NAME,
+            industry=settings.DEMO_INDUSTRY,
+        )
+        db.add(current_user)
+        db.flush()
     for field, value in req.model_dump(exclude_none=True).items():
         setattr(current_user, field, value)
     db.commit()

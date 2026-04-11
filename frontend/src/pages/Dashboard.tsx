@@ -4,9 +4,9 @@ import { MetricsCards } from "../components/dashboard/MetricsCards";
 import { AgentActivityFeed } from "../components/dashboard/AgentActivityFeed";
 import { PerformanceTrends } from "../components/dashboard/PerformanceTrends";
 import { PageLoader } from "../components/shared/LoadingStates";
-import { Play, RefreshCw } from "lucide-react";
+import { Header } from "../components/shared/Header";
 import { useState } from "react";
-import { analyticsApi as api } from "../lib/api";
+import type { Campaign } from "../types";
 
 export function Dashboard() {
   const [cycling, setCycling] = useState(false);
@@ -15,27 +15,32 @@ export function Dashboard() {
   const { data: overviewRes, isLoading: loadingOverview, refetch: refetchOverview } =
     useQuery({ queryKey: ["overview"], queryFn: () => analyticsApi.overview(), refetchInterval: 30000 });
 
-  const { data: trendsRes, isLoading: loadingTrends } =
+  const { data: trendsRes } =
     useQuery({ queryKey: ["trends"], queryFn: () => analyticsApi.trends(30) });
 
   const { data: activityRes, isLoading: loadingActivity, refetch: refetchActivity } =
     useQuery({ queryKey: ["activity"], queryFn: () => analyticsApi.agentActivity(40), refetchInterval: 15000 });
 
-  const overview   = overviewRes?.data?.overview;
-  const trends     = trendsRes?.data?.trends || [];
-  const activity   = activityRes?.data?.activity || [];
+  const { data: campaignsRes } = useQuery({
+    queryKey: ["campaigns", "ACTIVE"],
+    queryFn: () => campaignsApi.list("ACTIVE"),
+  });
+
+  const overview = overviewRes?.data?.overview;
+  const trends = trendsRes?.data?.trends || [];
+  const activity = activityRes?.data?.activity || [];
+  const priorityCampaigns: Campaign[] = (campaignsRes?.data?.campaigns || []).slice(0, 3);
 
   async function runCycle() {
     setCycling(true);
-    setCycleMsg("Running agent cycle…");
+    setCycleMsg("Activating Observatory Agents…");
     try {
-      const res = await api.runCycle();
-      const total = res.data?.result?.total_recommendations || 0;
-      setCycleMsg(`✓ Cycle complete — ${total} new recommendations`);
+      await analyticsApi.runCycle();
+      setCycleMsg("✓ Agents cycle complete");
       refetchOverview();
       refetchActivity();
     } catch {
-      setCycleMsg("Cycle failed — check backend");
+      setCycleMsg("Observatory sync failed");
     } finally {
       setCycling(false);
       setTimeout(() => setCycleMsg(""), 6000);
@@ -45,138 +50,100 @@ export function Dashboard() {
   if (loadingOverview && !overview) return <PageLoader />;
 
   return (
-    <div style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-      {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-        <div>
-          <h1 className="gradient-text" style={{ margin: 0, fontSize: "1.6rem", fontWeight: 800 }}>
-            Campaign Dashboard
-          </h1>
-          <p style={{ margin: "0.25rem 0 0", color: "var(--text-muted)", fontSize: "0.875rem" }}>
-            Real-time overview powered by AI agents
-          </p>
+    <div className="flex flex-col min-h-screen">
+      <Header title="The Observatory" subtitle="Real-time Marketing Intelligence" />
+
+      <main className="p-8 max-w-7xl mx-auto space-y-8 animate-fade-in w-full">
+        {/* Title & Actions */}
+        <section className="flex flex-col md:flex-row justify-between items-end gap-6">
+          <div className="space-y-1">
+            <h2 className="font-serif text-4xl font-bold tracking-tight text-on-surface">Overview</h2>
+            <p className="text-stone-500 font-medium">Curating your marketing ecosystem with precision.</p>
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={runCycle}
+              disabled={cycling}
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-outline-variant/30 text-primary rounded-xl text-sm font-bold hover:bg-stone-50 transition-colors shadow-sm disabled:opacity-50"
+            >
+              <span className={`material-symbols-outlined text-lg ${cycling ? 'animate-spin' : ''}`}>
+                {cycling ? 'sync' : 'auto_awesome'}
+              </span>
+              {cycling ? 'Syncing...' : cycleMsg || 'Run Agent Cycle'}
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-outline-variant/30 text-stone-600 rounded-xl text-sm font-medium hover:bg-stone-50 transition-colors shadow-sm">
+              <span className="material-symbols-outlined text-lg">calendar_month</span>
+              Last 30 Days
+            </button>
+          </div>
+        </section>
+
+        {overview && <MetricsCards metrics={overview} />}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <PerformanceTrends data={trends} />
+          </div>
+          <div>
+            <AgentActivityFeed activity={activity} isLoading={loadingActivity} />
+          </div>
         </div>
-        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-          {cycleMsg && (
-            <span style={{ fontSize: "0.8rem", color: "#10b981", padding: "0.375rem 0.75rem", background: "rgba(16,185,129,0.1)", borderRadius: 8 }}>
-              {cycleMsg}
-            </span>
-          )}
-          <button className="btn-primary" onClick={runCycle} disabled={cycling} id="run-cycle-btn">
-            {cycling ? <RefreshCw size={14} className="animate-spin" /> : <Play size={14} />}
-            {cycling ? "Running…" : "Run Agent Cycle"}
-          </button>
-        </div>
-      </div>
 
-      {/* Metrics */}
-      {overview && <MetricsCards metrics={overview} />}
+        {/* Priority Campaigns */}
+        <section className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h4 className="font-serif text-2xl font-bold">Priority Archives</h4>
+            <a href="/campaigns" className="text-sm font-bold text-primary flex items-center gap-1 hover:underline">
+              View all archives <span className="material-symbols-outlined text-[18px]">arrow_right_alt</span>
+            </a>
+          </div>
 
-      {/* Charts + Feed */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: "1.25rem" }}>
-        <PerformanceTrends data={trends} />
-        <AgentActivityFeed activity={activity} isLoading={loadingActivity} />
-      </div>
-
-      {/* Agent status cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1rem" }}>
-        {[
-          { name: "Performance Detective", role: "Identifies underperformers", color: "#6366f1", emoji: "🔍" },
-          { name: "Budget Strategist",     role: "Optimizes budget allocation", color: "#10b981", emoji: "💰" },
-          { name: "Growth Executor",       role: "Scales winning campaigns",   color: "#f59e0b", emoji: "🚀" },
-        ].map((agent) => {
-          // Find the latest activity log entries for this agent
-          const agentLogs = activity.filter(
-            (a: any) => a.agent_name?.toLowerCase().includes(agent.name.split(" ")[0].toLowerCase())
-          );
-          const latest = agentLogs[0];
-          const isError = latest?.level === "error";
-          const isActive = latest && new Date(latest.created_at).getTime() > Date.now() - 10 * 60 * 1000;
-
-          // Relative time
-          const timeAgo = latest
-            ? (() => {
-                const diff = Math.round((Date.now() - new Date(latest.created_at).getTime()) / 1000);
-                if (diff < 60) return "just now";
-                if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-                if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-                return `${Math.floor(diff / 86400)}d ago`;
-              })()
-            : null;
-
-          // Count how many logs are info vs error
-          const successCount = agentLogs.filter((a: any) => a.level === "info").length;
-          const errorCount = agentLogs.filter((a: any) => a.level === "error").length;
-
-          return (
-            <div key={agent.name} className="glass-card" style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              {/* Header row */}
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span
-                  style={{
-                    width: 8, height: 8, borderRadius: "50%",
-                    background: isError ? "#ef4444" : isActive ? "#10b981" : "rgba(255,255,255,0.2)",
-                    boxShadow: isActive ? `0 0 6px ${isError ? "#ef444488" : "#10b98188"}` : "none",
-                    flexShrink: 0,
-                  }}
-                />
-                <span style={{ fontSize: "1rem" }}>{agent.emoji}</span>
-                <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-primary)" }}>
-                  {agent.name}
-                </span>
-                {timeAgo && (
-                  <span style={{ marginLeft: "auto", fontSize: "0.7rem", color: "var(--text-faint)" }}>
-                    {timeAgo}
-                  </span>
-                )}
-              </div>
-
-              {/* Role */}
-              <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--text-muted)" }}>{agent.role}</p>
-
-              {/* Latest action */}
-              {latest ? (
-                <div
-                  style={{
-                    padding: "0.5rem 0.75rem",
-                    background: isError ? "rgba(239,68,68,0.08)" : "rgba(99,102,241,0.06)",
-                    borderRadius: 8,
-                    borderLeft: `3px solid ${isError ? "#ef4444" : agent.color}`,
-                  }}
-                >
-                  <p style={{
-                    margin: 0, fontSize: "0.75rem", lineHeight: 1.5,
-                    color: isError ? "#fca5a5" : "var(--text-muted)",
-                    overflow: "hidden", textOverflow: "ellipsis",
-                    display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any,
-                  }}>
-                    {latest.message}
-                  </p>
-                </div>
-              ) : (
-                <div style={{ padding: "0.5rem 0.75rem", background: "rgba(255,255,255,0.03)", borderRadius: 8 }}>
-                  <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--text-faint)", fontStyle: "italic" }}>
-                    No activity yet — run an agent cycle
-                  </p>
-                </div>
-              )}
-
-              {/* Stats row */}
-              <div style={{ display: "flex", gap: "1rem", marginTop: "auto" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                  <span style={{ fontSize: "0.7rem", color: "#10b981" }}>●</span>
-                  <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>{successCount} runs</span>
-                </div>
-                {errorCount > 0 && (
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                    <span style={{ fontSize: "0.7rem", color: "#ef4444" }}>●</span>
-                    <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>{errorCount} errors</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {priorityCampaigns.map((campaign) => (
+              <div key={campaign.id} className="group bg-surface-container-lowest rounded-xl border border-outline-variant/20 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+                <div className="h-40 bg-gradient-to-br from-primary/10 to-primary-container/20 flex items-center justify-center relative">
+                  <span className="material-symbols-outlined text-6xl text-primary/30">campaign</span>
+                  <div className="absolute top-4 right-4">
+                    <span className="px-2 py-1 bg-white/90 backdrop-blur text-primary text-[10px] font-bold uppercase rounded-md shadow-sm">
+                      {campaign.status}
+                    </span>
                   </div>
-                )}
+                </div>
+                <div className="p-6">
+                  <h5 className="font-serif font-bold text-lg mb-2">{campaign.name}</h5>
+                  <p className="text-[10px] uppercase text-stone-400 font-bold tracking-widest mb-4">{campaign.objective}</p>
+                  <div className="grid grid-cols-2 gap-4 mb-6 pt-4 border-t border-outline-variant/10">
+                    <div>
+                      <p className="text-[10px] uppercase text-stone-400 font-bold">Health Score</p>
+                      <p className="text-sm font-bold text-primary">A+</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase text-stone-400 font-bold">ROAS</p>
+                      <p className="text-sm font-bold">4.2x</p>
+                    </div>
+                  </div>
+                  <button className="w-full py-2 bg-stone-100 text-stone-600 text-[10px] font-bold uppercase tracking-widest rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">
+                    Manage Observatory
+                  </button>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            ))}
+          </div>
+        </section>
+
+        <footer className="mt-20 py-8 border-t border-outline-variant/10 flex justify-between items-center text-on-surface-variant/40 text-[10px] font-sans uppercase tracking-[0.2em]">
+          <p>© 2026 AdSage AI Observatory. All data encrypted.</p>
+          <div className="flex gap-8">
+            <a href="#" className="hover:text-primary transition-colors">Privacy Protocol</a>
+            <a href="#" className="hover:text-primary transition-colors">System Status</a>
+          </div>
+        </footer>
+      </main>
+
+      <div className="fixed bottom-8 right-8 z-50">
+        <button className="w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95">
+          <span className="material-symbols-outlined text-3xl">auto_awesome</span>
+        </button>
       </div>
     </div>
   );

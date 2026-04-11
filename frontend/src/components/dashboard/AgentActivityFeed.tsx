@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { Cpu, AlertTriangle, Info } from "lucide-react";
+import { useEffect, useRef } from "react";
 import type { AgentActivity } from "../../types";
 import { timeAgo } from "../../lib/utils";
 
@@ -9,17 +8,18 @@ interface Props {
 }
 
 const AGENT_COLORS: Record<string, string> = {
-  "Performance Detective": "#6366f1",
-  "Budget Strategist":     "#10b981",
-  "Growth Executor":       "#f59e0b",
-  "System":                "#64748b",
+  "Performance Detective": "text-primary",
+  "Budget Strategist":     "text-secondary",
+  "Growth Executor":       "text-tertiary",
+  "System":                "text-stone-400",
 };
 
-function ActivityIcon({ level }: { level: string }) {
-  if (level === "error")   return <AlertTriangle size={13} color="#ef4444" />;
-  if (level === "warning") return <AlertTriangle size={13} color="#f59e0b" />;
-  return <Info size={13} color="#6366f1" />;
-}
+const AGENT_ICONS: Record<string, string> = {
+  "Performance Detective": "search",
+  "Budget Strategist":     "payments",
+  "Growth Executor":       "trending_up",
+  "System":                "settings_suggest",
+};
 
 export function AgentActivityFeed({ activity, isLoading }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -29,69 +29,47 @@ export function AgentActivityFeed({ activity, isLoading }: Props) {
   }, [activity]);
 
   return (
-    <div className="glass-card" style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <Cpu size={16} color="var(--accent-blue)" />
-        <h3 style={{ margin: 0, fontSize: "0.9rem", fontWeight: 600, color: "var(--text-primary)" }}>
-          Agent Activity
-        </h3>
-        {isLoading && <span className="badge badge-blue" style={{ marginLeft: "auto" }}>Live</span>}
+    <div className="bg-surface-container-low rounded-xl p-8 border border-outline-variant/10 shadow-sm flex flex-col overflow-hidden">
+      <div className="flex justify-between items-center mb-8">
+        <h4 className="font-serif text-xl font-bold">Agent Activity</h4>
+        <div className="flex items-center gap-2 text-primary">
+          {isLoading && <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />}
+          <span className="material-symbols-outlined text-xl">smart_toy</span>
+        </div>
       </div>
 
-      <div
-        style={{
-          maxHeight: 320,
-          overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.5rem",
-        }}
-      >
+      <div className="space-y-8 relative overflow-y-auto pr-2 no-scrollbar" style={{ maxHeight: "420px" }}>
+        {/* Timeline Line */}
+        <div className="absolute left-4 top-0 bottom-0 w-px bg-outline-variant/30" />
+        
         {activity.length === 0 ? (
-          <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", textAlign: "center", padding: "2rem 0" }}>
-            No agent activity yet. Run a cycle to start.
+          <p className="text-sm text-stone-500 text-center py-10">
+            Scanning for agent pulses...
           </p>
         ) : (
-          activity.map((log) => (
-            <div
-              key={log.id}
-              className="animate-fade-in"
-              style={{
-                display: "flex",
-                gap: "0.625rem",
-                padding: "0.5rem 0.625rem",
-                borderRadius: 8,
-                background: "rgba(255,255,255,0.025)",
-                alignItems: "flex-start",
-              }}
-            >
-              <div style={{ paddingTop: 2 }}>
-                <ActivityIcon level={log.level} />
+          activity.slice(0, 15).map((log) => (
+            <div key={log.id} className="relative pl-10 flex flex-col gap-1 animate-fade-in group">
+              <div className="absolute left-0 top-1.5 w-8 h-8 rounded-full bg-white border border-outline-variant/40 flex items-center justify-center z-10 shadow-sm group-hover:border-primary transition-all">
+                <span className={`material-symbols-outlined text-[16px] ${AGENT_COLORS[log.agent_name] || 'text-primary'}`}>
+                  {AGENT_ICONS[log.agent_name] || 'info'}
+                </span>
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-                  <span
-                    style={{
-                      fontSize: "0.7rem",
-                      fontWeight: 600,
-                      color: AGENT_COLORS[log.agent_name] || "#64748b",
-                    }}
-                  >
-                    {log.agent_name}
-                  </span>
-                  <span style={{ fontSize: "0.7rem", color: "var(--text-faint)" }}>
-                    {timeAgo(log.created_at)}
-                  </span>
-                </div>
-                <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--text-muted)", lineHeight: 1.4 }}>
-                  {log.message}
-                </p>
-              </div>
+              <span className="text-[10px] font-bold uppercase text-stone-400 tracking-wider group-hover:text-primary transition-colors">
+                {timeAgo(log.created_at)}
+              </span>
+              <p className="text-sm font-semibold text-on-surface leading-tight">{log.agent_name}</p>
+              <p className="text-xs text-stone-500 leading-relaxed max-w-[240px]">
+                {log.message}
+              </p>
             </div>
           ))
         )}
         <div ref={bottomRef} />
       </div>
+      
+      <button className="w-full mt-8 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-primary border border-primary/20 rounded-xl hover:bg-primary/5 transition-all">
+        View Full History
+      </button>
     </div>
   );
 }

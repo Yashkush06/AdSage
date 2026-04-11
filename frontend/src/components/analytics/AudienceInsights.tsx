@@ -1,6 +1,6 @@
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Cell,
+  ResponsiveContainer,
 } from "recharts";
 import type { AudienceSegment } from "../../types";
 
@@ -8,7 +8,20 @@ interface Props {
   segments: AudienceSegment[];
 }
 
-const GENDER_COLORS = { male: "#6366f1", female: "#a78bfa" };
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="bg-white p-4 rounded-xl border border-outline-variant shadow-xl font-body text-[10px] uppercase font-bold tracking-widest text-primary">
+      <p className="border-b border-outline-variant/10 pb-2 mb-2">{label}</p>
+      {payload.map((p: any) => (
+        <div key={p.dataKey} className="flex justify-between gap-4 py-0.5" style={{ color: p.color }}>
+          <span>{p.name}:</span>
+          <span>{Number(p.value).toFixed(2)}x</span>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export function AudienceInsights({ segments }: Props) {
   // Group by age
@@ -26,47 +39,70 @@ export function AudienceInsights({ segments }: Props) {
   }));
 
   return (
-    <div className="glass-card" style={{ padding: "1.25rem" }}>
-      <h3 style={{ margin: "0 0 1rem", fontSize: "0.9rem", fontWeight: 600, color: "var(--text-primary)" }}>
-        Audience Performance by Age/Gender
-      </h3>
-      <ResponsiveContainer width="100%" height={200}>
-        <BarChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="rgba(255,255,255,0.04)" vertical={false} />
-          <XAxis dataKey="age" tick={{ fontSize: 11, fill: "var(--text-faint)" }} tickLine={false} axisLine={false} />
-          <YAxis tick={{ fontSize: 11, fill: "var(--text-faint)" }} tickLine={false} axisLine={false} tickFormatter={(v) => `${v}x`} />
-          <Tooltip
-            contentStyle={{ background: "var(--bg-elevated)", border: "1px solid var(--border-dim)", borderRadius: 8, fontSize: "0.8rem" }}
-            formatter={(v: number) => [`${v.toFixed(2)}x ROAS`]}
-          />
-          <Bar dataKey="Male ROAS"   fill="#6366f1" radius={[4,4,0,0]} />
-          <Bar dataKey="Female ROAS" fill="#a78bfa" radius={[4,4,0,0]} />
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="bg-surface-container-low p-8 rounded-xl border border-outline-variant/10 shadow-sm flex flex-col h-full overflow-hidden">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h4 className="font-serif text-xl font-bold">Audience Pulse</h4>
+          <p className="text-stone-400 text-xs tracking-tight">Performance by Demographics</p>
+        </div>
+        <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest bg-white border border-outline-variant/20 px-4 py-2 rounded-full shadow-sm">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-primary"></div>
+            <span>Male</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-primary-container"></div>
+            <span>Female</span>
+          </div>
+        </div>
+      </div>
 
-      {/* Top performers */}
-      <div style={{ marginTop: "1rem", display: "flex", flexDirection: "column", gap: "0.375rem" }}>
-        <p style={{ margin: 0, fontSize: "0.75rem", fontWeight: 600, color: "var(--text-muted)" }}>
-          Top Segments
-        </p>
+      <div className="h-56 w-full mb-8">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={chartData} margin={{ top: 0, right: 0, left: -25, bottom: 0 }}>
+            <CartesianGrid stroke="#e5e2dd" vertical={false} strokeDasharray="3 3" opacity={0.5} />
+            <XAxis 
+              dataKey="age" 
+              tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 700 }} 
+              tickLine={false} 
+              axisLine={false} 
+            />
+            <YAxis 
+              tick={{ fontSize: 10, fill: "#94a3b8", fontWeight: 700 }} 
+              tickLine={false} 
+              axisLine={false} 
+              tickFormatter={(v) => `${v}x`} 
+            />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f6f3ee' }} />
+            <Bar dataKey="Male ROAS" fill="#566252" radius={[4, 4, 0, 0]} barSize={24} />
+            <Bar dataKey="Female ROAS" fill="#a8b5a2" radius={[4, 4, 0, 0]} barSize={24} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="space-y-3">
+        <p className="text-[10px] font-bold uppercase text-stone-400 tracking-[0.2em] mb-4">Top Segments</p>
         {[...segments]
           .sort((a, b) => b.roas - a.roas)
           .slice(0, 3)
           .map((s) => (
             <div
               key={`${s.age}-${s.gender}`}
-              style={{
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                padding: "0.375rem 0.5rem", borderRadius: 6,
-                background: "rgba(255,255,255,0.025)",
-              }}
+              className="group flex items-center justify-between p-4 bg-white border border-outline-variant/30 rounded-xl hover:border-primary transition-all duration-300"
             >
-              <span style={{ fontSize: "0.8rem", color: "var(--text-primary)" }}>
-                {s.age} · {s.gender}
-              </span>
-              <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#10b981" }}>
-                {s.roas.toFixed(2)}x ROAS
-              </span>
+              <div className="flex items-center gap-4">
+                <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center">
+                  <span className="material-symbols-outlined text-[16px] text-stone-500">person</span>
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-on-surface">{s.age}</p>
+                  <p className="text-[10px] text-stone-400 uppercase tracking-widest">{s.gender}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-bold text-primary">{s.roas.toFixed(2)}x</p>
+                <p className="text-[10px] text-stone-400 uppercase font-bold tracking-widest">Efficiency</p>
+              </div>
             </div>
           ))}
       </div>

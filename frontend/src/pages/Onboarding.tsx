@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { authApi } from "../lib/api";
 import { useAppStore } from "../lib/store";
 import { LoadingSpinner } from "../components/shared/LoadingStates";
-import { Zap, ArrowRight } from "lucide-react";
 
-type Step = "welcome" | "business" | "goals";
+type Step = "vision" | "pulse" | "strategy";
 
 export function Onboarding() {
-  const [step, setStep] = useState<Step>("welcome");
+  const [step, setStep] = useState<Step>("vision");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -19,204 +18,225 @@ export function Onboarding() {
     industry:      "",
     target_cpa:    "400",
     target_roas:   "3.0",
+    strategy:      "Efficiency",
   });
 
-  function f(label: string, key: keyof typeof form, type = "text", placeholder = "") {
-    return (
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.375rem" }}>
-        <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-muted)" }}>{label}</label>
-        <input
-          className="input"
-          type={type}
-          placeholder={placeholder}
-          value={form[key]}
-          onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-        />
-      </div>
-    );
-  }
+  const steps: { id: Step; label: string; icon: string }[] = [
+    { id: "vision",   label: "Core Vision", icon: "visibility" },
+    { id: "pulse",    label: "Market Pulse", icon: "hub" },
+    { id: "strategy", label: "Agent strategy", icon: "auto_awesome" },
+  ];
 
   async function finish() {
     setLoading(true);
     setError("");
     try {
-      // Update the demo user's profile with the entered goals
       await authApi.updateProfile({
-        business_name: form.business_name || "Demo Store",
+        business_name: form.business_name || "CodePunk Studio",
         industry:      form.industry || "E-commerce",
         target_cpa:    parseFloat(form.target_cpa) || 400,
         target_roas:   parseFloat(form.target_roas) || 3.0,
       });
 
-      // Fetch the updated user
       const meRes = await authApi.me();
       setUser(meRes.data);
       setOnboarded(true);
       navigate("/");
     } catch (e: any) {
-      setError("Could not reach backend. Make sure the server is running on port 8000.");
+      const detail = e?.response?.data?.detail || e?.message || "unknown error";
+      setError(`Synchronisation with the Observatory failed: ${detail}`);
+      console.error("[Onboarding] finish() error:", e?.response ?? e);
     }
     setLoading(false);
   }
 
-  const steps: Step[] = ["welcome", "business", "goals"];
-  const stepIdx = steps.indexOf(step);
-
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "var(--bg-base)",
-        backgroundImage: "radial-gradient(ellipse at top, rgba(99,102,241,0.12) 0%, transparent 60%)",
-        padding: "2rem",
-      }}
-    >
-      <div style={{ width: "100%", maxWidth: 480 }}>
-        {/* Logo */}
-        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <div
-            style={{
-              width: 56, height: 56, borderRadius: 16,
-              background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 1rem",
-              boxShadow: "0 0 24px rgba(99,102,241,0.4)",
-            }}
-          >
-            <Zap size={24} color="white" />
+    <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-6 md:p-12 font-body">
+      <div className="w-full max-w-5xl bg-surface-container-lowest rounded-[2rem] border border-outline-variant/20 shadow-2xl flex overflow-hidden lg:h-[700px]">
+        
+        {/* Step Navigation Sidebar */}
+        <aside className="w-64 bg-surface-container-low border-r border-outline-variant/10 p-8 hidden md:flex flex-col">
+          <div className="flex items-center gap-3 mb-16">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+              <span className="material-symbols-outlined text-white">temp_preferences_eco</span>
+            </div>
+            <h1 className="font-serif text-xl font-bold text-primary">AdSage</h1>
           </div>
-          <h1 className="gradient-text" style={{ margin: 0, fontSize: "1.75rem", fontWeight: 800 }}>
-            AdSage
-          </h1>
-          <p style={{ margin: "0.375rem 0 0", color: "var(--text-muted)", fontSize: "0.875rem" }}>
-            AI-powered Meta Ads Manager
-          </p>
-        </div>
 
-        {/* Progress bar */}
-        <div style={{ display: "flex", gap: "0.375rem", marginBottom: "1.5rem" }}>
-          {steps.map((s, i) => (
-            <div
-              key={s}
-              style={{
-                flex: 1, height: 3, borderRadius: 2,
-                background: i <= stepIdx ? "var(--accent-blue)" : "rgba(255,255,255,0.08)",
-                transition: "background 0.3s",
-              }}
-            />
-          ))}
-        </div>
-
-        <div className="glass-card" style={{ padding: "2rem" }}>
-          {/* Step 1: Welcome */}
-          {step === "welcome" && (
-            <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-              <h2 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 700, color: "var(--text-primary)" }}>
-                Welcome to AdSage
-              </h2>
-              <p style={{ margin: 0, color: "var(--text-muted)", lineHeight: 1.7 }}>
-                Three AI agents autonomously optimize your Meta Ads — with your approval at every step.
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-                {[
-                  { emoji: "🔍", title: "Performance Detective", desc: "Flags underperforming campaigns" },
-                  { emoji: "💰", title: "Budget Strategist",     desc: "Reallocates budgets to maximize ROAS" },
-                  { emoji: "🚀", title: "Growth Executor",       desc: "Scales and duplicates winning campaigns" },
-                ].map((a) => (
-                  <div
-                    key={a.title}
-                    style={{
-                      display: "flex", gap: "0.875rem", alignItems: "flex-start",
-                      padding: "0.75rem", borderRadius: 10,
-                      background: "rgba(255,255,255,0.03)",
-                    }}
-                  >
-                    <span style={{ fontSize: "1.25rem" }}>{a.emoji}</span>
-                    <div>
-                      <p style={{ margin: 0, fontWeight: 600, fontSize: "0.875rem", color: "var(--text-primary)" }}>{a.title}</p>
-                      <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--text-muted)" }}>{a.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div
-                style={{
-                  padding: "0.75rem", borderRadius: 10,
-                  background: "rgba(99,102,241,0.08)",
-                  border: "1px solid rgba(99,102,241,0.15)",
-                }}
-              >
-                <p style={{ margin: 0, fontSize: "0.8rem", color: "#818cf8" }}>
-                  🎭 <strong>Demo mode</strong> — using realistic simulated campaign data. No real Meta API needed.
-                </p>
-              </div>
-              <button className="btn-primary" onClick={() => setStep("business")} id="onboarding-start-btn">
-                Get Started <ArrowRight size={14} />
-              </button>
-            </div>
-          )}
-
-          {/* Step 2: Business */}
-          {step === "business" && (
-            <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-              <h2 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 700, color: "var(--text-primary)" }}>
-                Tell us about your business
-              </h2>
-              {f("Business Name", "business_name", "text", "e.g. CodePunk Store")}
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.375rem" }}>
-                <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-muted)" }}>Industry</label>
-                <select
-                  className="input"
-                  value={form.industry}
-                  onChange={(e) => setForm({ ...form, industry: e.target.value })}
+          <div className="space-y-4 flex-1">
+             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-8">Onboarding Cycle</p>
+             {steps.map((s, i) => (
+                <div 
+                  key={s.id} 
+                  className={`flex items-center gap-4 group transition-all duration-300 ${step === s.id ? 'opacity-100' : 'opacity-40'}`}
                 >
-                  <option value="">Select industry…</option>
-                  {["E-commerce", "Fashion", "Electronics", "FMCG", "EdTech", "SaaS", "Real Estate", "Other"].map((i) => (
-                    <option key={i} value={i}>{i}</option>
-                  ))}
-                </select>
-              </div>
-              <button className="btn-primary" onClick={() => setStep("goals")}>
-                Continue <ArrowRight size={14} />
-              </button>
-            </div>
-          )}
+                   <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-all ${
+                     step === s.id ? 'border-primary bg-primary text-white' : 'border-stone-300 text-stone-300'
+                   }`}>
+                      {i + 1}
+                   </div>
+                   <div className="flex flex-col">
+                      <span className={`text-[12px] font-bold uppercase tracking-widest ${step === s.id ? 'text-primary' : 'text-stone-400'}`}>
+                        {s.label}
+                      </span>
+                   </div>
+                </div>
+             ))}
+          </div>
 
-          {/* Step 3: Goals */}
-          {step === "goals" && (
-            <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-              <h2 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 700, color: "var(--text-primary)" }}>
-                Set your performance targets
-              </h2>
-              <p style={{ margin: 0, fontSize: "0.82rem", color: "var(--text-muted)" }}>
-                Agents use these thresholds to decide when to alert, pause, or scale campaigns.
-              </p>
-              {f("Target CPA (₹)", "target_cpa", "number", "400")}
-              {f("Target ROAS (x)", "target_roas", "number", "3.0")}
-              {error && (
-                <p style={{
-                  margin: 0, color: "#f87171", fontSize: "0.82rem",
-                  padding: "0.625rem 0.75rem",
-                  background: "rgba(239,68,68,0.1)", borderRadius: 8,
-                }}>
-                  {error}
-                </p>
-              )}
-              <button
-                className="btn-primary"
-                onClick={finish}
-                disabled={loading}
-                id="onboarding-finish-btn"
-              >
-                {loading ? <LoadingSpinner size={14} /> : <Zap size={14} />}
-                {loading ? "Setting up…" : "Launch Dashboard"}
-              </button>
+          <div className="mt-auto">
+             <p className="text-[10px] text-stone-400 font-medium leading-relaxed">
+               Welcome to the Observatory. <br/>
+               Our agents will guide your marketing evolution.
+             </p>
+          </div>
+        </aside>
+
+        {/* Content Area */}
+        <main className="flex-1 p-8 md:p-16 flex flex-col relative overflow-y-auto">
+          
+          <div className="flex-1 animate-fade-in max-w-md mx-auto w-full flex flex-col justify-center">
+            
+            {step === "vision" && (
+              <div className="space-y-8 animate-fade-in">
+                <div className="space-y-2">
+                  <h2 className="font-serif text-4xl font-bold tracking-tight text-on-surface">Establish Vision</h2>
+                  <p className="text-stone-500 font-medium">Tell us about your business baseline.</p>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">Business Name</label>
+                    <input 
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-on-surface"
+                      placeholder="e.g. Sterling Archival Studio"
+                      value={form.business_name}
+                      onChange={(e) => setForm({ ...form, business_name: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">Primary Industry</label>
+                    <select 
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-on-surface appearance-none"
+                      value={form.industry}
+                      onChange={(e) => setForm({ ...form, industry: e.target.value })}
+                    >
+                       <option value="">Select industry scope...</option>
+                       {["E-commerce", "SaaS", "Fashion", "Electronics", "Architecture", "Luxury Goods"].map(i => <option key={i} value={i}>{i}</option>)}
+                    </select>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setStep("pulse")}
+                  className="w-full py-4 bg-primary text-white rounded-2xl font-bold uppercase tracking-[0.2em] text-xs shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                >
+                  Continue Pulse Check
+                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                </button>
+              </div>
+            )}
+
+            {step === "pulse" && (
+              <div className="space-y-8 animate-fade-in">
+                <div className="space-y-2">
+                  <h2 className="font-serif text-4xl font-bold tracking-tight text-on-surface">Set the Pulse</h2>
+                  <p className="text-stone-500 font-medium">Define your acceptable performance thresholds.</p>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">Target CPA (₹)</label>
+                    <input 
+                      type="number"
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-on-surface"
+                      placeholder="400"
+                      value={form.target_cpa}
+                      onChange={(e) => setForm({ ...form, target_cpa: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">Minimum ROAS (x)</label>
+                    <input 
+                      type="number"
+                      step="0.1"
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-on-surface"
+                      placeholder="3.0"
+                      value={form.target_roas}
+                      onChange={(e) => setForm({ ...form, target_roas: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                   <button onClick={() => setStep("vision")} className="flex-1 py-4 bg-surface-container-high text-stone-600 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-stone-200 transition-colors">Back</button>
+                   <button 
+                     onClick={() => setStep("strategy")}
+                     className="flex-[2] py-4 bg-primary text-white rounded-2xl font-bold uppercase tracking-[0.2em] text-xs shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                   >
+                     Calibrate Strategy
+                   </button>
+                </div>
+              </div>
+            )}
+
+            {step === "strategy" && (
+              <div className="space-y-8 animate-fade-in">
+                <div className="space-y-2">
+                  <h2 className="font-serif text-4xl font-bold tracking-tight text-on-surface">Select Strategy</h2>
+                  <p className="text-stone-500 font-medium">How should our agents manage your archives?</p>
+                </div>
+
+                <div className="space-y-4">
+                   {[
+                     { name: 'Stability', icon: 'balance', desc: 'Prioritize consistent ROAS over volume.' },
+                     { name: 'Efficiency', icon: 'energy_savings_leaf', desc: 'Optimize spend relative to conversion value.' },
+                     { name: 'Expansion', icon: 'shutter_speed', desc: 'Aggressive scaling of winning creative assets.' }
+                   ].map(s => (
+                     <div 
+                       key={s.name}
+                       onClick={() => setForm({...form, strategy: s.name})}
+                       className={`p-6 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-6 ${
+                         form.strategy === s.name ? 'border-primary bg-primary/5' : 'border-outline-variant/20 hover:border-outline-variant/50'
+                       }`}
+                     >
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${form.strategy === s.name ? 'bg-primary text-white' : 'bg-surface-container-high text-stone-400'}`}>
+                           <span className="material-symbols-outlined text-2xl">{s.icon}</span>
+                        </div>
+                        <div className="flex-1">
+                           <p className={`text-sm font-bold ${form.strategy === s.name ? 'text-primary' : 'text-on-surface'}`}>{s.name}</p>
+                           <p className="text-[11px] text-stone-500 leading-tight">{s.desc}</p>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+
+                {error && <p className="text-error text-xs font-bold bg-error-container/20 p-4 rounded-xl">{error}</p>}
+
+                <div className="flex gap-4 pt-4">
+                   <button onClick={() => setStep("pulse")} className="flex-1 py-4 bg-surface-container-high text-stone-600 rounded-2xl font-bold uppercase tracking-widest text-xs">Back</button>
+                   <button 
+                     onClick={finish}
+                     disabled={loading}
+                     className="flex-[2] py-4 bg-primary text-white rounded-2xl font-bold uppercase tracking-[0.2em] text-xs shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                   >
+                     {loading ? <LoadingSpinner size={16} /> : 'Activate Observatory'}
+                   </button>
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          <footer className="mt-auto pt-16 flex justify-between items-center text-[10px] font-bold text-stone-300 uppercase tracking-widest">
+            <span>© 2026 AdSage AI</span>
+            <div className="flex gap-4">
+              <span>Security Protocol</span>
+              <span>Encrypted</span>
             </div>
-          )}
-        </div>
+          </footer>
+        </main>
+
       </div>
     </div>
   );
