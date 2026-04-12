@@ -1,0 +1,26 @@
+[build]
+  base    = "frontend"
+  command = "npm run build"
+  publish = "frontend/dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA fallback — all routes serve index.html so React Router can handle them
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+# Optional: proxy /api calls to your backend (update the URL after deploying backend)
+# [[redirects]]
+#   from   = "/api/*"
+#   to     = "https://your-backend-url.com/api/:splat"
+#   status = 200
+#   force  = true
+
+[dev]
+  command   = "npm run dev"
+  port      = 5173
+  targetPort = 5173
+  framework = "vite"
