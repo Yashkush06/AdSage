@@ -180,7 +180,7 @@ function CreativeStudioInner() {
             <span className="material-symbols-outlined text-[#FF0032] text-4xl shadow-[0_0_15px_rgba(255,0,50,0.4)]" style={{fontVariationSettings: "'FILL' 1"}}>auto_awesome</span>
             <h1 className="text-4xl font-black font-serif text-white uppercase italic tracking-tighter">Creative Studio</h1>
           </div>
-          <p className="text-[#00F0FF]/80 font-bold uppercase tracking-[0.2em] text-[10px]">Neural Content Generation — Proven Framework Selection Active</p>
+          <p className="text-[#00F0FF]/80 font-bold uppercase tracking-[0.2em] text-[10px]">AI Content Generation — Proven Framework Selection Active</p>
         </div>
       </div>
 
@@ -209,7 +209,7 @@ function CreativeStudioInner() {
             {activeTab === "generate" ? (
               <form onSubmit={handleGenerate} className="space-y-6">
                 <div>
-                  <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Neural Identifier</label>
+                  <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Business Name</label>
                   <input required value={business} onChange={e => setBusiness(e.target.value)} type="text" placeholder="e.g. FitTrack Pro" className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-bold text-white uppercase italic text-sm placeholder:text-white/40 rounded-xl shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]" />
                 </div>
                 
@@ -336,7 +336,7 @@ function CreativeStudioInner() {
                   <div className="flex justify-between items-start mb-8">
                     <div className="flex items-center gap-3">
                       <span className="material-symbols-outlined text-[#FF0032] shadow-[0_0_10px_rgba(255,0,50,0.3)]">gesture</span>
-                      <h3 className="font-black text-white text-[11px] uppercase tracking-[0.4em] italic">Neural Hooks</h3>
+                      <h3 className="font-black text-white text-[11px] uppercase tracking-[0.4em] italic">Ad Hooks</h3>
                     </div>
                     <button onClick={handleRegenerateHooks} className="text-[#00F0FF]/40 hover:text-[#00F0FF] transition-all hover:rotate-180 duration-500" title="Refine Frequency">
                       <span className="material-symbols-outlined text-[20px]">sync</span>
@@ -361,27 +361,27 @@ function CreativeStudioInner() {
                    <div className="absolute top-0 right-0 w-1 h-24 bg-[#00F0FF]/40" />
                   <div className="flex items-center gap-3 mb-8">
                     <span className="material-symbols-outlined text-[#00F0FF] shadow-[0_0_10px_rgba(0,240,255,0.3)]">radar</span>
-                    <h3 className="font-black text-white text-[11px] uppercase tracking-[0.4em] italic">Precision Cluster</h3>
+                    <h3 className="font-black text-white text-[11px] uppercase tracking-[0.4em] italic">Target Audience</h3>
                   </div>
                   
                   <div className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-white/3 border border-white/10 p-4 rounded-xl">
-                        <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-2 italic">Neural Maturity</span>
+                        <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-2 italic">Age Range</span>
                         <span className="font-black text-white uppercase italic text-sm">{currentAd.targetAudience.age || "Full Spectrum"}</span>
                       </div>
                       <div className="bg-white/3 border border-white/10 p-4 rounded-xl">
-                        <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-2 italic">Spectrum</span>
+                        <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-2 italic">Gender</span>
                         <span className="font-black text-white uppercase italic text-sm">{currentAd.targetAudience.gender || "Omni"}</span>
                       </div>
                     </div>
                     <div className="bg-white/3 border border-white/10 p-4 rounded-xl">
-                      <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-2 italic">Spatial Coordination</span>
+                      <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-2 italic">Location</span>
                       <p className="font-black text-white uppercase italic text-xs tracking-tighter">{currentAd.targetAudience.location || "Default Terrain"}</p>
                     </div>
                     {currentAd.targetAudience.interests && (
                       <div>
-                        <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-4 italic">Neural Affinities</span>
+                        <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-4 italic">Interests</span>
                         <div className="flex flex-wrap gap-2">
                           {currentAd.targetAudience.interests.map(i => (
                             <span key={i} className="px-3 py-1 bg-[#00F0FF]/5 border border-[#00F0FF]/20 text-[#00F0FF] text-[9px] font-black uppercase tracking-widest italic">{i}</span>
@@ -400,7 +400,7 @@ function CreativeStudioInner() {
                   <div className="flex items-center justify-between gap-4 mb-8">
                     <div className="flex items-center gap-3">
                        <span className="material-symbols-outlined text-[#FF0032]">description</span>
-                       <h3 className="font-black text-white text-[11px] uppercase tracking-[0.4em] italic">Neural Manifest (Copy)</h3>
+                       <h3 className="font-black text-white text-[11px] uppercase tracking-[0.4em] italic">Ad Copy</h3>
                     </div>
                     <button className="text-white/20 hover:text-white transition-all flex items-center gap-2 text-[9px] font-black uppercase tracking-widest italic" onClick={() => handleCopy(currentAd.adCopy)}>
                       <span className="material-symbols-outlined text-[16px]">content_copy</span> Copy Manifest
@@ -418,7 +418,7 @@ function CreativeStudioInner() {
                   
                   {currentAd.callToAction && (
                     <div className="flex items-center justify-between border-t border-white/5 pt-8">
-                      <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic">Termination Trigger</span>
+                      <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic">Call to Action</span>
                       <button className="px-6 py-2.5 bg-[#FF0032] text-white rounded-xl font-medium shadow-md shadow-[#FF0032]/20 hover:shadow-lg hover:shadow-[#FF0032]/30 transition-all">
                         {currentAd.callToAction}
                       </button>
