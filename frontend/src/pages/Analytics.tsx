@@ -3,6 +3,9 @@ import { campaignsApi, analyticsApi } from "../lib/api";
 import { PerformanceTrends } from "../components/dashboard/PerformanceTrends";
 import { FunnelVisualization } from "../components/analytics/FunnelVisualization";
 import { AudienceInsights } from "../components/analytics/AudienceInsights";
+import { ChannelBreakdown } from "../components/analytics/ChannelBreakdown";
+import { PeakConversions } from "../components/analytics/PeakConversions";
+import { TopCreatives } from "../components/analytics/TopCreatives";
 import { Header } from "../components/shared/Header";
 import { useState } from "react";
 import type { Campaign } from "../types";
@@ -51,6 +54,22 @@ function Skeleton({ className = "" }: { className?: string }) {
 
 export function Analytics() {
   const [selectedCampaign, setSelectedCampaign] = useState<string>("");
+  const [cycling, setCycling] = useState(false);
+  const [cycleMsg, setCycleMsg] = useState("");
+
+  async function runCycle() {
+    setCycling(true);
+    setCycleMsg("Syncing agents…");
+    try {
+      await analyticsApi.runCycle();
+      setCycleMsg("✓ Pulse complete");
+    } catch {
+      setCycleMsg("Sync failed");
+    } finally {
+      setCycling(false);
+      setTimeout(() => setCycleMsg(""), 4000);
+    }
+  }
 
   const { data: campaignsRes, isLoading: loadingCampaigns } = useQuery({
     queryKey: ["campaigns"],
@@ -128,9 +147,9 @@ export function Analytics() {
                 </select>
               )}
             </div>
-            <button className="flex items-center gap-2 px-6 py-2 bg-[#FF0032] text-white rounded-none text-[10px] font-black uppercase tracking-[.2em] hover-glitch transition-all shadow-[0_0_15px_rgba(255,0,50,0.3)]">
-              <span className="material-symbols-outlined text-sm">bolt</span>
-              Initiate Pulse
+            <button onClick={runCycle} disabled={cycling} className="flex items-center gap-2 px-6 py-2 bg-[#FF0032] text-white rounded-none text-[10px] font-black uppercase tracking-[.2em] hover-glitch transition-all shadow-[0_0_15px_rgba(255,0,50,0.3)] disabled:opacity-50">
+              <span className={`material-symbols-outlined text-sm ${cycling ? 'animate-spin' : ''}`}>bolt</span>
+              {cycling ? 'Syncing…' : cycleMsg || 'Initiate Pulse'}
             </button>
           </div>
         </section>
@@ -180,8 +199,8 @@ export function Analytics() {
                 <div className="text-6xl font-serif font-black text-white italic mb-2 tracking-tighter">{insights.week_rating}/10</div>
                 <p className="text-white/80 text-xs font-bold uppercase tracking-widest">Operational Sync Level</p>
               </div>
-              <button className="w-full py-4 bg-black/20 hover:bg-black/40 text-white rounded-none text-[10px] font-black uppercase tracking-[.2em] transition-colors border border-white/10">
-                Network Briefing
+              <button onClick={runCycle} disabled={cycling} className="w-full py-4 bg-black/20 hover:bg-black/40 text-white rounded-none text-[10px] font-black uppercase tracking-[.2em] transition-colors border border-white/10 disabled:opacity-50">
+                {cycling ? 'Syncing…' : 'Network Briefing'}
               </button>
             </div>
           </div>
@@ -194,10 +213,21 @@ export function Analytics() {
           <PerformanceTrends data={trends} title="Global Ecosystem Pulse" />
         )}
 
-        {/* Funnel + Audience */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        {/* Row 1: Channel Breakdown + Audience Performance */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <ChannelBreakdown />
+          {loadingAudience ? <Skeleton className="h-80" /> : <AudienceInsights segments={audience} />}
+        </div>
+
+        {/* Row 2: Hourly Conversions + Top Creatives */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <PeakConversions />
+          <TopCreatives />
+        </div>
+
+        {/* Row 3: Funnel */}
+        <div className="mb-12">
           {loadingFunnel ? <Skeleton className="h-96" /> : <FunnelVisualization steps={funnel} />}
-          {loadingAudience ? <Skeleton className="h-96" /> : <AudienceInsights segments={audience} />}
         </div>
       </main>
     </div>

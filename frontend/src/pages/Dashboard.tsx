@@ -626,8 +626,8 @@ export function Dashboard() {
       </main>
 
       <div className="fixed bottom-8 right-8 z-50">
-        <button className="w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95">
-          <span className="material-symbols-outlined text-3xl">auto_awesome</span>
+        <button onClick={runCycle} disabled={cycling} className="w-14 h-14 bg-[#FF0032] text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 disabled:opacity-50 shadow-[0_0_20px_rgba(255,0,50,0.4)]">
+          <span className={`material-symbols-outlined text-3xl ${cycling ? 'animate-spin' : ''}`}>{cycling ? 'sync' : 'auto_awesome'}</span>
         </button>
       </div>
     </div>

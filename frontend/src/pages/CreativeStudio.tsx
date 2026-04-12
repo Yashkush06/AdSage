@@ -1,5 +1,24 @@
-import { useState } from "react";
+import { useState, Component } from "react";
 import { creativeStudioApi } from "../lib/api";
+
+// Error boundary to prevent full blank screen on render crash
+class ErrorBoundary extends Component<{ children: React.ReactNode }, { error: string | null }> {
+  state = { error: null };
+  static getDerivedStateFromError(e: Error) { return { error: e.message }; }
+  render() {
+    if (this.state.error) return (
+      <div className="flex items-center justify-center min-h-screen bg-[#050505]">
+        <div className="text-center p-8 border border-[#FF0032]/20 rounded-none max-w-md">
+          <span className="material-symbols-outlined text-4xl text-[#FF0032]/40 mb-4 block">error</span>
+          <p className="text-white/40 text-xs font-black uppercase tracking-widest">Render Error</p>
+          <p className="text-white/20 text-xs mt-2">{this.state.error}</p>
+          <button onClick={() => this.setState({ error: null })} className="mt-6 px-6 py-2 bg-[#FF0032] text-white text-xs font-black uppercase tracking-widest">Retry</button>
+        </div>
+      </div>
+    );
+    return this.props.children;
+  }
+}
 
 type Goal = "Sales" | "Leads" | "Traffic" | "Awareness";
 type Platform = "Instagram" | "Facebook" | "Both";
@@ -25,6 +44,10 @@ interface AdResult {
 }
 
 export function CreativeStudio() {
+  return <ErrorBoundary><CreativeStudioInner /></ErrorBoundary>;
+}
+
+function CreativeStudioInner() {
   const [activeTab, setActiveTab] = useState<"generate" | "improve">("generate");
 
   // Form State
@@ -59,7 +82,17 @@ export function CreativeStudio() {
         tone,
       });
       if (res.data.success) {
-        setAdHistory([{ ...res.data.ad, _id: Date.now() }, ...adHistory]);
+        const ad = res.data.ad;
+        setAdHistory([{
+          campaignName: ad.campaignName || "Untitled Campaign",
+          hooks: Array.isArray(ad.hooks) ? ad.hooks : [],
+          targetAudience: ad.targetAudience || {},
+          adCopy: ad.adCopy || "",
+          creativeIdeas: Array.isArray(ad.creativeIdeas) ? ad.creativeIdeas : [],
+          callToAction: ad.callToAction,
+          estimatedBudget: ad.estimatedBudget,
+          keyMetrics: Array.isArray(ad.keyMetrics) ? ad.keyMetrics : [],
+        }, ...adHistory]);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setError(res.data.detail || "Failed to generate ad.");
@@ -82,7 +115,19 @@ export function CreativeStudio() {
         adCopy: existingAdCopy,
       });
       if (res.data.success) {
-        setAdHistory([{ ...res.data.ad, _id: Date.now() }, ...adHistory]);
+        const ad = res.data.ad;
+        setAdHistory([{
+          campaignName: ad.campaignName || "Improved Campaign",
+          hooks: Array.isArray(ad.hooks) ? ad.hooks : [],
+          targetAudience: ad.targetAudience || {},
+          adCopy: ad.adCopy || "",
+          creativeIdeas: Array.isArray(ad.creativeIdeas) ? ad.creativeIdeas : [],
+          callToAction: ad.callToAction,
+          estimatedBudget: ad.estimatedBudget,
+          keyMetrics: Array.isArray(ad.keyMetrics) ? ad.keyMetrics : [],
+          improvements: Array.isArray(ad.improvements) ? ad.improvements : [],
+          estimatedImpact: ad.estimatedImpact,
+        }, ...adHistory]);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setError(res.data.detail || "Failed to improve ad.");

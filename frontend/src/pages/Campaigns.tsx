@@ -76,6 +76,8 @@ function CampaignRow({ campaign, onSelect, selected }: {
 export function Campaigns() {
   const [selected, setSelected] = useState<Campaign | null>(null);
   const [statusFilter, setStatusFilter] = useState("ACTIVE");
+  const [page, setPage] = useState(0);
+  const PAGE_SIZE = 8;
 
   const { data, isLoading } = useQuery({
     queryKey: ["campaigns", statusFilter],
@@ -83,6 +85,17 @@ export function Campaigns() {
   });
 
   const campaigns: Campaign[] = data?.data?.campaigns || [];
+  const totalPages = Math.max(1, Math.ceil(campaigns.length / PAGE_SIZE));
+  const paginated = campaigns.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+
+  function exportCsv() {
+    const rows = [["Name","Status","Objective","Budget"].join(","),
+      ...campaigns.map(c => [c.name, c.status, c.objective, c.daily_budget_inr ?? ""].join(","))
+    ];
+    const blob = new Blob([rows.join("\n")], { type: "text/csv" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+    a.download = "campaigns.csv"; a.click();
+  }
 
   if (isLoading) return <PageLoader />;
 
@@ -161,7 +174,7 @@ export function Campaigns() {
                     </select>
                     <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none text-sm">stat_0</span>
                 </div>
-                <button className="px-6 py-4 bg-white/5 text-white/50 text-[10px] font-black uppercase tracking-[0.3em] border border-white/10 hover:text-white hover:bg-white/10 transition-all rounded-none italic flex items-center gap-3">
+                <button onClick={exportCsv} className="px-6 py-4 bg-white/5 text-white/50 text-[10px] font-black uppercase tracking-[0.3em] border border-white/10 hover:text-white hover:bg-white/10 transition-all rounded-none italic flex items-center gap-3">
                   <span className="material-symbols-outlined text-lg">download</span>
                   Export Dump
                 </button>
@@ -185,7 +198,7 @@ export function Campaigns() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
-                  {campaigns.map((c) => (
+                  {paginated.map((c) => (
                     <CampaignRow
                       key={c.id}
                       campaign={c}
@@ -199,14 +212,14 @@ export function Campaigns() {
               {/* Footer Navigation */}
               <div className="px-8 py-6 bg-white/5 flex justify-between items-center border-t border-white/5">
                 <p className="text-[9px] text-white/20 uppercase tracking-[0.5em] font-black italic">
-                    Reservoir Size: {campaigns.length} Entities Synchronized
+                    Reservoir Size: {campaigns.length} Entities — Page {page + 1}/{totalPages}
                 </p>
                 <div className="flex gap-6">
-                  <button className="p-2 text-white/20 hover:text-[#00F0FF] transition-all flex items-center gap-2 group">
+                  <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="p-2 text-white/20 hover:text-[#00F0FF] transition-all flex items-center gap-2 group disabled:opacity-30">
                      <span className="text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Rewind</span>
                      <span className="material-symbols-outlined text-xl">west</span>
                   </button>
-                  <button className="p-2 text-white/20 hover:text-[#FF0032] transition-all flex items-center gap-2 group">
+                  <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="p-2 text-white/20 hover:text-[#FF0032] transition-all flex items-center gap-2 group disabled:opacity-30">
                      <span className="material-symbols-outlined text-xl">east</span>
                      <span className="text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Fast Fwd</span>
                   </button>

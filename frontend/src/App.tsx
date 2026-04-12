@@ -13,7 +13,7 @@ import { CreativeStudio } from "./pages/CreativeStudio";
 import { useAppStore } from "./lib/store";
 import { AppStartup } from "./components/shared/AppStartup";
 import { CursorTrail } from "./components/shared/CursorTrail";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const qc = new QueryClient({
@@ -72,14 +72,10 @@ function AppLayout() {
 }
 
 export default function App() {
-  const [showStartup, setShowStartup] = useState(false);
-
-  useEffect(() => {
-    const isFirstLoad = !sessionStorage.getItem("adsage_booted");
-    if (isFirstLoad) {
-      setShowStartup(true);
-    }
-  }, []);
+  // Start as true — show startup immediately on first load
+  const [showStartup, setShowStartup] = useState(() => {
+    return !sessionStorage.getItem("adsage_booted");
+  });
 
   const handleStartupComplete = () => {
     sessionStorage.setItem("adsage_booted", "true");
@@ -92,7 +88,7 @@ export default function App() {
       <style>{`* { cursor: none !important; }`}</style>
       <AnimatePresence>
         {showStartup && (
-          <AppStartup onComplete={handleStartupComplete} />
+          <AppStartup key="startup" onComplete={handleStartupComplete} />
         )}
       </AnimatePresence>
       <BrowserRouter>
