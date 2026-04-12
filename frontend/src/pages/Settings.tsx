@@ -52,115 +52,24 @@ export function Settings() {
   }
 
   const field = (label: string, key: keyof typeof form, type = "text", hint?: string) => (
-<<<<<<< HEAD
-    <div className="space-y-2">
-      <label className="text-[10px] uppercase font-black text-white/30 tracking-[0.4em] italic">{label}</label>
-      <input
-        className="w-full bg-[#0d0d0f] border border-white/10 rounded-none px-4 py-3 outline-none focus:border-[#FF0032]/50 focus:ring-1 focus:ring-[#FF0032]/20 transition-all font-bold text-white/80 text-sm placeholder:text-white/20"
-=======
     <div className="space-y-3 group">
       <label className="text-[10px] uppercase font-black text-white/40 tracking-[0.3em] group-focus-within:text-[#FF0032] transition-colors">{label}</label>
       <input
         className="input font-bold"
->>>>>>> 6f02f14 (Update UI visibility, auth models, and add glassmorphism components)
         type={type}
         value={form[key]}
         onChange={(e) => setForm({ ...form, [key]: e.target.value })}
       />
-<<<<<<< HEAD
-      {hint && <p className="text-[10px] text-white/20 italic">Directive: {hint}</p>}
-=======
       {hint && <p className="text-[9px] text-[#00F0FF]/50 italic font-bold tracking-[0.2em] uppercase">Directive: {hint}</p>}
->>>>>>> 6f02f14 (Update UI visibility, auth models, and add glassmorphism components)
     </div>
   );
 
   return (
-<<<<<<< HEAD
-    <div className="flex flex-col min-h-screen bg-[#050505]">
-      <Header title="Observatory Settings" subtitle="Ecosystem Configuration" />
-
-      <main className="p-8 max-w-2xl mx-auto space-y-8 animate-fade-in w-full pb-20">
-
-        <div className="space-y-1">
-          <h2 className="font-serif text-4xl font-black tracking-tighter text-white uppercase italic">Configuration</h2>
-          <p className="text-white/30 font-black text-[11px] uppercase tracking-[0.3em]">Fine-tuning the parameters of your agent network.</p>
-        </div>
-
-        {/* Business profile */}
-        <section className="bg-[#0a0a0c] border border-white/8 rounded-none p-8 space-y-8">
-          <div className="flex items-center gap-3 text-[#FF0032]">
-            <span className="material-symbols-outlined text-xl">identity_platform</span>
-            <h3 className="font-serif text-xl font-black italic uppercase tracking-tighter">Business Core</h3>
-          </div>
-
-          <div className="space-y-6">
-            {field("Business Name", "business_name")}
-            {field("Industry Vector", "industry")}
-            <div className="grid grid-cols-2 gap-6">
-              {field("Target CPA (₹)", "target_cpa", "number", "Agent pause threshold")}
-              {field("Target ROAS (x)", "target_roas", "number", "Agent scale threshold")}
-            </div>
-            {field("Monthly Budget (₹)", "monthly_budget", "number")}
-          </div>
-
-          <div className="flex items-center gap-4 pt-4 border-t border-white/5">
-            <button
-              onClick={save}
-              disabled={saving}
-              className="flex-1 py-4 bg-[#FF0032] text-white rounded-none text-[10px] font-black uppercase tracking-[0.4em] italic shadow-[0_0_20px_rgba(255,0,50,0.3)] hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
-            >
-              {saving ? <LoadingSpinner size={16} /> : <span className="material-symbols-outlined text-lg">save</span>}
-              Save Parameters
-            </button>
-            {msg && <span className="text-xs font-black text-[#00F0FF] animate-fade-in uppercase tracking-widest">{msg}</span>}
-          </div>
-        </section>
-
-        {/* Temporal Simulation */}
-        <section className="bg-[#0a0a0c] border border-white/8 rounded-none p-8 space-y-6">
-          <div className="flex items-center gap-3 text-white/40">
-            <span className="material-symbols-outlined text-xl">timelapse</span>
-            <h3 className="font-serif text-xl font-black italic uppercase tracking-tighter text-white/60">Time Dilation</h3>
-          </div>
-          <p className="text-sm text-white/30 leading-relaxed max-w-md font-medium">
-            Accelerate the ecosystem to observe agent decisions and campaign evolution in the simulated market.
-          </p>
-
-          <div className="flex items-center gap-4">
-            <select
-              className="bg-[#0d0d0f] border border-white/10 text-white/60 text-sm font-black uppercase italic px-4 py-3 outline-none focus:border-[#FF0032]/50 transition-all rounded-none appearance-none"
-              value={simHours}
-              onChange={(e) => setSimHours(Number(e.target.value))}
-            >
-              {[1, 4, 8, 24, 48].map((h) => (
-                <option key={h} value={h} className="bg-[#0d0d0f]">{h} hour{h > 1 ? "s" : ""}</option>
-              ))}
-            </select>
-            <button
-              onClick={simulate}
-              disabled={simming}
-              className="flex-[2] py-4 bg-white/5 border border-white/10 text-white/50 rounded-none text-[10px] font-black uppercase tracking-[0.3em] italic hover:bg-white/10 hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              {simming ? <LoadingSpinner size={14} /> : <span className="material-symbols-outlined text-lg">fast_forward</span>}
-              Simulate Shift
-            </button>
-          </div>
-          {simMsg && <p className="text-xs font-black text-[#00F0FF] animate-fade-in uppercase tracking-widest">{simMsg}</p>}
-        </section>
-
-        {/* Security */}
-        <div className="p-6 bg-[#FF0032]/5 border border-[#FF0032]/20 rounded-none flex items-start gap-4">
-          <span className="material-symbols-outlined text-[#FF0032] text-lg">security</span>
-          <p className="text-[10px] text-white/30 font-black leading-relaxed uppercase tracking-wider">
-            Observatory Security: All business parameters are locally encrypted. This session is in <strong className="text-white/50">Simulation Mode</strong>. No real-world financial consequences are active.
-          </p>
-=======
     <div className="flex flex-col min-h-screen bg-[#050505] text-white selection:bg-[#FF0032] selection:text-white">
       <Header title="Observatory Settings" subtitle="Ecosystem Configuration" />
-      
+
       <main className="p-8 max-w-4xl mx-auto space-y-12 animate-fade-in w-full pb-20">
-        
+
         <div className="space-y-1">
           <h2 className="font-serif text-5xl font-black tracking-tighter uppercase italic leading-none">Configuration</h2>
           <p className="text-[#00F0FF]/60 font-bold uppercase tracking-[0.25em] text-[10px]">Fine-tuning the parameters of your agent network.</p>
@@ -168,98 +77,107 @@ export function Settings() {
 
         {/* Business profile */}
         <section className="glass-card p-10 space-y-10 relative overflow-hidden group/card shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF0032] via-[#00F0FF] to-[#FF0032] opacity-30 group-hover/card:opacity-100 transition-opacity duration-700" />
-           <div className="absolute -top-32 -right-32 w-64 h-64 bg-[#FF0032]/5 blur-3xl rounded-full" />
-           
-           <div className="flex items-center gap-4 text-white relative z-10">
-              <div className="w-12 h-12 rounded-none bg-[#FF0032]/10 border border-[#FF0032]/30 flex items-center justify-center text-[#FF0032] shadow-[0_0_15px_rgba(255,0,50,0.2)]">
-                 <span className="material-symbols-outlined text-2xl">account_tree</span>
-              </div>
-              <div>
-                 <h3 className="font-serif text-2xl font-black uppercase italic tracking-tighter">Business Core</h3>
-                 <p className="text-[#FF0032]/60 font-black uppercase tracking-[0.2em] text-[8px] mt-1">Primary Directives</p>
-              </div>
-           </div>
-           
-           <div className="space-y-8 relative z-10">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               {field("Business Name", "business_name")}
-               {field("Industry Vector", "industry")}
-             </div>
-             
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-               {field("Target CPA (₹)", "target_cpa", "number", "Agent pause threshold")}
-               {field("Target ROAS (x)", "target_roas", "number", "Agent scale threshold")}
-               {field("Monthly Budget (₹)", "monthly_budget", "number")}
-             </div>
-           </div>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF0032] via-[#00F0FF] to-[#FF0032] opacity-30 group-hover/card:opacity-100 transition-opacity duration-700" />
+          <div className="absolute -top-32 -right-32 w-64 h-64 bg-[#FF0032]/5 blur-3xl rounded-full" />
 
-           <div className="flex items-center gap-6 pt-8 border-t border-white/5 relative z-10">
-             <button 
-               onClick={save} 
-               disabled={saving}
-               className="btn-primary"
-             >
-               {saving ? <LoadingSpinner size={16} /> : <span className="material-symbols-outlined text-lg">save</span>}
-               Save Parameters
-             </button>
-             {msg && <span className="text-[10px] font-black uppercase tracking-widest text-[#00F0FF] animate-fade-in flex items-center gap-2"><span className="material-symbols-outlined text-sm">verified</span> {msg}</span>}
-           </div>
+          <div className="flex items-center gap-4 text-white relative z-10">
+            <div className="w-12 h-12 rounded-none bg-[#FF0032]/10 border border-[#FF0032]/30 flex items-center justify-center text-[#FF0032] shadow-[0_0_15px_rgba(255,0,50,0.2)]">
+              <span className="material-symbols-outlined text-2xl">account_tree</span>
+            </div>
+            <div>
+              <h3 className="font-serif text-2xl font-black uppercase italic tracking-tighter">Business Core</h3>
+              <p className="text-[#FF0032]/60 font-black uppercase tracking-[0.2em] text-[8px] mt-1">Primary Directives</p>
+            </div>
+          </div>
+
+          <div className="space-y-8 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {field("Business Name", "business_name")}
+              {field("Industry Vector", "industry")}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {field("Target CPA (₹)", "target_cpa", "number", "Agent pause threshold")}
+              {field("Target ROAS (x)", "target_roas", "number", "Agent scale threshold")}
+              {field("Monthly Budget (₹)", "monthly_budget", "number")}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-6 pt-8 border-t border-white/5 relative z-10">
+            <button
+              onClick={save}
+              disabled={saving}
+              className="btn-primary"
+            >
+              {saving ? <LoadingSpinner size={16} /> : <span className="material-symbols-outlined text-lg">save</span>}
+              Save Parameters
+            </button>
+            {msg && (
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#00F0FF] animate-fade-in flex items-center gap-2">
+                <span className="material-symbols-outlined text-sm">verified</span> {msg}
+              </span>
+            )}
+          </div>
         </section>
 
         {/* Temporal Simulation */}
         <section className="glass-card p-10 space-y-8 relative overflow-hidden group/card shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00F0FF] via-[#FF0032] to-[#00F0FF] opacity-30 group-hover/card:opacity-100 transition-opacity duration-700" />
-           <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-[#00F0FF]/5 blur-3xl rounded-full" />
-           
-           <div className="flex items-center gap-4 text-white relative z-10">
-              <div className="w-12 h-12 rounded-none bg-[#00F0FF]/10 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-                 <span className="material-symbols-outlined text-2xl">timelapse</span>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00F0FF] via-[#FF0032] to-[#00F0FF] opacity-30 group-hover/card:opacity-100 transition-opacity duration-700" />
+          <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-[#00F0FF]/5 blur-3xl rounded-full" />
+
+          <div className="flex items-center gap-4 text-white relative z-10">
+            <div className="w-12 h-12 rounded-none bg-[#00F0FF]/10 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+              <span className="material-symbols-outlined text-2xl">timelapse</span>
+            </div>
+            <div>
+              <h3 className="font-serif text-2xl font-black uppercase italic tracking-tighter">Time Dilation</h3>
+              <p className="text-[#00F0FF]/60 font-black uppercase tracking-[0.2em] text-[8px] mt-1">Simulated Market Evolution</p>
+            </div>
+          </div>
+
+          <div className="flex items-end gap-6 relative z-10 max-w-xl">
+            <div className="space-y-3 flex-[2]">
+              <label className="text-[10px] uppercase font-black text-white/40 tracking-[0.3em]">Temporal Scope</label>
+              <div className="relative">
+                <select
+                  className="input cursor-pointer font-bold appearance-none w-full pr-10"
+                  value={simHours}
+                  onChange={(e) => setSimHours(Number(e.target.value))}
+                >
+                  {[1, 4, 8, 24, 48].map((h) => (
+                    <option key={h} value={h} className="bg-[#121214] text-white">
+                      Forward {h} hour{h > 1 ? "s" : ""}
+                    </option>
+                  ))}
+                </select>
+                <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none">expand_more</span>
               </div>
-              <div>
-                 <h3 className="font-serif text-2xl font-black uppercase italic tracking-tighter">Time Dilation</h3>
-                 <p className="text-[#00F0FF]/60 font-black uppercase tracking-[0.2em] text-[8px] mt-1">Simulated Market Evolution</p>
-              </div>
-           </div>
-           
-           <div className="flex items-end gap-6 relative z-10 max-w-xl">
-              <div className="space-y-3 flex-[2]">
-                <label className="text-[10px] uppercase font-black text-white/40 tracking-[0.3em]">Temporal Scope</label>
-                <div className="relative">
-                  <select
-                    className="input cursor-pointer font-bold appearance-none w-full pr-10"
-                    value={simHours}
-                    onChange={(e) => setSimHours(Number(e.target.value))}
-                  >
-                    {[1, 4, 8, 24, 48].map((h) => (
-                      <option key={h} value={h} className="bg-[#121214] text-white">Forward {h} hour{h > 1 ? "s" : ""}</option>
-                    ))}
-                  </select>
-                  <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none">expand_more</span>
-                </div>
-              </div>
-              <button 
-                onClick={simulate} 
-                disabled={simming}
-                className="btn-secondary flex-1 py-3 h-[46px]"
-              >
-                {simming ? <LoadingSpinner size={14} /> : <span className="material-symbols-outlined text-lg">fast_forward</span>}
-                Initiate
-              </button>
-           </div>
-           {simMsg && <p className="text-[10px] font-black uppercase tracking-widest text-[#00F0FF] animate-fade-in flex items-center gap-2 relative z-10"><span className="material-symbols-outlined text-sm">update</span> {simMsg}</p>}
+            </div>
+            <button
+              onClick={simulate}
+              disabled={simming}
+              className="btn-secondary flex-1 py-3 h-[46px]"
+            >
+              {simming ? <LoadingSpinner size={14} /> : <span className="material-symbols-outlined text-lg">fast_forward</span>}
+              Initiate
+            </button>
+          </div>
+          {simMsg && (
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#00F0FF] animate-fade-in flex items-center gap-2 relative z-10">
+              <span className="material-symbols-outlined text-sm">update</span> {simMsg}
+            </p>
+          )}
         </section>
 
         {/* Security / Info */}
-        <div className="p-6 bg-[#00F0FF]/5 border border-[#00F0FF]/20 rounded-none flex items-start gap-5 shadow-[0_0_15px_rgba(0,240,255,0.05)] mx-auto max-w-3xl">
-           <span className="material-symbols-outlined text-[#00F0FF] text-3xl opacity-80">local_police</span>
-           <div>
-             <h4 className="text-[11px] font-black text-[#00F0FF] uppercase tracking-[0.3em] mb-1">Observatory Security Protocol</h4>
-             <p className="text-[10px] text-white/50 font-bold leading-relaxed uppercase tracking-widest">
-               All business parameters are locally encrypted. This session is operating in <strong className="text-white">Simulation Mode</strong>. No real-world financial consequences are active during phase tests.
-             </p>
-           </div>
->>>>>>> 6f02f14 (Update UI visibility, auth models, and add glassmorphism components)
+        <div className="p-6 bg-[#00F0FF]/5 border border-[#00F0FF]/20 rounded-none flex items-start gap-5 shadow-[0_0_15px_rgba(0,240,255,0.05)]">
+          <span className="material-symbols-outlined text-[#00F0FF] text-3xl opacity-80">local_police</span>
+          <div>
+            <h4 className="text-[11px] font-black text-[#00F0FF] uppercase tracking-[0.3em] mb-1">Observatory Security Protocol</h4>
+            <p className="text-[10px] text-white/50 font-bold leading-relaxed uppercase tracking-widest">
+              All business parameters are locally encrypted. This session is operating in{" "}
+              <strong className="text-white">Simulation Mode</strong>. No real-world financial consequences are active during phase tests.
+            </p>
+          </div>
         </div>
 
       </main>

@@ -242,19 +242,19 @@ export function Dashboard() {
                 <div className="p-5 space-y-6 animate-fade-in">
 
                   {/* ── AI Agent Insights ── */}
-                  <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-primary-container/10 overflow-hidden">
-                    <div className="flex items-center justify-between px-5 py-3 border-b border-primary/10">
+                  <div className="rounded-xl border border-white/5 bg-gradient-to-br from-white/5 to-transparent overflow-hidden">
+                    <div className="flex items-center justify-between px-5 py-3 border-b border-white/5">
                       <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-primary text-[18px]" style={{fontVariationSettings:"'FILL' 1"}}>psychology</span>
-                        <span className="text-[11px] font-bold uppercase tracking-widest text-primary">AI Agent Analysis</span>
+                        <span className="material-symbols-outlined text-[#00F0FF] text-[18px]" style={{fontVariationSettings:"'FILL' 1"}}>psychology</span>
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-[#00F0FF]">AI Agent Analysis</span>
                         {aiInsights?.confidence_score && (
-                          <span className="ml-2 px-2 py-0.5 bg-primary/10 rounded-full text-[10px] font-bold text-primary">
+                          <span className="ml-2 px-2 py-0.5 bg-[#00F0FF]/10 rounded-full text-[10px] font-bold text-[#00F0FF]">
                             {aiInsights.confidence_score}/10 confidence
                           </span>
                         )}
                       </div>
                       {aiLoading && (
-                        <div className="flex items-center gap-1.5 text-[11px] text-stone-400">
+                        <div className="flex items-center gap-1.5 text-[11px] text-white/40">
                           <span className="material-symbols-outlined text-[14px] animate-spin">sync</span>
                           AI analysing…
                         </div>
@@ -262,7 +262,7 @@ export function Dashboard() {
                     </div>
 
                     {aiLoading && !aiInsights && (
-                      <div className="px-5 py-6 flex items-center justify-center gap-3 text-stone-400 text-sm">
+                      <div className="px-5 py-6 flex items-center justify-center gap-3 text-white/40 text-sm">
                         <span className="material-symbols-outlined animate-spin">progress_activity</span>
                         Running agent on your data…
                       </div>
@@ -271,25 +271,25 @@ export function Dashboard() {
                     {aiInsights && (
                       <div className="p-5 space-y-4">
                         {/* Headline */}
-                        <p className="text-base font-serif font-bold text-on-surface leading-snug">
+                        <p className="text-base font-serif font-bold text-white leading-snug">
                           {aiInsights.headline}
                         </p>
 
                         {/* 4 insight cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {([
-                            { key: "top_channel_insight", icon: "cell_tower",  label: "Top Channel" },
-                            { key: "audience_insight",    icon: "group",       label: "Audience" },
-                            { key: "timing_insight",      icon: "schedule",    label: "Peak Timing" },
-                            { key: "budget_recommendation",icon: "payments",   label: "Budget" },
-                          ] as const).map(({ key, icon, label }) =>
+                            { key: "top_channel_insight", icon: "cell_tower",  label: "Top Channel", color: "text-[#FF0032]" },
+                            { key: "audience_insight",    icon: "group",       label: "Audience", color: "text-[#00F0FF]" },
+                            { key: "timing_insight",      icon: "schedule",    label: "Peak Timing", color: "text-[#FDA481]" },
+                            { key: "budget_recommendation",icon: "payments",   label: "Budget", color: "text-[#FF0032]" },
+                          ] as const).map(({ key, icon, label, color }) =>
                             aiInsights[key] ? (
-                              <div key={key} className="bg-white/70 rounded-lg p-3 border border-primary/10">
-                                <div className="flex items-center gap-1.5 mb-1">
-                                  <span className="material-symbols-outlined text-primary text-[14px]">{icon}</span>
-                                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">{label}</span>
+                              <div key={key} className="bg-white/5 rounded-xl p-4 border border-white/5 hover:bg-white/10 transition-colors">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className={`material-symbols-outlined ${color} text-[16px]`}>{icon}</span>
+                                  <span className={`text-[10px] font-bold uppercase tracking-widest ${color}/50`}>{label}</span>
                                 </div>
-                                <p className="text-xs text-on-surface leading-relaxed">{aiInsights[key]}</p>
+                                <p className="text-xs text-white/80 leading-relaxed font-medium">{aiInsights[key]}</p>
                               </div>
                             ) : null
                           )}
@@ -297,30 +297,32 @@ export function Dashboard() {
 
                         {/* Red flags + Action items row */}
                         {(aiInsights.red_flags?.length > 0 || aiInsights.action_items?.length > 0) && (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                             {aiInsights.red_flags?.length > 0 && (
-                              <div>
-                                <p className="text-[10px] font-bold uppercase tracking-wider text-error mb-2 flex items-center gap-1">
-                                  <span className="material-symbols-outlined text-[13px]">warning</span> Red Flags
+                              <div className="bg-[#FF0032]/5 p-4 rounded-xl border border-[#FF0032]/10">
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-[#FF0032] mb-3 flex items-center gap-1.5">
+                                  <span className="material-symbols-outlined text-[14px]">warning</span> Red Flags
                                 </p>
-                                <ul className="space-y-1">
+                                <ul className="space-y-2">
                                   {aiInsights.red_flags.map((f: string, i: number) => (
-                                    <li key={i} className="flex items-start gap-1.5 text-xs text-stone-600">
-                                      <span className="text-error mt-0.5 shrink-0">•</span>{f}
+                                    <li key={i} className="flex items-start gap-2.5 text-xs text-white/70">
+                                      <span className="text-[#FF0032] mt-0.5 shrink-0 text-[8px]">■</span>
+                                      <span className="leading-snug">{f}</span>
                                     </li>
                                   ))}
                                 </ul>
                               </div>
                             )}
                             {aiInsights.action_items?.length > 0 && (
-                              <div>
-                                <p className="text-[10px] font-bold uppercase tracking-wider text-primary mb-2 flex items-center gap-1">
-                                  <span className="material-symbols-outlined text-[13px]">task_alt</span> Action Items
+                              <div className="bg-[#00F0FF]/5 p-4 rounded-xl border border-[#00F0FF]/10">
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-[#00F0FF] mb-3 flex items-center gap-1.5">
+                                  <span className="material-symbols-outlined text-[14px]">task_alt</span> Action Items
                                 </p>
-                                <ol className="space-y-1">
+                                <ol className="space-y-2">
                                   {aiInsights.action_items.map((a: string, i: number) => (
-                                    <li key={i} className="flex items-start gap-1.5 text-xs text-stone-600">
-                                      <span className="font-bold text-primary shrink-0">{i + 1}.</span>{a}
+                                    <li key={i} className="flex items-start gap-2.5 text-xs text-white/70">
+                                      <span className="font-black text-[#00F0FF] shrink-0 text-[10px] mt-0.5">{i + 1}.</span>
+                                      <span className="leading-snug">{a}</span>
                                     </li>
                                   ))}
                                 </ol>

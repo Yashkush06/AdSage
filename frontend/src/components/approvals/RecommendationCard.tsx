@@ -149,18 +149,7 @@ export function RecommendationCard({ rec, onApprove, onReject, isLoading }: Prop
           </div>
         )}
 
-        {/* ---- Action Details (if available) ---- */}
-        {Object.keys(rec.action_details).length > 0 && (
-          <div className="flex flex-wrap gap-3 mb-5 p-4 bg-[#242E49] rounded-xl border border-[#37415C]/10">
-            <p className="w-full text-[9px] font-bold uppercase tracking-[0.2em] text-[#FDA481]/40 mb-1">Action Parameters</p>
-            {Object.entries(rec.action_details).map(([k, v]) => (
-              <div key={k} className="text-xs">
-                <span className="text-[#FDA481]/40 font-medium">{k.replace(/_/g, " ")}: </span>
-                <span className="font-bold text-white">{String(v)}</span>
-              </div>
-            ))}
-          </div>
-        )}
+
 
         {/* ---- Expand: Full Reasoning ---- */}
         <button
