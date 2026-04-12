@@ -36,6 +36,7 @@ export function Onboarding() {
         industry:      form.industry || "E-commerce",
         target_cpa:    parseFloat(form.target_cpa) || 400,
         target_roas:   parseFloat(form.target_roas) || 3.0,
+        strategy:      form.strategy || "Efficiency",
       });
 
       const meRes = await authApi.me();
@@ -72,15 +73,15 @@ export function Onboarding() {
              {steps.map((s, i) => (
                 <div 
                   key={s.id} 
-                  className={`flex items-center gap-5 group transition-all duration-500 ${step === s.id ? 'opacity-100 translate-x-1' : 'opacity-20'}`}
+                  className={`flex items-center gap-5 group transition-all duration-500 ${step === s.id ? 'opacity-100 translate-x-1' : 'opacity-50 hover:opacity-80'}`}
                 >
                    <div className={`w-8 h-8 rounded-none border-2 flex items-center justify-center text-[10px] font-black transition-all ${
-                     step === s.id ? 'border-[#FF0032] bg-[#FF0032] text-white shadow-[0_0_15px_rgba(255,0,50,0.3)]' : 'border-white/10 text-white/30'
+                     step === s.id ? 'border-[#FF0032] bg-[#FF0032] text-white shadow-[0_0_15px_rgba(255,0,50,0.3)]' : 'border-white/20 text-white/50'
                    }`}>
                       {i + 1}
                    </div>
                    <div className="flex flex-col">
-                      <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${step === s.id ? 'text-[#00F0FF]' : 'text-white/40'}`}>
+                      <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${step === s.id ? 'text-[#00F0FF]' : 'text-white/50'}`}>
                         {s.label}
                       </span>
                    </div>

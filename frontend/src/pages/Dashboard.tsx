@@ -131,21 +131,21 @@ export function Dashboard() {
         {/* Title & Actions */}
         <section className="flex flex-col md:flex-row justify-between items-end gap-6">
           <div className="space-y-1">
-            <h2 className="font-serif text-4xl font-bold tracking-tight text-on-surface">Overview</h2>
-            <p className="text-stone-500 font-medium">Curating your marketing ecosystem with precision.</p>
+            <h2 className="font-serif text-5xl font-black tracking-tighter text-white uppercase italic leading-none mb-2">Overview</h2>
+            <p className="text-[#00F0FF] font-bold uppercase tracking-[0.4em] text-[10px] opacity-60">Curating your marketing ecosystem with precision.</p>
           </div>
           <div className="flex gap-3">
             <button
               onClick={runCycle}
               disabled={cycling}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-outline-variant/30 text-primary rounded-xl text-sm font-bold hover:bg-stone-50 transition-colors shadow-sm disabled:opacity-50"
+              className="px-6 py-2 bg-[#FF0032] border border-[#FF0032] text-white rounded-none text-[10px] font-black uppercase tracking-[0.3em] hover:bg-[#FF0032]/80 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,0,50,0.3)] disabled:opacity-50 italic"
             >
               <span className={`material-symbols-outlined text-lg ${cycling ? 'animate-spin' : ''}`}>
                 {cycling ? 'sync' : 'auto_awesome'}
               </span>
               {cycling ? 'Syncing...' : cycleMsg || 'Run Agent Cycle'}
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-outline-variant/30 text-stone-600 rounded-xl text-sm font-medium hover:bg-stone-50 transition-colors shadow-sm">
+            <button className="px-6 py-2 bg-white/5 border border-white/10 text-white/50 rounded-none text-[10px] font-black uppercase tracking-[0.3em] hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 italic">
               <span className="material-symbols-outlined text-lg">calendar_month</span>
               Last 30 Days
             </button>

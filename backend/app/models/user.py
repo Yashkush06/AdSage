@@ -20,6 +20,7 @@ class User(Base):
     target_cpa = Column(Float, nullable=True, default=400.0)
     target_roas = Column(Float, nullable=True, default=3.0)
     monthly_budget = Column(Float, nullable=True)
+    strategy = Column(String, nullable=True, default="Efficiency")
 
     # Settings
     is_active = Column(Boolean, default=True)

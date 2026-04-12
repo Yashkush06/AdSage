@@ -21,6 +21,7 @@ class SetupRequest(BaseModel):
     target_cpa: Optional[float] = None
     target_roas: Optional[float] = None
     monthly_budget: Optional[float] = None
+    strategy: Optional[str] = None
 
 
 @router.get("/me")
@@ -36,6 +37,7 @@ async def me(db: Session = Depends(get_db)):
         "target_cpa": current_user.target_cpa,
         "target_roas": current_user.target_roas,
         "monthly_budget": current_user.monthly_budget,
+        "strategy": current_user.strategy,
     }
 
 
@@ -90,5 +92,6 @@ async def login(current_user: User = Depends(get_current_user)):
             "industry": current_user.industry,
             "target_cpa": current_user.target_cpa,
             "target_roas": current_user.target_roas,
+            "strategy": current_user.strategy,
         },
     }

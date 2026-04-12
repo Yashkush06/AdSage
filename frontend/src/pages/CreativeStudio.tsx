@@ -180,7 +180,7 @@ function CreativeStudioInner() {
             <span className="material-symbols-outlined text-[#FF0032] text-4xl shadow-[0_0_15px_rgba(255,0,50,0.4)]" style={{fontVariationSettings: "'FILL' 1"}}>auto_awesome</span>
             <h1 className="text-4xl font-black font-serif text-white uppercase italic tracking-tighter">Creative Studio</h1>
           </div>
-          <p className="text-[#00F0FF]/40 font-bold uppercase tracking-[0.2em] text-[10px]">Neural Content Generation — Proven Framework Selection Active</p>
+          <p className="text-[#00F0FF]/80 font-bold uppercase tracking-[0.2em] text-[10px]">Neural Content Generation — Proven Framework Selection Active</p>
         </div>
       </div>
 
@@ -191,14 +191,14 @@ function CreativeStudioInner() {
           <div className="bg-[#121214] p-1 rounded-none flex gap-1 mb-6 border border-white/5">
             <button
               onClick={() => setActiveTab("generate")}
-              className={`flex-1 px-4 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.3em] transition-all flex gap-2 items-center justify-center italic ${activeTab === "generate" ? "bg-[#FF0032] text-white shadow-[0_0_20px_rgba(255,0,50,0.3)]" : "text-white/30 hover:text-white"}`}
+              className={`flex-1 px-4 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.3em] transition-all flex gap-2 items-center justify-center italic ${activeTab === "generate" ? "bg-[#FF0032] text-white shadow-[0_0_20px_rgba(255,0,50,0.3)]" : "text-white/60 hover:text-white"}`}
             >
               <span className="material-symbols-outlined text-[18px]">add_box</span>
               New Protocol
             </button>
             <button
               onClick={() => setActiveTab("improve")}
-              className={`flex-1 px-4 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.3em] transition-all flex gap-2 items-center justify-center italic ${activeTab === "improve" ? "bg-[#00F0FF] text-white shadow-[0_0_20px_rgba(0,240,255,0.3)]" : "text-white/30 hover:text-white"}`}
+              className={`flex-1 px-4 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.3em] transition-all flex gap-2 items-center justify-center italic ${activeTab === "improve" ? "bg-[#00F0FF] text-white shadow-[0_0_20px_rgba(0,240,255,0.3)]" : "text-white/60 hover:text-white"}`}
             >
               <span className="material-symbols-outlined text-[18px]">bolt</span>
               Improve Existing
@@ -209,18 +209,18 @@ function CreativeStudioInner() {
             {activeTab === "generate" ? (
               <form onSubmit={handleGenerate} className="space-y-6">
                 <div>
-                  <label className="block text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-3 italic">Neural Identifier</label>
-                  <input required value={business} onChange={e => setBusiness(e.target.value)} type="text" placeholder="e.g. FitTrack Pro" className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-bold text-white uppercase italic text-sm placeholder:text-white/10 rounded-none shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]" />
+                  <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Neural Identifier</label>
+                  <input required value={business} onChange={e => setBusiness(e.target.value)} type="text" placeholder="e.g. FitTrack Pro" className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-bold text-white uppercase italic text-sm placeholder:text-white/40 rounded-none shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]" />
                 </div>
                 
                 <div>
-                  <label className="block text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-3 italic">Data Matrix (Description)</label>
-                  <textarea required value={description} onChange={e => setDescription(e.target.value)} rows={5} placeholder="Describe the artifact requirements..." className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-bold text-white text-xs leading-relaxed placeholder:text-white/10 rounded-none resize-none shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]" />
+                  <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Data Matrix (Description)</label>
+                  <textarea required value={description} onChange={e => setDescription(e.target.value)} rows={5} placeholder="Describe the artifact requirements..." className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-bold text-white text-xs leading-relaxed placeholder:text-white/40 rounded-none resize-none shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-3 italic">Directive</label>
+                    <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Directive</label>
                     <select value={goal} onChange={e => setGoal(e.target.value as Goal)} className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic text-xs appearance-none rounded-none cursor-pointer">
                       <option>Sales</option>
                       <option>Leads</option>
@@ -229,7 +229,7 @@ function CreativeStudioInner() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-3 italic">Node</label>
+                    <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Node</label>
                     <select value={platform} onChange={e => setPlatform(e.target.value as Platform)} className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic text-xs appearance-none rounded-none cursor-pointer">
                       <option>Both</option>
                       <option>Instagram</option>
@@ -239,13 +239,13 @@ function CreativeStudioInner() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-3 italic">Frequency (Tone)</label>
+                  <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Frequency (Tone)</label>
                   <div className="grid grid-cols-2 gap-2">
                     {(["Premium", "Funny", "Aggressive", "Minimal"] as Tone[]).map((t) => (
                       <button
                         key={t} type="button"
                         onClick={() => setTone(t)}
-                        className={`py-3 px-3 text-[10px] font-black uppercase tracking-widest border transition-all rounded-none italic ${tone === t ? "border-[#FF0032] bg-[#FF0032]/10 text-white shadow-[0_0_10px_rgba(255,0,50,0.2)]" : "border-white/5 text-white/20 hover:text-white"}`}
+                        className={`py-3 px-3 text-[10px] font-black uppercase tracking-widest border transition-all rounded-none italic ${tone === t ? "border-[#FF0032] bg-[#FF0032]/10 text-white shadow-[0_0_10px_rgba(255,0,50,0.2)]" : "border-white/5 text-white/50 hover:text-white"}`}
                       >
                         {t}
                       </button>
@@ -265,12 +265,12 @@ function CreativeStudioInner() {
             ) : (
               <form onSubmit={handleImprove} className="space-y-5 animate-fade-in">
                 <div>
-                  <label className="block text-xs font-bold text-[#FDA481]/40 uppercase tracking-wider mb-2">Campaign Name (Optional)</label>
+                  <label className="block text-xs font-bold text-[#FDA481]/80 uppercase tracking-wider mb-2">Campaign Name (Optional)</label>
                   <input value={existingCampaignName} onChange={e => setExistingCampaignName(e.target.value)} type="text" placeholder="e.g. Q3 Summer Sale" className="input bg-[#181A2F] border-[#37415C] text-white" />
                 </div>
                 
                 <div>
-                  <label className="block text-xs font-bold text-[#FDA481]/40 uppercase tracking-wider mb-2">Current Ad Copy</label>
+                  <label className="block text-xs font-bold text-[#FDA481]/80 uppercase tracking-wider mb-2">Current Ad Copy</label>
                   <textarea required value={existingAdCopy} onChange={e => setExistingAdCopy(e.target.value)} rows={6} placeholder="Paste your underperforming ad copy here..." className="input bg-[#181A2F] border-[#37415C] text-white rounded-2xl resize-none" />
                 </div>
 
@@ -474,8 +474,8 @@ function CreativeStudioInner() {
               <div className="w-20 h-20 rounded-none bg-white/3 flex items-center justify-center mb-6 border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] group-hover:border-[#FF0032]/40 transition-all">
                 <span className="material-symbols-outlined text-4xl text-white/10 group-hover:text-[#FF0032]/40 transition-all group-hover:scale-110">psychology</span>
               </div>
-              <h3 className="text-2xl font-black font-serif text-white/40 mb-3 uppercase italic tracking-tighter">Standby for Synthesis</h3>
-              <p className="text-white/20 max-w-sm text-[9px] font-black uppercase tracking-[0.4em] italic leading-loose">Initialize the creative protocol to generate high-velocity conversion artifacts.</p>
+              <h3 className="text-2xl font-black font-serif text-white/60 mb-3 uppercase italic tracking-tighter">Standby for Synthesis</h3>
+              <p className="text-white/50 max-w-sm text-[9px] font-black uppercase tracking-[0.4em] italic leading-loose">Initialize the creative protocol to generate high-velocity conversion artifacts.</p>
             </div>
           )}
         </div>

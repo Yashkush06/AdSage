@@ -12,7 +12,11 @@ export function MetricsCards({ metrics }: Props) {
       value: formatCurrency(metrics.total_spend),
       growth: "+4.2%",
       progress: 72,
+<<<<<<< HEAD
       barColor: "#FF0032",
+=======
+      colorClass: "bg-white",
+>>>>>>> 6f02f14 (Update UI visibility, auth models, and add glassmorphism components)
     },
     {
       label: "Revenue",
@@ -33,7 +37,11 @@ export function MetricsCards({ metrics }: Props) {
       value: String(metrics.active_campaigns),
       growth: "-2.1%",
       progress: 45,
+<<<<<<< HEAD
       barColor: "#ffffff",
+=======
+      colorClass: "bg-white/60",
+>>>>>>> 6f02f14 (Update UI visibility, auth models, and add glassmorphism components)
     },
   ];
 
