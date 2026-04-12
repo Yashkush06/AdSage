@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Recommendation } from "../../types";
 import { timeAgo } from "../../lib/utils";
+import { GlowCard } from "../shared/GlowCard";
 
 interface Props {
   rec: Recommendation;
@@ -88,8 +89,12 @@ export function RecommendationCard({ rec, onApprove, onReject, isLoading }: Prop
     setNotes("");
   };
 
+  const glowAccent = rec.priority === "critical" || rec.priority === "high" ? "red" as const
+    : rec.priority === "medium" ? "purple" as const
+    : "teal" as const;
+
   return (
-    <div className={`bg-[#181A2F] rounded-2xl border border-[#37415C]/20 shadow-sm overflow-hidden animate-slide-up group transition-shadow hover:shadow-md ${prio.glow}`}>
+    <GlowCard accent={glowAccent} className="animate-slide-up" noPadding>
       {/* Priority stripe */}
       <div className={`h-1 w-full ${prio.bar}`} />
 
@@ -253,6 +258,6 @@ export function RecommendationCard({ rec, onApprove, onReject, isLoading }: Prop
 
       {/* Agent color footer stripe */}
       <div className={`h-1 w-full ${agentBar}`} />
-    </div>
+    </GlowCard>
   );
 }

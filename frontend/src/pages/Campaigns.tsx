@@ -6,6 +6,7 @@ import { useState } from "react";
 import type { Campaign, CampaignInsights } from "../types";
 import { formatCurrency, formatRoas } from "../lib/utils";
 import { Reveal, Revealstagger } from "../components/shared/Reveal";
+import { WaveButton } from "../components/shared/WaveButton";
 
 function CampaignRow({ campaign, onSelect, selected }: {
   campaign: Campaign;
@@ -116,9 +117,11 @@ export function Campaigns() {
                   <h3 className="text-6xl font-serif font-black text-white italic mb-2 uppercase tracking-tighter leading-none shadow-[0_0_20px_rgba(0,0,0,0.5)]">3.4x Average Pulse</h3>
                   <p className="text-white/40 text-[11px] font-black uppercase tracking-[.2em] max-w-lg mt-6 leading-relaxed">Active assets outperforming seasonal benchmarks. Sync level: Optimal. Scale protocols active.</p>
                   <div className="mt-10 flex gap-4">
-                    <button className="px-8 py-3 bg-[#FF0032] text-white text-[10px] font-black uppercase tracking-[.4em] italic rounded-xl shadow-[0_0_30px_rgba(255,0,50,0.3)]  transition-all flex items-center gap-3">
-                      Initiate Insights <span className="material-symbols-outlined text-sm">bolt</span>
-                    </button>
+                    <WaveButton
+                      id="campaigns-initiate-insights"
+                      label="Initiate Insights"
+                      hoverLabel="Archive Pulse"
+                    />
                   </div>
                 </div>
               </div>

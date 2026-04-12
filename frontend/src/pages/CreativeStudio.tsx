@@ -1,5 +1,6 @@
 import { useState, Component } from "react";
 import { creativeStudioApi } from "../lib/api";
+import { WaveButton } from "../components/shared/WaveButton";
 
 // Error boundary to prevent full blank screen on render crash
 class ErrorBoundary extends Component<{ children: React.ReactNode }, { error: string | null }> {
@@ -253,13 +254,14 @@ function CreativeStudioInner() {
                   </div>
                 </div>
 
-                <button disabled={loading} type="submit" className="w-full w-full bg-[#FF0032] text-white font-medium rounded-xl py-3 mt-4 shadow-md transition-all disabled:opacity-50">
-                  {loading ? (
-                    <><span className="material-symbols-outlined animate-spin text-lg">sync</span> Syncing...</>
-                  ) : (
-                    <><span className="material-symbols-outlined text-lg">terminal</span> Initiate Synthesis</>
-                  )}
-                </button>
+                <WaveButton
+                  id="creative-studio-generate"
+                  type="submit"
+                  disabled={loading}
+                  label={loading ? 'Syncing...' : 'Initiate Synthesis'}
+                  hoverLabel="Generate Creative"
+                  className="w-full mt-4"
+                />
                 {error && <p className="text-error text-sm mt-3">{error}</p>}
               </form>
             ) : (
@@ -279,13 +281,14 @@ function CreativeStudioInner() {
                   <p>Our AI will rewrite this copy to increase conversion rate based on proven direct-response frameworks.</p>
                 </div>
 
-                <button disabled={loading} type="submit" className="w-full bg-[#FDA481] text-[#181A2F] font-bold rounded-xl py-3.5 mt-2 opacity-100 disabled:opacity-50 flex items-center justify-center gap-2">
-                  {loading ? (
-                    <><span className="material-symbols-outlined animate-spin">progress_activity</span> Optimizing...</>
-                  ) : (
-                    <><span className="material-symbols-outlined">magic_button</span> Improve Ad Copy</>
-                  )}
-                </button>
+                <WaveButton
+                  id="creative-studio-improve"
+                  type="submit"
+                  disabled={loading}
+                  label={loading ? 'Optimizing...' : 'Improve Ad Copy'}
+                  hoverLabel="Rewrite Copy"
+                  className="w-full mt-2"
+                />
                 {error && <p className="text-error text-sm mt-3">{error}</p>}
               </form>
             )}

@@ -9,6 +9,7 @@ import { TopCreatives } from "../components/analytics/TopCreatives";
 import { Header } from "../components/shared/Header";
 import { useState } from "react";
 import type { Campaign } from "../types";
+import { WaveButton } from "../components/shared/WaveButton";
 
 // Static fallback data so the page is never blank
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -147,10 +148,13 @@ export function Analytics() {
                 </select>
               )}
             </div>
-            <button onClick={runCycle} disabled={cycling} className="flex items-center gap-2 px-5 py-2 bg-[#FF0032] text-white rounded-xl font-medium text-sm transition-all flex items-center gap-2 disabled:opacity-50">
-              <span className={`material-symbols-outlined text-sm ${cycling ? 'animate-spin' : ''}`}>bolt</span>
-              {cycling ? 'Syncing…' : cycleMsg || 'Initiate Pulse'}
-            </button>
+            <WaveButton
+              id="analytics-initiate-pulse"
+              onClick={runCycle}
+              disabled={cycling}
+              label={cycling ? 'Syncing…' : cycleMsg || 'Initiate Pulse'}
+              hoverLabel="Deep Scan"
+            />
           </div>
         </section>
 
@@ -199,9 +203,15 @@ export function Analytics() {
                 <div className="text-6xl font-serif font-black text-white italic mb-2 tracking-tighter">{insights.week_rating}/10</div>
                 <p className="text-white/80 text-xs font-bold uppercase tracking-widest">Operational Sync Level</p>
               </div>
-              <button onClick={runCycle} disabled={cycling} className="w-full py-4 bg-black/20 hover:bg-black/40 text-white rounded-xl text-[10px] font-black uppercase tracking-[.2em] transition-colors border border-white/10 disabled:opacity-50">
-                {cycling ? 'Syncing…' : 'Network Briefing'}
-              </button>
+              <WaveButton
+                id="analytics-network-briefing"
+                onClick={runCycle}
+                disabled={cycling}
+                label={cycling ? 'Syncing…' : 'Network Briefing'}
+                hoverLabel="Pulse Report"
+                variant="light"
+                className="w-full justify-center"
+              />
             </div>
           </div>
         )}

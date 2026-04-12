@@ -11,6 +11,8 @@ import {
   PieChart, Pie, Cell, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip as RTooltip, ResponsiveContainer,
 } from "recharts";
+import { WaveButton } from "../components/shared/WaveButton";
+import { GlowCard } from "../components/shared/GlowCard";
 
 const CHART_COLORS = ["#566252", "#a8b5a2", "#70585f", "#c7aab2", "#e5e2dd"];
 
@@ -135,16 +137,13 @@ export function Dashboard() {
             <p className="text-[#00F0FF] font-bold uppercase tracking-[0.4em] text-[10px] opacity-60">Curating your marketing ecosystem with precision.</p>
           </div>
           <div className="flex gap-3">
-            <button
+            <WaveButton
+              id="dashboard-run-agent-cycle"
               onClick={runCycle}
               disabled={cycling}
-              className="px-4 py-2 bg-[#FF0032] text-white rounded-xl font-medium text-sm transition-all flex items-center gap-2 disabled:opacity-50"
-            >
-              <span className={`material-symbols-outlined text-lg ${cycling ? 'animate-spin' : ''}`}>
-                {cycling ? 'sync' : 'auto_awesome'}
-              </span>
-              {cycling ? 'Syncing...' : cycleMsg || 'Run Agent Cycle'}
-            </button>
+              label={cycling ? 'Syncing…' : cycleMsg || 'Run Agent Cycle'}
+              hoverLabel="Observatory Sync"
+            />
             <button className="px-4 py-2 bg-white/5 border border-white/10 text-white/60 rounded-xl font-medium text-sm hover:text-white hover:bg-white/10 transition-all flex items-center gap-2">
               <span className="material-symbols-outlined text-lg">calendar_month</span>
               Last 30 Days
@@ -155,7 +154,7 @@ export function Dashboard() {
         {overview && <MetricsCards metrics={overview} />}
 
         {/* ── CSV Import Widget ───────────────────────────────────────────── */}
-        <section className="bg-[#0d0d0f] border border-white/8 rounded-2xl overflow-hidden">
+        <GlowCard accent="teal">
           {/* Header bar */}
           <div
             className="flex items-center justify-between p-5 cursor-pointer hover:bg-white/3 transition-colors"
@@ -440,7 +439,7 @@ export function Dashboard() {
               )}
             </div>
           )}
-        </section>
+        </GlowCard>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -491,10 +490,13 @@ export function Dashboard() {
                 const confidence = Math.min(100, Math.round((rec.confidence_score ?? 0.8) * 100));
                 const campaignName = (rec.action_details as any)?.campaign_name ||
                                      (rec.data_supporting as any)?.campaign_name || "";
+                const glowAccent = rec.priority === "critical" || rec.priority === "high" ? "red" as const
+                  : rec.priority === "medium" ? "orange" as const : "teal" as const;
                 return (
-                  <div
+                  <GlowCard
                     key={rec.id}
-                    className="bg-gradient-to-br from-[#1a1f2e] to-[#0f1318] rounded-2xl p-5 border border-white/5 hover:border-white/10 transition-all hover:shadow-lg hover:shadow-black/40 flex flex-col gap-4"
+                    accent={glowAccent}
+                    className="flex flex-col gap-4"
                   >
                     {/* Top row: type chip + impact badge */}
                     <div className="flex items-center justify-between">
@@ -520,8 +522,8 @@ export function Dashboard() {
 
                     {/* Title + description */}
                     <div>
-                      <h5 className="font-bold text-white text-sm leading-snug mb-1.5">{rec.title}</h5>
-                      <p className="text-white/50 text-xs leading-relaxed line-clamp-3">{rec.description}</p>
+                      <h5 className="font-bold text-white text-[11px] leading-snug mb-1">{rec.title}</h5>
+                      <p className="text-white/50 text-[10px] leading-relaxed line-clamp-2">{rec.description}</p>
                     </div>
 
                     {/* Campaign tag */}
@@ -547,7 +549,7 @@ export function Dashboard() {
                         />
                       </div>
                     </div>
-                  </div>
+                  </GlowCard>
                 );
               })}
             </div>
@@ -566,7 +568,7 @@ export function Dashboard() {
             </a>
           </div>
 
-          <div className="bg-gradient-to-br from-[#1a1f2e] to-[#0f1318] rounded-2xl border border-white/5 overflow-hidden">
+          <GlowCard accent="teal" noPadding>
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/5">
@@ -628,7 +630,7 @@ export function Dashboard() {
                 )}
               </tbody>
             </table>
-          </div>
+          </GlowCard>
         </section>
 
         <footer className="mt-20 py-8 border-t border-outline-variant/10 flex justify-between items-center text-on-surface-variant/40 text-[10px] font-sans uppercase tracking-[0.2em]">
