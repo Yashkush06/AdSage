@@ -81,7 +81,7 @@ export function Settings() {
           <div className="absolute -top-32 -right-32 w-64 h-64 bg-[#FF0032]/5 blur-3xl rounded-full" />
 
           <div className="flex items-center gap-4 text-white relative z-10">
-            <div className="w-12 h-12 rounded-none bg-[#FF0032]/10 border border-[#FF0032]/30 flex items-center justify-center text-[#FF0032] shadow-[0_0_15px_rgba(255,0,50,0.2)]">
+            <div className="w-12 h-12 rounded-xl bg-[#FF0032]/10 border border-[#FF0032]/30 flex items-center justify-center text-[#FF0032] shadow-[0_0_15px_rgba(255,0,50,0.2)]">
               <span className="material-symbols-outlined text-2xl">account_tree</span>
             </div>
             <div>
@@ -125,7 +125,7 @@ export function Settings() {
           <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-[#00F0FF]/5 blur-3xl rounded-full" />
 
           <div className="flex items-center gap-4 text-white relative z-10">
-            <div className="w-12 h-12 rounded-none bg-[#00F0FF]/10 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="w-12 h-12 rounded-xl bg-[#00F0FF]/10 border border-[#00F0FF]/30 flex items-center justify-center text-[#00F0FF] shadow-[0_0_15px_rgba(0,240,255,0.2)]">
               <span className="material-symbols-outlined text-2xl">timelapse</span>
             </div>
             <div>
@@ -169,7 +169,7 @@ export function Settings() {
         </section>
 
         {/* Security / Info */}
-        <div className="p-6 bg-[#00F0FF]/5 border border-[#00F0FF]/20 rounded-none flex items-start gap-5 shadow-[0_0_15px_rgba(0,240,255,0.05)]">
+        <div className="p-6 bg-[#00F0FF]/5 border border-[#00F0FF]/20 rounded-xl flex items-start gap-5 shadow-[0_0_15px_rgba(0,240,255,0.05)]">
           <span className="material-symbols-outlined text-[#00F0FF] text-3xl opacity-80">local_police</span>
           <div>
             <h4 className="text-[11px] font-black text-[#00F0FF] uppercase tracking-[0.3em] mb-1">Observatory Security Protocol</h4>

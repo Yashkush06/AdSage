@@ -3,8 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { authApi } from "../lib/api";
 import { useAppStore } from "../lib/store";
 import { LoadingSpinner } from "../components/shared/LoadingStates";
+import { motion } from "framer-motion";
+import ClickSpark from "../components/ClickSpark";
 
 type Step = "vision" | "pulse" | "strategy";
+
+const pageVariants = {
+  initial: { opacity: 0, filter: "blur(8px)", scale: 0.98 },
+  animate: { opacity: 1, filter: "blur(0px)", scale: 1, transition: { duration: 0.5 } },
+  exit: { opacity: 0, filter: "blur(4px)", scale: 1.02, transition: { duration: 0.3 } }
+};
 
 export function Onboarding() {
   const [step, setStep] = useState<Step>("vision");
@@ -52,14 +60,15 @@ export function Onboarding() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-6 md:p-12 font-body overflow-hidden">
-      <div className="w-full max-w-5xl bg-[#050505] rounded-none border border-white/5 shadow-[0_0_50px_rgba(0,0,0,0.8)] flex overflow-hidden lg:h-[700px] relative">
+    <ClickSpark sparkColor="#FF0032" sparkSize={12} sparkRadius={20} sparkCount={10} duration={500} extraScale={1.2} style={{ minHeight: '100vh' }}>
+    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit" className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-6 md:p-12 font-body overflow-hidden">
+      <div className="w-full max-w-5xl bg-[#050505] rounded-xl border border-white/5 shadow-[0_0_50px_rgba(0,0,0,0.8)] flex overflow-hidden lg:h-[700px] relative">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF0032] via-[#00F0FF] to-[#FF0032] opacity-50" />
         
         {/* Step Navigation Sidebar */}
         <aside className="w-64 bg-[#0A0A0C] border-r border-white/5 p-10 hidden md:flex flex-col">
           <div className="flex items-center gap-3 mb-16 group cursor-pointer">
-            <div className="w-12 h-12 rounded-none bg-[#FF0032] flex items-center justify-center shadow-[0_0_20px_rgba(255,0,50,0.3)] hover-glitch transition-all">
+            <div className="w-12 h-12 rounded-xl bg-[#FF0032] flex items-center justify-center shadow-[0_0_20px_rgba(255,0,50,0.3)]  transition-all">
               <span className="material-symbols-outlined text-white text-[28px]" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
             </div>
             <div>
@@ -75,7 +84,7 @@ export function Onboarding() {
                   key={s.id} 
                   className={`flex items-center gap-5 group transition-all duration-500 ${step === s.id ? 'opacity-100 translate-x-1' : 'opacity-50 hover:opacity-80'}`}
                 >
-                   <div className={`w-8 h-8 rounded-none border-2 flex items-center justify-center text-[10px] font-black transition-all ${
+                   <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center text-[10px] font-black transition-all ${
                      step === s.id ? 'border-[#FF0032] bg-[#FF0032] text-white shadow-[0_0_15px_rgba(255,0,50,0.3)]' : 'border-white/20 text-white/50'
                    }`}>
                       {i + 1}
@@ -113,7 +122,7 @@ export function Onboarding() {
                   <div className="space-y-3">
                     <label className="text-[9px] uppercase font-black text-white/30 tracking-[0.4em]">Directive Alias</label>
                     <input 
-                      className="w-full bg-[#121214] border border-white/10 rounded-none px-6 py-5 outline-none focus:border-[#FF0032] focus:ring-1 focus:ring-[#FF0032] transition-all font-bold text-white uppercase placeholder:text-white/10 text-sm italic"
+                      className="w-full bg-[#121214] border border-white/10 rounded-xl px-6 py-5 outline-none focus:border-[#FF0032] focus:ring-1 focus:ring-[#FF0032] transition-all font-bold text-white uppercase placeholder:text-white/10 text-sm italic"
                       placeholder="e.g. STERLING ARCHIVAL"
                       value={form.business_name}
                       onChange={(e) => setForm({ ...form, business_name: e.target.value })}
@@ -122,7 +131,7 @@ export function Onboarding() {
                   <div className="space-y-2">
                     <label className="text-[9px] uppercase font-black text-white/30 tracking-[0.4em]">Market Frequency</label>
                     <select 
-                      className="w-full bg-[#121214] border border-white/10 rounded-none px-6 py-5 outline-none focus:border-[#00F0FF] focus:ring-1 focus:ring-[#00F0FF] transition-all font-bold text-white appearance-none uppercase italic text-sm"
+                      className="w-full bg-[#121214] border border-white/10 rounded-xl px-6 py-5 outline-none focus:border-[#00F0FF] focus:ring-1 focus:ring-[#00F0FF] transition-all font-bold text-white appearance-none uppercase italic text-sm"
                       value={form.industry}
                       onChange={(e) => setForm({ ...form, industry: e.target.value })}
                     >
@@ -134,7 +143,7 @@ export function Onboarding() {
 
                 <button 
                   onClick={() => setStep("pulse")}
-                  className="w-full py-5 bg-[#FF0032] text-white rounded-none font-black uppercase tracking-[0.3em] text-[11px] shadow-[0_0_25px_rgba(255,0,50,0.4)] hover-glitch transition-all flex items-center justify-center gap-3"
+                  className="w-full py-5 bg-[#FF0032] text-white rounded-xl font-black uppercase tracking-[0.3em] text-[11px] shadow-[0_0_25px_rgba(255,0,50,0.4)]  transition-all flex items-center justify-center gap-3"
                 >
                   Initiate Frequency Check
                   <span className="material-symbols-outlined text-sm">bolt</span>
@@ -154,7 +163,7 @@ export function Onboarding() {
                     <label className="text-[9px] uppercase font-black text-white/30 tracking-[0.4em] italic">Target CPA (₹)</label>
                     <input 
                       type="number"
-                      className="w-full bg-[#121214] border border-white/10 rounded-none px-6 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"
+                      className="w-full bg-[#121214] border border-white/10 rounded-xl px-6 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"
                       placeholder="400"
                       value={form.target_cpa}
                       onChange={(e) => setForm({ ...form, target_cpa: e.target.value })}
@@ -165,7 +174,7 @@ export function Onboarding() {
                     <input 
                       type="number"
                       step="0.1"
-                      className="w-full bg-[#121214] border border-white/10 rounded-none px-6 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"
+                      className="w-full bg-[#121214] border border-white/10 rounded-xl px-6 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"
                       placeholder="3.0"
                       value={form.target_roas}
                       onChange={(e) => setForm({ ...form, target_roas: e.target.value })}
@@ -174,10 +183,10 @@ export function Onboarding() {
                 </div>
 
                 <div className="flex gap-4">
-                   <button onClick={() => setStep("vision")} className="flex-1 py-4 bg-white/5 text-white/30 rounded-none font-black uppercase tracking-[0.4em] text-[10px] hover:bg-white/10 transition-all italic border border-white/5">Back</button>
+                   <button onClick={() => setStep("vision")} className="flex-1 py-4 bg-white/5 text-white/30 rounded-xl font-black uppercase tracking-[0.4em] text-[10px] hover:bg-white/10 transition-all italic border border-white/5">Back</button>
                    <button 
                      onClick={() => setStep("strategy")}
-                     className="flex-[2] py-4 bg-[#FF0032] text-white rounded-none font-black uppercase tracking-[0.4em] text-[10px] shadow-[0_0_30px_rgba(255,0,50,0.3)] hover-glitch transition-all flex items-center justify-center gap-2 italic"
+                     className="flex-[2] py-4 bg-[#FF0032] text-white rounded-xl font-black uppercase tracking-[0.4em] text-[10px] shadow-[0_0_30px_rgba(255,0,50,0.3)]  transition-all flex items-center justify-center gap-2 italic"
                    >
                      Continue Node
                      <span className="material-symbols-outlined text-lg">arrow_forward</span>
@@ -202,11 +211,11 @@ export function Onboarding() {
                         <div 
                           key={s.name}
                           onClick={() => setForm({...form, strategy: s.name})}
-                          className={`p-6 rounded-none border-2 transition-all cursor-pointer flex items-center gap-6 ${
+                          className={`p-6 rounded-xl border-2 transition-all cursor-pointer flex items-center gap-6 ${
                             form.strategy === s.name ? 'border-[#FF0032] bg-[#FF0032]/5' : 'border-white/5 hover:border-white/20'
                           }`}
                         >
-                           <div className={`w-12 h-12 rounded-none flex items-center justify-center ${form.strategy === s.name ? 'bg-[#FF0032] text-white' : 'bg-[#121214] text-[#00F0FF]/40'}`}>
+                           <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${form.strategy === s.name ? 'bg-[#FF0032] text-white' : 'bg-[#121214] text-[#00F0FF]/40'}`}>
                               <span className="material-symbols-outlined text-2xl">{s.icon}</span>
                            </div>
                         <div className="flex-1">
@@ -244,6 +253,7 @@ export function Onboarding() {
         </main>
 
       </div>
-    </div>
+    </motion.div>
+    </ClickSpark>
   );
 }

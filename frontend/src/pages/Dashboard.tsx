@@ -138,14 +138,14 @@ export function Dashboard() {
             <button
               onClick={runCycle}
               disabled={cycling}
-              className="px-6 py-2 bg-[#FF0032] border border-[#FF0032] text-white rounded-none text-[10px] font-black uppercase tracking-[0.3em] hover:bg-[#FF0032]/80 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,0,50,0.3)] disabled:opacity-50 italic"
+              className="px-4 py-2 bg-[#FF0032] text-white rounded-xl font-medium text-sm transition-all flex items-center gap-2 disabled:opacity-50"
             >
               <span className={`material-symbols-outlined text-lg ${cycling ? 'animate-spin' : ''}`}>
                 {cycling ? 'sync' : 'auto_awesome'}
               </span>
               {cycling ? 'Syncing...' : cycleMsg || 'Run Agent Cycle'}
             </button>
-            <button className="px-6 py-2 bg-white/5 border border-white/10 text-white/50 rounded-none text-[10px] font-black uppercase tracking-[0.3em] hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 italic">
+            <button className="px-4 py-2 bg-white/5 border border-white/10 text-white/60 rounded-xl font-medium text-sm hover:text-white hover:bg-white/10 transition-all flex items-center gap-2">
               <span className="material-symbols-outlined text-lg">calendar_month</span>
               Last 30 Days
             </button>
@@ -344,7 +344,7 @@ export function Dashboard() {
                   {/* Charts row */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Donut — Channel Breakdown */}
-                    <div className="glass-card p-5 rounded-none bg-[#050505] border border-white/5">
+                    <div className="glass-card p-5 rounded-xl bg-[#050505] border border-white/5">
                       <h5 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mb-4 italic">Channel Breakdown</h5>
                       <div className="h-44">
                         <ResponsiveContainer width="100%" height="100%">
@@ -365,7 +365,7 @@ export function Dashboard() {
                       <div className="flex flex-wrap gap-2 mt-4 justify-center">
                         {csvResult.channelBreakdown.map((item: any, i: number) => (
                           <div key={item.name} className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
-                            <span className="w-2 h-2 rounded-none" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
+                            <span className="w-2 h-2 rounded-xl" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
                             {item.name} ({item.percentage}%)
                           </div>
                         ))}
@@ -373,7 +373,7 @@ export function Dashboard() {
                     </div>
 
                     {/* Bar — Audience */}
-                    <div className="glass-card p-5 rounded-none bg-[#050505] border border-white/5">
+                    <div className="glass-card p-5 rounded-xl bg-[#050505] border border-white/5">
                       <h5 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mb-4 italic">Audience Performance</h5>
                       <div className="h-52">
                         <ResponsiveContainer width="100%" height="100%">
@@ -393,7 +393,7 @@ export function Dashboard() {
                     </div>
 
                     {/* Bar — Hourly */}
-                    <div className="glass-card p-5 rounded-none bg-[#050505] border border-white/5">
+                    <div className="glass-card p-5 rounded-xl bg-[#050505] border border-white/5">
                       <h5 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mb-4 italic">Hourly Conversions</h5>
                       <div className="h-52">
                         <ResponsiveContainer width="100%" height="100%">
@@ -415,7 +415,7 @@ export function Dashboard() {
                   </div>
 
                   {/* Preview table */}
-                  <div className="glass-card overflow-x-auto rounded-none bg-[#050505] border border-white/5 mt-6">
+                  <div className="glass-card overflow-x-auto rounded-xl bg-[#050505] border border-white/5 mt-6">
                     <table className="w-full text-left border-collapse text-xs">
                       <thead>
                         <tr className="border-b border-white/5">

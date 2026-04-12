@@ -8,7 +8,7 @@ class ErrorBoundary extends Component<{ children: React.ReactNode }, { error: st
   render() {
     if (this.state.error) return (
       <div className="flex items-center justify-center min-h-screen bg-[#050505]">
-        <div className="text-center p-8 border border-[#FF0032]/20 rounded-none max-w-md">
+        <div className="text-center p-8 border border-[#FF0032]/20 rounded-xl max-w-md">
           <span className="material-symbols-outlined text-4xl text-[#FF0032]/40 mb-4 block">error</span>
           <p className="text-white/40 text-xs font-black uppercase tracking-widest">Render Error</p>
           <p className="text-white/20 text-xs mt-2">{this.state.error}</p>
@@ -188,40 +188,40 @@ function CreativeStudioInner() {
         
         {/* Left Column: Form Settings */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-[#121214] p-1 rounded-none flex gap-1 mb-6 border border-white/5">
+          <div className="bg-[#121214] p-1 rounded-xl flex gap-1 mb-6 border border-white/5">
             <button
               onClick={() => setActiveTab("generate")}
-              className={`flex-1 px-4 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.3em] transition-all flex gap-2 items-center justify-center italic ${activeTab === "generate" ? "bg-[#FF0032] text-white shadow-[0_0_20px_rgba(255,0,50,0.3)]" : "text-white/60 hover:text-white"}`}
+              className={`flex-1 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] transition-all flex gap-2 items-center justify-center italic ${activeTab === "generate" ? "bg-[#FF0032] text-white shadow-[0_0_20px_rgba(255,0,50,0.3)]" : "text-white/60 hover:text-white"}`}
             >
               <span className="material-symbols-outlined text-[18px]">add_box</span>
               New Protocol
             </button>
             <button
               onClick={() => setActiveTab("improve")}
-              className={`flex-1 px-4 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.3em] transition-all flex gap-2 items-center justify-center italic ${activeTab === "improve" ? "bg-[#00F0FF] text-white shadow-[0_0_20px_rgba(0,240,255,0.3)]" : "text-white/60 hover:text-white"}`}
+              className={`flex-1 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] transition-all flex gap-2 items-center justify-center italic ${activeTab === "improve" ? "bg-[#00F0FF] text-white shadow-[0_0_20px_rgba(0,240,255,0.3)]" : "text-white/60 hover:text-white"}`}
             >
               <span className="material-symbols-outlined text-[18px]">bolt</span>
               Improve Existing
             </button>
           </div>
 
-          <div className="bg-[#0A0A0C] border border-white/5 p-6 rounded-none">
+          <div className="bg-[#0A0A0C] border border-white/5 p-6 rounded-xl">
             {activeTab === "generate" ? (
               <form onSubmit={handleGenerate} className="space-y-6">
                 <div>
                   <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Neural Identifier</label>
-                  <input required value={business} onChange={e => setBusiness(e.target.value)} type="text" placeholder="e.g. FitTrack Pro" className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-bold text-white uppercase italic text-sm placeholder:text-white/40 rounded-none shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]" />
+                  <input required value={business} onChange={e => setBusiness(e.target.value)} type="text" placeholder="e.g. FitTrack Pro" className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-bold text-white uppercase italic text-sm placeholder:text-white/40 rounded-xl shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]" />
                 </div>
                 
                 <div>
                   <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Data Matrix (Description)</label>
-                  <textarea required value={description} onChange={e => setDescription(e.target.value)} rows={5} placeholder="Describe the artifact requirements..." className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-bold text-white text-xs leading-relaxed placeholder:text-white/40 rounded-none resize-none shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]" />
+                  <textarea required value={description} onChange={e => setDescription(e.target.value)} rows={5} placeholder="Describe the artifact requirements..." className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-bold text-white text-xs leading-relaxed placeholder:text-white/40 rounded-xl resize-none shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Directive</label>
-                    <select value={goal} onChange={e => setGoal(e.target.value as Goal)} className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic text-xs appearance-none rounded-none cursor-pointer">
+                    <select value={goal} onChange={e => setGoal(e.target.value as Goal)} className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic text-xs appearance-none rounded-xl cursor-pointer">
                       <option>Sales</option>
                       <option>Leads</option>
                       <option>Traffic</option>
@@ -230,7 +230,7 @@ function CreativeStudioInner() {
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-white/60 uppercase tracking-[0.4em] mb-3 italic">Node</label>
-                    <select value={platform} onChange={e => setPlatform(e.target.value as Platform)} className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic text-xs appearance-none rounded-none cursor-pointer">
+                    <select value={platform} onChange={e => setPlatform(e.target.value as Platform)} className="w-full bg-[#121214] border border-white/10 px-4 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic text-xs appearance-none rounded-xl cursor-pointer">
                       <option>Both</option>
                       <option>Instagram</option>
                       <option>Facebook</option>
@@ -245,7 +245,7 @@ function CreativeStudioInner() {
                       <button
                         key={t} type="button"
                         onClick={() => setTone(t)}
-                        className={`py-3 px-3 text-[10px] font-black uppercase tracking-widest border transition-all rounded-none italic ${tone === t ? "border-[#FF0032] bg-[#FF0032]/10 text-white shadow-[0_0_10px_rgba(255,0,50,0.2)]" : "border-white/5 text-white/50 hover:text-white"}`}
+                        className={`py-3 px-3 text-[10px] font-black uppercase tracking-widest border transition-all rounded-xl italic ${tone === t ? "border-[#FF0032] bg-[#FF0032]/10 text-white shadow-[0_0_10px_rgba(255,0,50,0.2)]" : "border-white/5 text-white/50 hover:text-white"}`}
                       >
                         {t}
                       </button>
@@ -253,7 +253,7 @@ function CreativeStudioInner() {
                   </div>
                 </div>
 
-                <button disabled={loading} type="submit" className="w-full bg-[#FF0032] text-white font-black rounded-none py-5 mt-4 text-[11px] uppercase tracking-[0.5em] shadow-[0_0_30px_rgba(255,0,50,0.3)] hover-glitch transition-all disabled:opacity-50 italic">
+                <button disabled={loading} type="submit" className="w-full w-full bg-[#FF0032] text-white font-medium rounded-xl py-3 mt-4 shadow-md transition-all disabled:opacity-50">
                   {loading ? (
                     <><span className="material-symbols-outlined animate-spin text-lg">sync</span> Syncing...</>
                   ) : (
@@ -295,9 +295,9 @@ function CreativeStudioInner() {
         {/* Right Column: Output Viewer */}
         <div className="lg:col-span-8">
           {loading ? (
-            <div className="h-[600px] border border-white/5 bg-[#0A0A0C] flex flex-col items-center justify-center p-8 text-center rounded-none relative overflow-hidden">
+            <div className="h-[600px] border border-white/5 bg-[#0A0A0C] flex flex-col items-center justify-center p-8 text-center rounded-xl relative overflow-hidden">
               <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#FF0032] via-transparent to-transparent animate-pulse" />
-              <div className="w-24 h-24 rounded-none bg-white/3 border border-white/10 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(255,255,255,0.05)]">
+              <div className="w-24 h-24 rounded-xl bg-white/3 border border-white/10 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(255,255,255,0.05)]">
                  <span className="material-symbols-outlined text-5xl text-[#FF0032] animate-pulse">hub</span>
               </div>
               <h3 className="text-2xl font-black font-serif text-white mb-3 uppercase italic tracking-tighter">Querying the Multiverse...</h3>
@@ -307,9 +307,9 @@ function CreativeStudioInner() {
             <div className="space-y-8 animate-slide-up">
               
               {/* Campaign Header Output */}
-              <div className="bg-white/3 border border-white/5 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 rounded-none relative overflow-hidden group">
+              <div className="bg-white/3 border border-white/5 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 rounded-xl relative overflow-hidden group">
                 <div className="absolute top-0 left-0 w-1 h-full bg-[#FF0032]" />
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF0032]/5 rounded-none transform translate-x-16 -translate-y-16 rotate-45 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF0032]/5 rounded-xl transform translate-x-16 -translate-y-16 rotate-45 pointer-events-none" />
                 
                 <div>
                   <div className="flex items-center gap-3 mb-2">
@@ -320,7 +320,7 @@ function CreativeStudioInner() {
                   <h2 className="text-3xl font-black font-serif text-white tracking-tighter uppercase italic">{currentAd.campaignName}</h2>
                 </div>
                 <div className="flex gap-4">
-                   <button className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 text-white/60 text-[10px] font-black uppercase tracking-[0.3em] hover:text-white hover:bg-white/10 transition-all rounded-none italic" onClick={() => handleCopy(JSON.stringify(currentAd, null, 2))}>
+                   <button className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 text-white/60 text-[10px] font-black uppercase tracking-[0.3em] hover:text-white hover:bg-white/10 transition-all rounded-xl italic" onClick={() => handleCopy(JSON.stringify(currentAd, null, 2))}>
                      <span className="material-symbols-outlined text-[18px]">terminal</span> Export Schema
                    </button>
                 </div>
@@ -330,7 +330,7 @@ function CreativeStudioInner() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 
                 {/* Hooks */}
-                <div className="bg-[#121214] border border-white/5 p-8 flex flex-col h-full rounded-none relative group overflow-hidden">
+                <div className="bg-[#121214] border border-white/5 p-8 flex flex-col h-full rounded-xl relative group overflow-hidden">
                   <div className="absolute top-0 left-0 w-1 h-24 bg-[#FF0032]/40" />
                   
                   <div className="flex justify-between items-start mb-8">
@@ -357,7 +357,7 @@ function CreativeStudioInner() {
                 </div>
 
                 {/* Audience Context */}
-                <div className="bg-[#121214] border border-white/5 p-8 rounded-none relative">
+                <div className="bg-[#121214] border border-white/5 p-8 rounded-xl relative">
                    <div className="absolute top-0 right-0 w-1 h-24 bg-[#00F0FF]/40" />
                   <div className="flex items-center gap-3 mb-8">
                     <span className="material-symbols-outlined text-[#00F0FF] shadow-[0_0_10px_rgba(0,240,255,0.3)]">radar</span>
@@ -366,16 +366,16 @@ function CreativeStudioInner() {
                   
                   <div className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-white/3 border border-white/10 p-4 rounded-none">
+                      <div className="bg-white/3 border border-white/10 p-4 rounded-xl">
                         <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-2 italic">Neural Maturity</span>
                         <span className="font-black text-white uppercase italic text-sm">{currentAd.targetAudience.age || "Full Spectrum"}</span>
                       </div>
-                      <div className="bg-white/3 border border-white/10 p-4 rounded-none">
+                      <div className="bg-white/3 border border-white/10 p-4 rounded-xl">
                         <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-2 italic">Spectrum</span>
                         <span className="font-black text-white uppercase italic text-sm">{currentAd.targetAudience.gender || "Omni"}</span>
                       </div>
                     </div>
-                    <div className="bg-white/3 border border-white/10 p-4 rounded-none">
+                    <div className="bg-white/3 border border-white/10 p-4 rounded-xl">
                       <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.4em] mb-2 italic">Spatial Coordination</span>
                       <p className="font-black text-white uppercase italic text-xs tracking-tighter">{currentAd.targetAudience.location || "Default Terrain"}</p>
                     </div>
@@ -395,7 +395,7 @@ function CreativeStudioInner() {
               </div>
 
               {/* Main Ad Copy Area */}
-              <div className="bg-[#0A0A0C] border border-white/5 p-0 overflow-hidden flex flex-col md:flex-row rounded-none relative">
+              <div className="bg-[#0A0A0C] border border-white/5 p-0 overflow-hidden flex flex-col md:flex-row rounded-xl relative">
                 <div className="p-8 md:p-10 flex-1 border-r border-white/5">
                   <div className="flex items-center justify-between gap-4 mb-8">
                     <div className="flex items-center gap-3">
@@ -408,8 +408,8 @@ function CreativeStudioInner() {
                   </div>
                   
                   <div className="bg-[#121214] p-8 border border-white/10 relative group mb-8 shadow-[inset_0_0_30px_rgba(0,0,0,0.5)]">
-                    <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#FF0032]/20 rounded-none pointer-events-none" />
-                    <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#00F0FF]/20 rounded-none pointer-events-none" />
+                    <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#FF0032]/20 rounded-xl pointer-events-none" />
+                    <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#00F0FF]/20 rounded-xl pointer-events-none" />
                     
                     <p className="text-base font-bold leading-relaxed relative z-10 whitespace-pre-wrap text-white/80 italic tracking-tight">
                       {currentAd.adCopy}
@@ -419,7 +419,7 @@ function CreativeStudioInner() {
                   {currentAd.callToAction && (
                     <div className="flex items-center justify-between border-t border-white/5 pt-8">
                       <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic">Termination Trigger</span>
-                      <button className="px-8 py-3 bg-[#FF0032] text-white rounded-none text-[10px] font-black uppercase tracking-[0.5em] shadow-[0_0_30px_rgba(255,0,50,0.3)] hover-glitch italic">
+                      <button className="px-6 py-2.5 bg-[#FF0032] text-white rounded-xl font-medium shadow-md shadow-[#FF0032]/20 hover:shadow-lg hover:shadow-[#FF0032]/30 transition-all">
                         {currentAd.callToAction}
                       </button>
                     </div>
@@ -443,7 +443,7 @@ function CreativeStudioInner() {
                         ))}
                       </ul>
                       {currentAd.estimatedImpact && (
-                         <div className="mt-8 p-5 bg-white/3 border border-white/10 rounded-none">
+                         <div className="mt-8 p-5 bg-white/3 border border-white/10 rounded-xl">
                            <span className="block text-[8px] text-white/30 font-black uppercase tracking-[0.5em] mb-2 italic">Est. Magnitude</span>
                            <span className="text-[11px] font-black text-[#FF0032] uppercase italic tracking-widest">{currentAd.estimatedImpact}</span>
                          </div>
@@ -457,7 +457,7 @@ function CreativeStudioInner() {
                       </div>
                       <ul className="space-y-4">
                         {currentAd.creativeIdeas.map((idea, idx) => (
-                          <li key={idx} className="bg-[#050505] p-4 rounded-none border border-white/5 text-xs italic font-bold leading-relaxed shadow-lg text-white/50 hover:text-white transition-colors group">
+                          <li key={idx} className="bg-[#050505] p-4 rounded-xl border border-white/5 text-xs italic font-bold leading-relaxed shadow-lg text-white/50 hover:text-white transition-colors group">
                             <span className="inline-block px-2 py-0.5 bg-white/5 text-[#FF0032] text-[8px] font-black mb-3 border border-white/5">{String(idx+1).padStart(2, '0')}</span>
                             <p>{idea}</p>
                           </li>
@@ -470,8 +470,8 @@ function CreativeStudioInner() {
 
             </div>
           ) : (
-            <div className="h-[600px] bg-[#0A0A0C] border border-white/5 border-dashed flex flex-col items-center justify-center p-8 text-center rounded-none cursor-pointer hover:bg-white/3 transition-all group" onClick={() => (document.querySelector('button[type="submit"]') as HTMLButtonElement)?.click()}>
-              <div className="w-20 h-20 rounded-none bg-white/3 flex items-center justify-center mb-6 border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] group-hover:border-[#FF0032]/40 transition-all">
+            <div className="h-[600px] bg-[#0A0A0C] border border-white/5 border-dashed flex flex-col items-center justify-center p-8 text-center rounded-xl cursor-pointer hover:bg-white/3 transition-all group" onClick={() => (document.querySelector('button[type="submit"]') as HTMLButtonElement)?.click()}>
+              <div className="w-20 h-20 rounded-xl bg-white/3 flex items-center justify-center mb-6 border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] group-hover:border-[#FF0032]/40 transition-all">
                 <span className="material-symbols-outlined text-4xl text-white/10 group-hover:text-[#FF0032]/40 transition-all group-hover:scale-110">psychology</span>
               </div>
               <h3 className="text-2xl font-black font-serif text-white/60 mb-3 uppercase italic tracking-tighter">Standby for Synthesis</h3>

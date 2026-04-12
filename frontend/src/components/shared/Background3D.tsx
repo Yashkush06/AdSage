@@ -103,38 +103,31 @@ function FloatingNodes({ count = 30 }) {
 }
 
 export function Background3D() {
-  const { performanceMode } = useAppStore();
   const [dpr, setDpr] = useState(1.5);
   const [quality, setQuality] = useState(1);
-
-  // Sync quality with performanceMode if not auto
-  const finalQuality = performanceMode === 'low' ? 0.5 : performanceMode === 'high' ? 1 : quality;
-  const finalDpr = performanceMode === 'low' ? 1 : performanceMode === 'high' ? 1.5 : dpr;
 
   return (
     <div className="canvas-container">
       <Canvas
         camera={{ position: [0, 0, 30], fov: 60 }}
-        dpr={finalDpr}
-        gl={{ antialias: finalQuality > 0.5 }}
+        dpr={dpr}
+        gl={{ antialias: quality > 0.5 }}
       >
-        {performanceMode === 'auto' && (
-          <PerformanceMonitor
-            onDecline={() => {
-              setDpr(1);
-              setQuality(0.5);
-            }}
-            onIncline={() => {
-              setDpr(1.5);
-              setQuality(1);
-            }}
-          />
-        )}
+        <PerformanceMonitor
+          onDecline={() => {
+            setDpr(1);
+            setQuality(0.5);
+          }}
+          onIncline={() => {
+            setDpr(1.5);
+            setQuality(1);
+          }}
+        />
         <color attach="background" args={["#181A2F"]} />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={2} color="#FDA481" />
-        <Particles count={finalQuality === 1 ? 1500 : 500} />
-        <FloatingNodes count={finalQuality === 1 ? 30 : 10} />
+        <Particles count={quality === 1 ? 1500 : 500} />
+        <FloatingNodes count={quality === 1 ? 30 : 10} />
         <fog attach="fog" args={["#181A2F", 20, 70]} />
       </Canvas>
     </div>

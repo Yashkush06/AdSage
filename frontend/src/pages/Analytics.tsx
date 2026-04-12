@@ -131,7 +131,7 @@ export function Analytics() {
             <p className="text-[#00F0FF]/60 font-medium">Synced with the Verse. Deep analytical pulse active.</p>
           </div>
           <div className="flex gap-3">
-            <div className="flex items-center gap-2 px-6 py-2 bg-[#121214] border border-white/5 rounded-none shadow-sm">
+            <div className="flex items-center gap-2 px-6 py-2 bg-[#121214] border border-white/5 rounded-xl shadow-sm">
               <span className="text-[10px] font-black uppercase text-white/30 tracking-[.3em] mr-2">Archive:</span>
               {loadingCampaigns ? (
                 <Skeleton className="w-32 h-4" />
@@ -147,7 +147,7 @@ export function Analytics() {
                 </select>
               )}
             </div>
-            <button onClick={runCycle} disabled={cycling} className="flex items-center gap-2 px-6 py-2 bg-[#FF0032] text-white rounded-none text-[10px] font-black uppercase tracking-[.2em] hover-glitch transition-all shadow-[0_0_15px_rgba(255,0,50,0.3)] disabled:opacity-50">
+            <button onClick={runCycle} disabled={cycling} className="flex items-center gap-2 px-5 py-2 bg-[#FF0032] text-white rounded-xl font-medium text-sm transition-all flex items-center gap-2 disabled:opacity-50">
               <span className={`material-symbols-outlined text-sm ${cycling ? 'animate-spin' : ''}`}>bolt</span>
               {cycling ? 'Syncing…' : cycleMsg || 'Initiate Pulse'}
             </button>
@@ -162,7 +162,7 @@ export function Analytics() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="md:col-span-2 bg-[#121214] p-10 rounded-none border border-white/5 relative group overflow-hidden">
+            <div className="md:col-span-2 bg-[#121214] p-10 rounded-xl border border-white/5 relative group overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-5 translate-x-4">
                 <span className="material-symbols-outlined text-white text-[120px]">psychology</span>
               </div>
@@ -192,14 +192,14 @@ export function Analytics() {
                 </div>
               </div>
             </div>
-            <div className="bg-[#FF0032] p-10 rounded-none flex flex-col justify-between shadow-[0_0_30px_rgba(255,0,50,0.2)] relative overflow-hidden group">
+            <div className="bg-[#FF0032] p-10 rounded-xl flex flex-col justify-between shadow-[0_0_30px_rgba(255,0,50,0.2)] relative overflow-hidden group">
               <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-black/20 rounded-full group-hover:scale-110 transition-transform" />
               <div className="text-white text-[10px] font-black uppercase tracking-[0.4em]">Pulse Index</div>
               <div>
                 <div className="text-6xl font-serif font-black text-white italic mb-2 tracking-tighter">{insights.week_rating}/10</div>
                 <p className="text-white/80 text-xs font-bold uppercase tracking-widest">Operational Sync Level</p>
               </div>
-              <button onClick={runCycle} disabled={cycling} className="w-full py-4 bg-black/20 hover:bg-black/40 text-white rounded-none text-[10px] font-black uppercase tracking-[.2em] transition-colors border border-white/10 disabled:opacity-50">
+              <button onClick={runCycle} disabled={cycling} className="w-full py-4 bg-black/20 hover:bg-black/40 text-white rounded-xl text-[10px] font-black uppercase tracking-[.2em] transition-colors border border-white/10 disabled:opacity-50">
                 {cycling ? 'Syncing…' : 'Network Briefing'}
               </button>
             </div>

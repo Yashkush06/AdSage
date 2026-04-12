@@ -28,7 +28,7 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (!active || !payload?.length) return null;
   const d: Channel = payload[0].payload;
   return (
-    <div className="bg-[#0d0d0f] border border-white/10 rounded-none p-4 text-xs shadow-2xl min-w-[160px]">
+    <div className="bg-[#0d0d0f] border border-white/10 rounded-xl p-4 text-xs shadow-2xl min-w-[160px]">
       <p className="font-black text-white uppercase italic tracking-tighter mb-2">{d.name}</p>
       <div className="space-y-1 text-white/50">
         <div className="flex justify-between gap-6"><span>Spend</span><span className="text-white font-bold">₹{d.spend.toLocaleString()}</span></div>
@@ -43,7 +43,7 @@ export function ChannelBreakdown({ data = FALLBACK }: Props) {
   const total = data.reduce((s, d) => s + d.spend, 0);
 
   return (
-    <div className="bg-[#0a0a0c] border border-white/5 rounded-none p-8">
+    <div className="bg-[#0a0a0c] border border-white/5 rounded-xl p-8">
       <div className="flex items-center gap-2 mb-6">
         <span className="material-symbols-outlined text-[#FF0032] text-lg">donut_large</span>
         <h4 className="font-black text-white uppercase italic tracking-tighter text-lg">Channel Breakdown</h4>
@@ -81,9 +81,9 @@ export function ChannelBreakdown({ data = FALLBACK }: Props) {
                   <span className="text-[11px] font-black text-white/70 uppercase italic tracking-tight truncate">{ch.name}</span>
                   <span className="text-[11px] font-black text-white/40 ml-2 flex-shrink-0">{ch.percentage}%</span>
                 </div>
-                <div className="h-1 bg-white/5 rounded-none overflow-hidden">
+                <div className="h-1 bg-white/5 rounded-xl overflow-hidden">
                   <div
-                    className="h-full rounded-none transition-all duration-700"
+                    className="h-full rounded-xl transition-all duration-700"
                     style={{ width: `${ch.percentage}%`, backgroundColor: COLORS[i % COLORS.length] }}
                   />
                 </div>

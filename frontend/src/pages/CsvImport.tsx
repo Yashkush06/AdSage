@@ -85,7 +85,7 @@ export function CsvImport() {
 
         {!result && (
           <div
-            className={`border-2 border-dashed rounded-none p-16 flex flex-col items-center justify-center transition-all relative overflow-hidden group ${
+            className={`border-2 border-dashed rounded-xl p-16 flex flex-col items-center justify-center transition-all relative overflow-hidden group ${
               file ? "border-[#FF0032] bg-[#FF0032]/5" : "border-white/5 bg-[#0A0A0C] hover:border-[#00F0FF]/30 hover:bg-white/5"
             }`}
             onDragOver={(e) => e.preventDefault()}
@@ -112,14 +112,14 @@ export function CsvImport() {
 
             <div className="flex gap-4">
               <button
-                className="px-6 py-3 bg-white/5 border border-white/10 text-white/50 text-[10px] font-black uppercase tracking-[0.3em] hover:text-white hover:bg-white/10 transition-all rounded-none italic"
+                className="px-6 py-3 bg-white/5 border border-white/10 text-white/50 text-[10px] font-black uppercase tracking-[0.3em] hover:text-white hover:bg-white/10 transition-all rounded-xl italic"
                 onClick={() => fileInputRef.current?.click()}
               >
                 Injest Artifacts
               </button>
               {file && (
                 <button
-                  className="px-8 py-3 bg-[#FF0032] text-white font-black rounded-none text-[10px] uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(255,0,50,0.3)] hover-glitch active:scale-[0.98] transition-all disabled:opacity-50"
+                  className="px-6 py-2.5 bg-[#FF0032] text-white rounded-xl font-medium shadow-md transition-all active:scale-95 disabled:opacity-50"
                   onClick={handleUpload}
                   disabled={isUploading}
                 >
@@ -133,9 +133,9 @@ export function CsvImport() {
         )}
 
         {isUploading && progress < 100 && (
-          <div className="w-full bg-white/5 rounded-none h-1 mt-6 overflow-hidden border border-white/5">
+          <div className="w-full bg-white/5 rounded-xl h-1 mt-6 overflow-hidden border border-white/5">
             <div
-              className="bg-[#FF0032] h-1 rounded-none transition-all duration-300 shadow-[0_0_10px_#FF0032]"
+              className="bg-[#FF0032] h-1 rounded-xl transition-all duration-300 shadow-[0_0_10px_#FF0032]"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -143,7 +143,7 @@ export function CsvImport() {
 
         {result && (
           <div className="space-y-8 animate-slide-up">
-            <div className="glass-card p-8 flex flex-col sm:flex-row items-center justify-between gap-6 border-l-[6px] border-l-[#FF0032] bg-[#FF0032]/5 rounded-none">
+            <div className="glass-card p-8 flex flex-col sm:flex-row items-center justify-between gap-6 border-l-[6px] border-l-[#FF0032] bg-[#FF0032]/5 rounded-xl">
                 <div className="flex items-center gap-5">
                     <span className="material-symbols-outlined text-[#FF0032] text-4xl shadow-[0_0_15px_rgba(255,0,50,0.3)]">bolt</span>
                     <div>
@@ -166,7 +166,7 @@ export function CsvImport() {
             {/* AI Insights Bento */}
              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                  {Object.entries(result.aiInsights).map(([key, text]) => (
-                    <div key={key} className="glass-card p-6 border-t-[3px] border-t-[#FF0032] bg-[#0A0A0C] rounded-none hover:bg-white/5 transition-colors group">
+                    <div key={key} className="glass-card p-6 border-t-[3px] border-t-[#FF0032] bg-[#0A0A0C] rounded-xl hover:bg-white/5 transition-colors group">
                        <p className="text-[9px] font-black uppercase text-[#00F0FF] tracking-[0.4em] mb-3 flex items-center gap-2 opacity-60">
                            <span className="material-symbols-outlined text-[14px]">terminal</span>
                            {key.replace(/_/g, " ")}
@@ -180,7 +180,7 @@ export function CsvImport() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Channel Breakdown */}
-              <div className="glass-card p-8 rounded-none bg-[#050505] border border-white/5">
+              <div className="glass-card p-8 rounded-xl bg-[#050505] border border-white/5">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mb-10 italic">Channel Velocity (Spend)</h3>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
@@ -211,7 +211,7 @@ export function CsvImport() {
                 <div className="flex flex-wrap gap-6 justify-center mt-8">
                    {result.channelBreakdown.map((item: any, i: number) => (
                        <div key={item.name} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40">
-                           <span className="w-2.5 h-2.5 rounded-none" style={{ backgroundColor: COLORS[i % COLORS.length]}}></span>
+                           <span className="w-2.5 h-2.5 rounded-xl" style={{ backgroundColor: COLORS[i % COLORS.length]}}></span>
                            <span>{item.name}</span>
                            <span className="text-[#FF0032]/80">({item.percentage}%)</span>
                        </div>
@@ -220,7 +220,7 @@ export function CsvImport() {
               </div>
 
               {/* Audience Performance */}
-              <div className="glass-card p-8 rounded-none bg-[#050505] border border-white/5">
+              <div className="glass-card p-8 rounded-xl bg-[#050505] border border-white/5">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mb-10 italic">Neural Demographics</h3>
                 <div className="h-72">
                   <ResponsiveContainer width="100%" height="100%">
@@ -240,7 +240,7 @@ export function CsvImport() {
               </div>
 
               {/* Hourly Conversions */}
-               <div className="glass-card p-10 lg:col-span-2 rounded-none bg-[#050505] border border-white/5">
+               <div className="glass-card p-10 lg:col-span-2 rounded-xl bg-[#050505] border border-white/5">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mb-10 italic">Frequency Distribution (Hourly)</h3>
                 <div className="h-72">
                   <ResponsiveContainer width="100%" height="100%">
@@ -261,7 +261,7 @@ export function CsvImport() {
               </div>
 
               {/* Data Preview */}
-               <div className="glass-card p-10 lg:col-span-2 overflow-x-auto rounded-none bg-[#050505] border border-white/5">
+               <div className="glass-card p-10 lg:col-span-2 overflow-x-auto rounded-xl bg-[#050505] border border-white/5">
                    <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mb-8 italic">Raw Neural Dump</h3>
                    <table className="w-full text-left border-collapse min-w-[800px]">
                        <thead>

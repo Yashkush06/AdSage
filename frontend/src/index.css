@@ -38,12 +38,6 @@ body {
   color: var(--on-surface);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: none; /* Hide default for CursorTrail */
-}
-
-/* ── Custom Cursor Overrides ───────────────────────────────── */
-a, button, [role="button"], select, input {
-  cursor: none;
 }
 
 h1, h2, h3, h4, h5, h6, .font-serif {
@@ -82,36 +76,179 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 ::-webkit-scrollbar-thumb { background: #FF0032; }
 ::-webkit-scrollbar-thumb:hover { background: #00F0FF; }
 
-/* ── Micro-animations ──────────────────────────────────────── */
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+/* ── Keyframes ─────────────────────────────────────────────── */
+@keyframes fadeIn    { from { opacity: 0; }                               to { opacity: 1; } }
+@keyframes slideUp   { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes shimmer   { from { background-position: -200% center; }       to { background-position: 200% center; } }
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255,0,50,0.3); }
+  50%       { box-shadow: 0 0 22px rgba(255,0,50,0.7), 0 0 40px rgba(255,0,50,0.2); }
+}
+@keyframes glow-pulse-cyan {
+  0%, 100% { box-shadow: 0 0 8px rgba(0,240,255,0.25); }
+  50%       { box-shadow: 0 0 22px rgba(0,240,255,0.6), 0 0 40px rgba(0,240,255,0.15); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-4px); }
+}
 @keyframes glitch {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
+  0%   { transform: translate(0); }
+  20%  { transform: translate(-2px,  2px); }
+  40%  { transform: translate(-2px, -2px); }
+  60%  { transform: translate( 2px,  2px); }
+  80%  { transform: translate( 2px, -2px); }
   100% { transform: translate(0); }
 }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .5; }
+}
+@keyframes border-spin {
+  to { --border-angle: 360deg; }
+}
 
-.animate-fade-in { animation: fadeIn 0.3s ease-out; }
+/* ── Micro-animation Helpers ───────────────────────────────── */
+.animate-fade-in  { animation: fadeIn  0.3s ease-out; }
 .animate-slide-up { animation: slideUp 0.4s ease-out; }
 .hover-glitch:hover { animation: glitch 0.2s linear infinite; }
+.animate-float    { animation: float 3s ease-in-out infinite; }
 
 .skeleton {
   background: #1A1A1C;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .5; }
+/* ── Universal Hover System ────────────────────────────────── */
+
+/* Cards — lift + red glow */
+.glass-card,
+[class*="rounded-xl"][class*="bg-[#121214]"],
+[class*="rounded-xl"][class*="bg-[#0A0A0C]"],
+[class*="rounded-2xl"][class*="bg-[#242E49]"],
+[class*="rounded-3xl"][class*="bg-[#242E49]"] {
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+/* Interactive card lift */
+button:not([disabled]),
+a,
+[role="button"],
+[class*="cursor-pointer"] {
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.2s ease,
+              opacity 0.15s ease,
+              color 0.15s ease,
+              border-color 0.15s ease,
+              background-color 0.15s ease;
+}
+
+/* ── Named Hover Utilities (apply to any element) ────────────── */
+
+/* Lift — subtle translateY + shadow */
+.hover-lift {
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+}
+
+/* Red glow */
+.hover-glow-red {
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.hover-glow-red:hover {
+  box-shadow: 0 0 18px rgba(255,0,50,0.45), 0 0 40px rgba(255,0,50,0.15);
+  border-color: rgba(255,0,50,0.5) !important;
+}
+
+/* Cyan glow */
+.hover-glow-cyan {
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.hover-glow-cyan:hover {
+  box-shadow: 0 0 18px rgba(0,240,255,0.35), 0 0 40px rgba(0,240,255,0.12);
+  border-color: rgba(0,240,255,0.45) !important;
+}
+
+/* Scale-up icon / small element */
+.hover-scale {
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  display: inline-block;
+}
+.hover-scale:hover { transform: scale(1.15); }
+
+/* Shimmer text effect on hover */
+.hover-shimmer {
+  background: linear-gradient(90deg, currentColor 0%, #FF0032 40%, #00F0FF 60%, currentColor 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.4s ease;
+}
+.hover-shimmer:hover { background-position: right center; }
+
+/* ── Global Button Glow on Hover ─────────────────────────── */
+button[class*="bg-[#FF0032]"]:not([disabled]):hover {
+  box-shadow: 0 0 25px rgba(255,0,50,0.6), 0 0 50px rgba(255,0,50,0.2) !important;
+  transform: translateY(-1px) scale(1.01);
+}
+button[class*="bg-[#FF0032]"]:not([disabled]):active {
+  transform: scale(0.97);
+  box-shadow: 0 0 10px rgba(255,0,50,0.3) !important;
+}
+
+/* Secondary cyan buttons */
+button[class*="border-[#00F0FF]"]:not([disabled]):hover,
+button[class*="bg-white/5"]:not([disabled]):hover {
+  box-shadow: 0 0 15px rgba(0,240,255,0.3);
+  transform: translateY(-1px);
+}
+
+/* ── Input Focus Animation ────────────────────────────────── */
+input, select, textarea {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+input:focus, select:focus, textarea:focus {
+  transform: scale(1.005);
+}
+
+/* ── Metric / stat card hover (Dashboard) ─────────────────── */
+section > div[class*="rounded"] {
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+section > div[class*="rounded"]:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,0,50,0.08);
+}
+
+/* ── NavLink icon bounce ─────────────────────────────────── */
+nav a .material-symbols-outlined {
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), color 0.15s ease;
+}
+nav a:hover .material-symbols-outlined {
+  transform: scale(1.25) rotate(-5deg);
+}
+
+/* ── Table row highlight ─────────────────────────────────── */
+tr {
+  transition: background-color 0.15s ease;
+}
+tbody tr:hover {
+  background-color: rgba(255,0,50,0.04) !important;
 }
 
 /* ── Button Overrides (Miles Style) ────────────────────────── */
 .btn-primary {
   @apply bg-[#FF0032] text-white px-6 py-2.5 rounded-none font-black uppercase tracking-tighter shadow-[0_0_15px_rgba(255,0,50,0.3)] hover:shadow-[0_0_25px_rgba(255,0,50,0.5)] transition-all active:scale-95 flex items-center justify-center gap-2;
 }
+.btn-primary:hover { transform: translateY(-1px) scale(1.01); }
 
 .btn-secondary {
   @apply bg-transparent border-2 border-[#00F0FF] text-[#00F0FF] px-6 py-2.5 rounded-none font-bold uppercase tracking-widest hover:bg-[#00F0FF] hover:text-[#050505] transition-all;
@@ -124,3 +261,4 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 .input {
   @apply w-full bg-[#121214] border border-white/10 rounded-none py-3 px-4 text-sm focus:border-[#FF0032] focus:ring-1 focus:ring-[#FF0032] outline-none transition-all placeholder:text-white/20 text-white;
 }
+
