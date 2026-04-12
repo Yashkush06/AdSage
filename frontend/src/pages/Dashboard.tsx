@@ -342,24 +342,28 @@ export function Dashboard() {
                   {/* Charts row */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Donut — Channel Breakdown */}
-                    <div className="bg-stone-50 border border-outline-variant/20 rounded-xl p-5">
-                      <h5 className="text-sm font-bold mb-4">Channel Breakdown</h5>
+                    <div className="glass-card p-5 rounded-none bg-[#050505] border border-white/5">
+                      <h5 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mb-4 italic">Channel Breakdown</h5>
                       <div className="h-44">
                         <ResponsiveContainer width="100%" height="100%">
                           <PieChart>
-                            <Pie data={csvResult.channelBreakdown} cx="50%" cy="50%" innerRadius={45} outerRadius={65} paddingAngle={4} dataKey="spend" nameKey="name">
+                            <Pie data={csvResult.channelBreakdown} cx="50%" cy="50%" innerRadius={45} outerRadius={65} paddingAngle={4} dataKey="spend" nameKey="name" stroke="none">
                               {csvResult.channelBreakdown.map((_: any, i: number) => (
                                 <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
                               ))}
                             </Pie>
-                            <RTooltip formatter={(v: unknown) => [`₹${Number(v).toLocaleString()}`, "Spend"]} />
+                            <RTooltip 
+                               contentStyle={{ backgroundColor: '#050505', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0px' }}
+                               itemStyle={{ color: '#FF0032', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase' }}
+                               formatter={(v: unknown) => [`₹${Number(v).toLocaleString()}`, "Spend"]} 
+                            />
                           </PieChart>
                         </ResponsiveContainer>
                       </div>
-                      <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                      <div className="flex flex-wrap gap-2 mt-4 justify-center">
                         {csvResult.channelBreakdown.map((item: any, i: number) => (
-                          <div key={item.name} className="flex items-center gap-1.5 text-[10px] font-medium">
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
+                          <div key={item.name} className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+                            <span className="w-2 h-2 rounded-none" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
                             {item.name} ({item.percentage}%)
                           </div>
                         ))}
@@ -367,32 +371,41 @@ export function Dashboard() {
                     </div>
 
                     {/* Bar — Audience */}
-                    <div className="bg-stone-50 border border-outline-variant/20 rounded-xl p-5">
-                      <h5 className="text-sm font-bold mb-4">Audience Performance</h5>
+                    <div className="glass-card p-5 rounded-none bg-[#050505] border border-white/5">
+                      <h5 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mb-4 italic">Audience Performance</h5>
                       <div className="h-52">
                         <ResponsiveContainer width="100%" height="100%">
                           <BarChart data={csvResult.audiencePerformance}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e2dd" />
-                            <XAxis dataKey="age" tick={{ fill: "#757871", fontSize: 11 }} tickLine={false} axisLine={false} />
-                            <YAxis tick={{ fill: "#757871", fontSize: 11 }} tickLine={false} axisLine={false} width={32} />
-                            <RTooltip cursor={{ fill: "#f6f3ee" }} contentStyle={{ borderRadius: "8px", border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} />
-                            <Bar dataKey="conversions" fill="var(--primary)" radius={[4, 4, 0, 0]} name="Conversions" />
+                            <CartesianGrid strokeDasharray="2 2" vertical={false} stroke="rgba(255,255,255,0.03)" />
+                            <XAxis dataKey="age" tick={{ fill: "rgba(255,255,255,0.2)", fontSize: 9, fontWeight: 900 }} tickLine={false} axisLine={false} />
+                            <YAxis tick={{ fill: "rgba(255,255,255,0.2)", fontSize: 9, fontWeight: 900 }} tickLine={false} axisLine={false} width={32} />
+                            <RTooltip 
+                                cursor={{ fill: "rgba(255,255,255,0.02)" }} 
+                                contentStyle={{ backgroundColor: '#050505', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0px' }} 
+                                itemStyle={{ color: '#00F0FF', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase' }} 
+                            />
+                            <Bar dataKey="conversions" fill="#00F0FF" radius={0} name="Conversions" />
                           </BarChart>
                         </ResponsiveContainer>
                       </div>
                     </div>
 
                     {/* Bar — Hourly */}
-                    <div className="bg-stone-50 border border-outline-variant/20 rounded-xl p-5">
-                      <h5 className="text-sm font-bold mb-4">Hourly Conversions</h5>
+                    <div className="glass-card p-5 rounded-none bg-[#050505] border border-white/5">
+                      <h5 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mb-4 italic">Hourly Conversions</h5>
                       <div className="h-52">
                         <ResponsiveContainer width="100%" height="100%">
                           <BarChart data={csvResult.hourlyConversions}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e2dd" />
-                            <XAxis dataKey="hour" tick={{ fill: "#757871", fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={(h) => `${h}h`} interval={3} />
-                            <YAxis tick={{ fill: "#757871", fontSize: 11 }} tickLine={false} axisLine={false} width={32} />
-                            <RTooltip cursor={{ fill: "#f6f3ee" }} contentStyle={{ borderRadius: "8px", border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} labelFormatter={(h) => `${h}:00`} />
-                            <Bar dataKey="conversions" fill="var(--primary-container)" radius={[4, 4, 0, 0]} name="Conversions" />
+                            <CartesianGrid strokeDasharray="2 2" vertical={false} stroke="rgba(255,255,255,0.03)" />
+                            <XAxis dataKey="hour" tick={{ fill: "rgba(255,255,255,0.2)", fontSize: 9, fontWeight: 900 }} tickLine={false} axisLine={false} tickFormatter={(h) => `${h}h`} interval={3} />
+                            <YAxis tick={{ fill: "rgba(255,255,255,0.2)", fontSize: 9, fontWeight: 900 }} tickLine={false} axisLine={false} width={32} />
+                            <RTooltip 
+                                cursor={{ fill: "rgba(255,255,255,0.02)" }} 
+                                contentStyle={{ backgroundColor: '#050505', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0px' }} 
+                                itemStyle={{ color: '#FF0032', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase' }} 
+                                labelFormatter={(h) => `${h}:00`} 
+                            />
+                            <Bar dataKey="conversions" fill="#FF0032" radius={0} name="Conversions" />
                           </BarChart>
                         </ResponsiveContainer>
                       </div>
@@ -400,26 +413,26 @@ export function Dashboard() {
                   </div>
 
                   {/* Preview table */}
-                  <div className="overflow-x-auto rounded-xl border border-outline-variant/20">
+                  <div className="glass-card overflow-x-auto rounded-none bg-[#050505] border border-white/5 mt-6">
                     <table className="w-full text-left border-collapse text-xs">
-                      <thead className="bg-stone-50">
-                        <tr>
+                      <thead>
+                        <tr className="border-b border-white/5">
                           {csvResult.preview.length > 0 && Object.keys(csvResult.preview[0]).slice(0, 8).map((k: string) => (
-                            <th key={k} className="px-4 py-3 font-bold text-stone-400 uppercase tracking-wider whitespace-nowrap">{k}</th>
+                            <th key={k} className="px-4 py-4 text-[9px] font-black text-[#FF0032] uppercase tracking-[0.3em] italic whitespace-nowrap">{k}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
                         {csvResult.preview.map((row: any, i: number) => (
-                          <tr key={i} className="border-t border-outline-variant/10 hover:bg-stone-50 transition-colors">
+                          <tr key={i} className="border-b border-white/5 text-xs font-bold text-white/60 hover:bg-white/5 transition-colors group">
                             {Object.keys(row).slice(0, 8).map((k) => (
-                              <td key={k} className="px-4 py-3 text-stone-600 truncate max-w-[140px]">{row[k]}</td>
+                              <td key={k} className="px-4 py-3 group-hover:text-white transition-colors truncate max-w-[140px] font-mono">{row[k]}</td>
                             ))}
                           </tr>
                         ))}
                       </tbody>
                     </table>
-                    <p className="text-center text-[10px] text-stone-400 py-2">Showing first {csvResult.preview.length} rows</p>
+                    <p className="text-center text-[9px] font-black text-white/10 py-4 uppercase tracking-[0.5em]">Showing first {csvResult.preview.length} rows</p>
                   </div>
                 </div>
               )}
