@@ -1,6 +1,5 @@
 import type { OverviewMetrics } from "../../types";
 import { formatCurrency, formatNumber } from "../../lib/utils";
-import { motion } from "framer-motion";
 
 interface Props {
   metrics: OverviewMetrics;
@@ -40,43 +39,29 @@ export function MetricsCards({ metrics }: Props) {
 
   return (
     <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
-      {cards.map((card, i) => (
-        <motion.div 
-          key={card.label}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.1, duration: 0.5 }}
-          whileHover={{ 
-            y: -12,
-            scale: 1.02,
-            borderColor: "rgba(255, 59, 59, 0.3)",
-            transition: { duration: 0.2, ease: "easeOut" },
-          }}
-          className="glass-card p-6 group cursor-default relative"
+      {cards.map((card) => (
+        <div 
+          key={card.label} 
+          className="bg-[#242E49] p-6 rounded-3xl border border-[#37415C]/30 shadow-sm hover:shadow-md transition-all duration-300 group"
         >
-          {/* Enhanced Hover Glow */}
-          <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-          
-          <p className="relative z-10 font-sans tracking-wide uppercase text-[10px] text-stone-400 mb-2 font-bold group-hover:text-primary transition-colors">
+          <p className="font-sans tracking-wide uppercase text-[10px] text-[#FDA481]/50 mb-2 font-bold group-hover:text-primary transition-colors">
             {card.label}
           </p>
-          <div className="relative z-10 flex items-baseline gap-2">
+          <div className="flex items-baseline gap-2">
             <h3 className="text-2xl font-serif font-bold text-on-surface">
               {card.value}
             </h3>
-            <span className={`text-[10px] font-bold ${card.growth.startsWith('+') ? 'text-primary' : 'text-stone-400'} flex items-center`}>
+            <span className={`text-[10px] font-bold ${card.growth.startsWith('+') ? 'text-primary' : 'text-[#FDA481]/40'} flex items-center`}>
               {card.growth}
             </span>
           </div>
-          <div className="relative z-10 mt-4 w-full h-1 bg-white/5 rounded-full overflow-hidden">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${card.progress}%` }}
-              transition={{ delay: 0.5 + i * 0.1, duration: 1, ease: "easeOut" }}
-              className={`${card.colorClass} h-full shadow-[0_0_12px_rgba(255,59,59,0.5)] group-hover:shadow-[0_0_16px_#FF3B3B] transition-shadow`} 
+          <div className="mt-4 w-full h-1 bg-[#37415C] rounded-full overflow-hidden">
+            <div 
+              className={`${card.colorClass} h-full transition-all duration-1000 ease-out`} 
+              style={{ width: `${card.progress}%` }}
             />
           </div>
-        </motion.div>
+        </div>
       ))}
     </section>
   );

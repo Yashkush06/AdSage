@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { authApi } from "../lib/api";
 import { useAppStore } from "../lib/store";
 import { LoadingSpinner } from "../components/shared/LoadingStates";
-import { motion, AnimatePresence } from "framer-motion";
 
 type Step = "vision" | "pulse" | "strategy";
 
@@ -52,37 +51,36 @@ export function Onboarding() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 md:p-12 font-body text-white">
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full max-w-5xl glass-card flex flex-col md:flex-row overflow-hidden lg:h-[700px] border-white/5"
-      >
+    <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-6 md:p-12 font-body overflow-hidden">
+      <div className="w-full max-w-5xl bg-[#050505] rounded-none border border-white/5 shadow-[0_0_50px_rgba(0,0,0,0.8)] flex overflow-hidden lg:h-[700px] relative">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF0032] via-[#00F0FF] to-[#FF0032] opacity-50" />
         
         {/* Step Navigation Sidebar */}
-        <aside className="w-64 bg-[#0b0c11] border-r border-outline-variant/10 p-8 hidden md:flex flex-col">
-          <div className="flex items-center gap-3 mb-16">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-              <span className="material-symbols-outlined text-white">temp_preferences_eco</span>
+        <aside className="w-64 bg-[#0A0A0C] border-r border-white/5 p-10 hidden md:flex flex-col">
+          <div className="flex items-center gap-3 mb-16 group cursor-pointer">
+            <div className="w-12 h-12 rounded-none bg-[#FF0032] flex items-center justify-center shadow-[0_0_20px_rgba(255,0,50,0.3)] hover-glitch transition-all">
+              <span className="material-symbols-outlined text-white text-[28px]" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
             </div>
-            <h1 className="font-serif text-xl font-bold text-primary">AdSage</h1>
+            <div>
+              <h1 className="font-serif text-2xl font-black text-white italic leading-none tracking-tighter uppercase">AdSage</h1>
+              <p className="text-[8px] font-black uppercase tracking-[0.4em] text-[#00F0FF] mt-1">Verse Alpha</p>
+            </div>
           </div>
 
-          <div className="space-y-4 flex-1">
-             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-8">Onboarding Cycle</p>
+          <div className="space-y-6 flex-1">
+             <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20 mb-10 italic">Neural Calibration Cycle</p>
              {steps.map((s, i) => (
                 <div 
                   key={s.id} 
-                  className={`flex items-center gap-4 group transition-all duration-300 ${step === s.id ? 'opacity-100' : 'opacity-40'}`}
+                  className={`flex items-center gap-5 group transition-all duration-500 ${step === s.id ? 'opacity-100 translate-x-1' : 'opacity-20'}`}
                 >
-                   <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-all ${
-                     step === s.id ? 'border-primary bg-primary text-white' : 'border-stone-300 text-stone-300'
+                   <div className={`w-8 h-8 rounded-none border-2 flex items-center justify-center text-[10px] font-black transition-all ${
+                     step === s.id ? 'border-[#FF0032] bg-[#FF0032] text-white shadow-[0_0_15px_rgba(255,0,50,0.3)]' : 'border-white/10 text-white/30'
                    }`}>
                       {i + 1}
                    </div>
                    <div className="flex flex-col">
-                      <span className={`text-[12px] font-bold uppercase tracking-widest ${step === s.id ? 'text-primary' : 'text-stone-400'}`}>
+                      <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${step === s.id ? 'text-[#00F0FF]' : 'text-white/40'}`}>
                         {s.label}
                       </span>
                    </div>
@@ -90,11 +88,10 @@ export function Onboarding() {
              ))}
           </div>
 
-          <div className="mt-auto p-4 bg-primary/10 rounded-2xl border border-primary/20">
-             <p className="text-[10px] text-primary font-bold uppercase tracking-widest mb-2">Observatory Status</p>
-             <p className="text-[10px] text-stone-400 font-medium leading-relaxed">
-               Syncing with market agents... <br/>
-               Ready for vision establishment.
+          <div className="mt-auto">
+             <p className="text-[10px] text-[#FDA481]/40 font-medium leading-relaxed">
+               Welcome to the Observatory. <br/>
+               Our agents will guide your marketing evolution.
              </p>
           </div>
         </aside>
@@ -102,169 +99,150 @@ export function Onboarding() {
         {/* Content Area */}
         <main className="flex-1 p-8 md:p-16 flex flex-col relative overflow-y-auto">
           
-          <div className="flex-1 max-w-md mx-auto w-full flex flex-col justify-center">
+          <div className="flex-1 animate-fade-in max-w-md mx-auto w-full flex flex-col justify-center">
             
-            <AnimatePresence mode="wait">
-              {step === "vision" && (
-                <motion.div 
-                  key="vision"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-8"
-                >
+            {step === "vision" && (
+              <div className="space-y-10 animate-fade-in">
+                <div className="space-y-2">
+                  <h2 className="font-serif text-5xl font-black tracking-tighter text-white uppercase italic leading-none">Establish Node</h2>
+                  <p className="text-[#00F0FF]/60 font-bold uppercase tracking-[0.25em] text-[10px]">Identify the business origin point.</p>
+                </div>
+
+                <div className="space-y-8">
+                  <div className="space-y-3">
+                    <label className="text-[9px] uppercase font-black text-white/30 tracking-[0.4em]">Directive Alias</label>
+                    <input 
+                      className="w-full bg-[#121214] border border-white/10 rounded-none px-6 py-5 outline-none focus:border-[#FF0032] focus:ring-1 focus:ring-[#FF0032] transition-all font-bold text-white uppercase placeholder:text-white/10 text-sm italic"
+                      placeholder="e.g. STERLING ARCHIVAL"
+                      value={form.business_name}
+                      onChange={(e) => setForm({ ...form, business_name: e.target.value })}
+                    />
+                  </div>
                   <div className="space-y-2">
-                    <h2 className="font-serif text-4xl font-bold tracking-tight text-on-surface">Establish Vision</h2>
-                    <p className="text-stone-500 font-medium">Tell us about your business baseline.</p>
+                    <label className="text-[9px] uppercase font-black text-white/30 tracking-[0.4em]">Market Frequency</label>
+                    <select 
+                      className="w-full bg-[#121214] border border-white/10 rounded-none px-6 py-5 outline-none focus:border-[#00F0FF] focus:ring-1 focus:ring-[#00F0FF] transition-all font-bold text-white appearance-none uppercase italic text-sm"
+                      value={form.industry}
+                      onChange={(e) => setForm({ ...form, industry: e.target.value })}
+                    >
+                       <option value="">Select industry scope...</option>
+                       {["E-commerce", "SaaS", "Fashion", "Electronics", "Architecture", "Luxury Goods"].map(i => <option key={i} value={i} className="bg-[#121214]">{i}</option>)}
+                    </select>
                   </div>
+                </div>
 
-                  <div className="space-y-6">
-                    <div className="space-y-2">
-                      <label className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">Business Name</label>
-                      <input 
-                        className="input"
-                        placeholder="e.g. Sterling Archival Studio"
-                        value={form.business_name}
-                        onChange={(e) => setForm({ ...form, business_name: e.target.value })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">Primary Industry</label>
-                      <select 
-                        className="input appearance-none"
-                        value={form.industry}
-                        onChange={(e) => setForm({ ...form, industry: e.target.value })}
-                      >
-                         <option value="">Select industry scope...</option>
-                         {["E-commerce", "SaaS", "Fashion", "Electronics", "Architecture", "Luxury Goods"].map(i => <option key={i} value={i} className="bg-surface">{i}</option>)}
-                      </select>
-                    </div>
-                  </div>
-
-                  <button 
-                    onClick={() => setStep("pulse")}
-                    className="btn-primary w-full py-4 text-xs tracking-[0.2em] uppercase"
-                  >
-                    Continue Pulse Check
-                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                  </button>
-                </motion.div>
-              )}
-
-              {step === "pulse" && (
-                <motion.div 
-                  key="pulse"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-8"
+                <button 
+                  onClick={() => setStep("pulse")}
+                  className="w-full py-5 bg-[#FF0032] text-white rounded-none font-black uppercase tracking-[0.3em] text-[11px] shadow-[0_0_25px_rgba(255,0,50,0.4)] hover-glitch transition-all flex items-center justify-center gap-3"
                 >
+                  Initiate Frequency Check
+                  <span className="material-symbols-outlined text-sm">bolt</span>
+                </button>
+              </div>
+            )}
+
+            {step === "pulse" && (
+              <div className="space-y-8 animate-fade-in">
+                <div className="space-y-2">
+                  <h2 className="font-serif text-4xl font-black tracking-tighter text-white uppercase italic">Set the Pulse</h2>
+                  <p className="text-[#00F0FF]/40 font-black uppercase tracking-[0.2em] text-[10px] italic">Define your acceptable performance thresholds.</p>
+                </div>
+
+                <div className="space-y-6">
                   <div className="space-y-2">
-                    <h2 className="font-serif text-4xl font-bold tracking-tight text-on-surface">Set the Pulse</h2>
-                    <p className="text-stone-500 font-medium">Define your acceptable performance thresholds.</p>
+                    <label className="text-[9px] uppercase font-black text-white/30 tracking-[0.4em] italic">Target CPA (₹)</label>
+                    <input 
+                      type="number"
+                      className="w-full bg-[#121214] border border-white/10 rounded-none px-6 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"
+                      placeholder="400"
+                      value={form.target_cpa}
+                      onChange={(e) => setForm({ ...form, target_cpa: e.target.value })}
+                    />
                   </div>
-
-                  <div className="space-y-6">
-                    <div className="space-y-2">
-                      <label className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">Target CPA (₹)</label>
-                      <input 
-                        type="number"
-                        className="input"
-                        placeholder="400"
-                        value={form.target_cpa}
-                        onChange={(e) => setForm({ ...form, target_cpa: e.target.value })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">Minimum ROAS (x)</label>
-                      <input 
-                        type="number"
-                        step="0.1"
-                        className="input"
-                        placeholder="3.0"
-                        value={form.target_roas}
-                        onChange={(e) => setForm({ ...form, target_roas: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                     <button onClick={() => setStep("vision")} className="flex-1 py-4 bg-white/5 text-stone-400 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-white/10 transition-colors">Back</button>
-                     <button 
-                       onClick={() => setStep("strategy")}
-                       className="btn-primary flex-[2] text-xs uppercase tracking-[0.2em]"
-                     >
-                       Calibrate Strategy
-                     </button>
-                  </div>
-                </motion.div>
-              )}
-
-              {step === "strategy" && (
-                <motion.div 
-                  key="strategy"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-8"
-                >
                   <div className="space-y-2">
-                    <h2 className="font-serif text-4xl font-bold tracking-tight text-on-surface">Select Strategy</h2>
-                    <p className="text-stone-500 font-medium">How should our agents manage your archives?</p>
+                    <label className="text-[9px] uppercase font-black text-white/30 tracking-[0.4em] italic">Minimum ROAS (x)</label>
+                    <input 
+                      type="number"
+                      step="0.1"
+                      className="w-full bg-[#121214] border border-white/10 rounded-none px-6 py-4 outline-none focus:border-[#FF0032] transition-all font-black text-white uppercase italic shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"
+                      placeholder="3.0"
+                      value={form.target_roas}
+                      onChange={(e) => setForm({ ...form, target_roas: e.target.value })}
+                    />
                   </div>
+                </div>
 
-                  <div className="space-y-4">
-                     {[
-                       { name: 'Stability', icon: 'balance', desc: 'Prioritize consistent ROAS over volume.' },
-                       { name: 'Efficiency', icon: 'energy_savings_leaf', desc: 'Optimize spend relative to conversion value.' },
-                       { name: 'Expansion', icon: 'shutter_speed', desc: 'Aggressive scaling of winning creative assets.' }
-                     ].map(s => (
-                       <div 
-                         key={s.name}
-                         onClick={() => setForm({...form, strategy: s.name})}
-                         className={`p-6 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-6 ${
-                           form.strategy === s.name ? 'border-primary bg-primary/10 shadow-lg shadow-primary/5' : 'border-white/5 bg-white/5 hover:border-white/10'
-                         }`}
-                       >
-                          <div className={`w-12 h-12 rounded-full flex items-center justify-center ${form.strategy === s.name ? 'bg-primary text-white' : 'bg-white/5 text-stone-500'}`}>
-                             <span className="material-symbols-outlined text-2xl">{s.icon}</span>
-                          </div>
-                          <div className="flex-1">
-                             <p className={`text-sm font-bold ${form.strategy === s.name ? 'text-primary' : 'text-on-surface'}`}>{s.name}</p>
-                             <p className="text-[11px] text-stone-500 leading-tight">{s.desc}</p>
-                          </div>
-                       </div>
-                     ))}
-                  </div>
+                <div className="flex gap-4">
+                   <button onClick={() => setStep("vision")} className="flex-1 py-4 bg-white/5 text-white/30 rounded-none font-black uppercase tracking-[0.4em] text-[10px] hover:bg-white/10 transition-all italic border border-white/5">Back</button>
+                   <button 
+                     onClick={() => setStep("strategy")}
+                     className="flex-[2] py-4 bg-[#FF0032] text-white rounded-none font-black uppercase tracking-[0.4em] text-[10px] shadow-[0_0_30px_rgba(255,0,50,0.3)] hover-glitch transition-all flex items-center justify-center gap-2 italic"
+                   >
+                     Continue Node
+                     <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                   </button>
+                </div>
+              </div>
+            )}
 
-                  {error && <p className="text-error text-xs font-bold bg-error/10 p-4 rounded-xl">{error}</p>}
+            {step === "strategy" && (
+              <div className="space-y-8 animate-fade-in">
+                <div className="space-y-2">
+                  <h2 className="font-serif text-4xl font-black tracking-tighter text-white uppercase italic">Select Strategy</h2>
+                  <p className="text-[#00F0FF]/40 font-black uppercase tracking-[0.2em] text-[10px] italic">How should our agents manage your archives?</p>
+                </div>
 
-                  <div className="flex gap-4 pt-4">
-                     <button onClick={() => setStep("pulse")} className="flex-1 py-4 bg-white/5 text-stone-400 rounded-2xl font-bold uppercase tracking-widest text-xs">Back</button>
-                     <button 
-                       onClick={finish}
-                       disabled={loading}
-                       className="btn-primary flex-[2] text-xs uppercase tracking-[0.2em]"
-                     >
-                       {loading ? <LoadingSpinner size={16} /> : 'Activate Observatory'}
-                     </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                <div className="space-y-4">
+                   {[
+                     { name: 'Stability', icon: 'balance', desc: 'Prioritize consistent ROAS over volume.' },
+                     { name: 'Efficiency', icon: 'energy_savings_leaf', desc: 'Optimize spend relative to conversion value.' },
+                     { name: 'Expansion', icon: 'shutter_speed', desc: 'Aggressive scaling of winning creative assets.' }
+                   ].map(s => (
+                        <div 
+                          key={s.name}
+                          onClick={() => setForm({...form, strategy: s.name})}
+                          className={`p-6 rounded-none border-2 transition-all cursor-pointer flex items-center gap-6 ${
+                            form.strategy === s.name ? 'border-[#FF0032] bg-[#FF0032]/5' : 'border-white/5 hover:border-white/20'
+                          }`}
+                        >
+                           <div className={`w-12 h-12 rounded-none flex items-center justify-center ${form.strategy === s.name ? 'bg-[#FF0032] text-white' : 'bg-[#121214] text-[#00F0FF]/40'}`}>
+                              <span className="material-symbols-outlined text-2xl">{s.icon}</span>
+                           </div>
+                        <div className="flex-1">
+                           <p className={`text-[11px] font-black uppercase tracking-[0.2em] ${form.strategy === s.name ? 'text-[#00F0FF]' : 'text-white/40'}`}>{s.name}</p>
+                           <p className="text-[10px] text-white/20 leading-tight uppercase font-bold mt-1">{s.desc}</p>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+
+                {error && <p className="text-[#B4182D] text-xs font-bold bg-[#B4182D]/10 p-4 rounded-xl border border-[#B4182D]/20">{error}</p>}
+
+                <div className="flex gap-4 pt-4">
+                   <button onClick={() => setStep("pulse")} className="flex-1 py-4 bg-[#242E49] text-[#FDA481]/60 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-[#37415C] transition-colors">Back</button>
+                   <button 
+                     onClick={finish}
+                     disabled={loading}
+                     className="flex-[2] py-4 bg-[#FDA481] text-[#181A2F] rounded-2xl font-bold uppercase tracking-[0.2em] text-xs shadow-lg shadow-[#FDA481]/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                   >
+                     {loading ? <LoadingSpinner size={16} /> : 'Activate Observatory'}
+                   </button>
+                </div>
+              </div>
+            )}
 
           </div>
 
-          <footer className="mt-auto pt-16 flex justify-between items-center text-[10px] font-bold text-stone-500 uppercase tracking-widest">
-            <span>© 2026 AdSage AI</span>
-            <div className="flex gap-4">
-              <span>Security Protocol</span>
-              <span>Encrypted</span>
+          <footer className="mt-auto pt-16 flex justify-between items-center text-[9px] font-black text-white/10 uppercase tracking-[0.5em] italic">
+            <span>© 2026 Spider-Verse Intelligence Network</span>
+            <div className="flex gap-12">
+              <span className="text-[#00F0FF]/20 hover:text-[#00F0FF] cursor-pointer transition-colors">Neural Security Protocol</span>
+              <span className="text-[#FF0032]/20 hover:text-[#FF0032] cursor-pointer transition-colors">Ecosystem Encrypted</span>
             </div>
           </footer>
         </main>
 
-      </motion.div>
+      </div>
     </div>
   );
 }

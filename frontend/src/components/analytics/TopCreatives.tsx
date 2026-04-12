@@ -26,10 +26,10 @@ const FORMAT_ICONS: Record<string, string> = {
 };
 
 const FORMAT_COLORS: Record<string, string> = {
-  image: "bg-blue-50 text-blue-600 border-blue-200",
-  video: "bg-rose-50 text-rose-600 border-rose-200",
-  carousel: "bg-violet-50 text-violet-600 border-violet-200",
-  story: "bg-amber-50 text-amber-600 border-amber-200",
+  image: "bg-[#242E49] text-[#FDA481] border-[#37415C]/50",
+  video: "bg-[#54162B]/50 text-[#FDA481] border-[#B4182D]/30",
+  carousel: "bg-[#37415C]/50 text-[#FDA481] border-[#37415C]/30",
+  story: "bg-[#B4182D]/20 text-[#FDA481] border-[#B4182D]/20",
 };
 
 const FALLBACK_CREATIVES: Creative[] = [
@@ -62,30 +62,30 @@ export function TopCreatives({ creatives = FALLBACK_CREATIVES }: Props) {
   const maxRoas = Math.max(...sorted.map((c) => c.roas), 1);
 
   return (
-    <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-sm overflow-hidden">
+    <div className="bg-[#181A2F] rounded-xl border border-[#37415C]/20 shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="p-8 pb-6 border-b border-outline-variant/10">
+      <div className="p-8 pb-6 border-b border-[#37415C]/10">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <div className="flex items-center gap-2 text-primary mb-1">
+            <div className="flex items-center gap-2 text-[#FDA481] mb-1">
               <span className="material-symbols-outlined text-base">auto_awesome</span>
               <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Creative Performance</span>
             </div>
-            <h4 className="font-serif text-2xl font-bold text-on-surface">Top Creatives</h4>
-            <p className="text-stone-400 text-xs mt-0.5">Best-performing ad formats ranked by impact</p>
+            <h4 className="font-serif text-2xl font-bold text-white">Top Creatives</h4>
+            <p className="text-[#FDA481]/40 text-xs mt-0.5">Best-performing ad formats ranked by impact</p>
           </div>
 
           <div className="flex flex-wrap gap-2">
             {/* Format filter pills */}
-            <div className="flex gap-1 p-1 bg-surface-container-high rounded-lg">
+            <div className="flex gap-1 p-1 bg-[#242E49] rounded-lg">
               {formats.map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilterFormat(f)}
                   className={`px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${
                     filterFormat === f
-                      ? "bg-primary text-white shadow-sm"
-                      : "text-stone-500 hover:text-on-surface"
+                      ? "bg-[#FDA481] text-[#181A2F] shadow-lg shadow-[#FDA481]/20"
+                      : "text-[#FDA481]/40 hover:text-white"
                   }`}
                 >
                   {f === "all" ? "All" : f}
@@ -103,8 +103,8 @@ export function TopCreatives({ creatives = FALLBACK_CREATIVES }: Props) {
               onClick={() => setSortBy(opt.key)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${
                 sortBy === opt.key
-                  ? "bg-primary/10 text-primary border border-primary/20"
-                  : "text-stone-400 hover:text-stone-600"
+                  ? "bg-[#FDA481]/10 text-[#FDA481] border border-[#FDA481]/20"
+                  : "text-[#FDA481]/40 hover:text-[#FDA481]/70"
               }`}
             >
               <span className="material-symbols-outlined text-[12px]">
@@ -125,10 +125,10 @@ export function TopCreatives({ creatives = FALLBACK_CREATIVES }: Props) {
           >
             {/* Rank */}
             <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold flex-shrink-0 ${
-              idx === 0 ? "bg-amber-400 text-white shadow-md" :
-              idx === 1 ? "bg-stone-300 text-stone-700" :
-              idx === 2 ? "bg-amber-700/30 text-amber-800" :
-              "bg-surface-container-high text-stone-400"
+              idx === 0 ? "bg-[#FDA481] text-[#181A2F] shadow-lg shadow-[#FDA481]/20" :
+              idx === 1 ? "bg-[#37415C] text-white" :
+              idx === 2 ? "bg-[#54162B] text-white" :
+              "bg-[#242E49] text-[#FDA481]/40"
             }`}>
               {idx + 1}
             </div>
@@ -147,21 +147,21 @@ export function TopCreatives({ creatives = FALLBACK_CREATIVES }: Props) {
             {/* Info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <p className="text-sm font-bold text-on-surface truncate">{creative.name}</p>
+                <p className="text-sm font-bold text-white truncate">{creative.name}</p>
                 <span className={`flex-shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-full border text-[9px] font-bold uppercase tracking-widest ${FORMAT_COLORS[creative.format]}`}>
                   <span className="material-symbols-outlined text-[10px]">{FORMAT_ICONS[creative.format]}</span>
                   {creative.format}
                 </span>
               </div>
-              <div className="flex items-center gap-4 text-[10px] text-stone-400 font-medium">
-                <span>{creative.impressions.toLocaleString()} impr.</span>
-                <span>{creative.clicks.toLocaleString()} clicks</span>
-                <span>{creative.conversions} conv.</span>
+              <div className="flex items-center gap-4 text-[10px] text-[#FDA481]/40 font-medium tracking-tight">
+                <span>{creative.impressions.toLocaleString()} IMPR.</span>
+                <span>{creative.clicks.toLocaleString()} CLICKS</span>
+                <span>{creative.conversions} CONV.</span>
               </div>
               {/* ROAS progress bar */}
-              <div className="mt-2 h-1 bg-surface-container-high rounded-full overflow-hidden w-full max-w-xs">
+              <div className="mt-2 h-1 bg-[#242E49] rounded-full overflow-hidden w-full max-w-xs border border-[#37415C]/10">
                 <div
-                  className="h-full bg-primary rounded-full transition-all duration-500"
+                  className="h-full bg-[#FDA481] rounded-full transition-all duration-500 shadow-[0_0_8px_#FDA48140]"
                   style={{ width: `${(creative.roas / maxRoas) * 100}%` }}
                 />
               </div>
@@ -170,20 +170,20 @@ export function TopCreatives({ creatives = FALLBACK_CREATIVES }: Props) {
             {/* Stats */}
             <div className="flex items-center gap-6 flex-shrink-0">
               <div className="text-center hidden sm:block">
-                <p className="text-[10px] text-stone-400 uppercase font-bold tracking-widest">CTR</p>
-                <p className="text-sm font-bold text-on-surface">{creative.ctr.toFixed(1)}%</p>
+                <p className="text-[10px] text-[#FDA481]/40 uppercase font-bold tracking-widest">CTR</p>
+                <p className="text-sm font-bold text-white">{creative.ctr.toFixed(1)}%</p>
               </div>
               <div className="text-center hidden md:block">
-                <p className="text-[10px] text-stone-400 uppercase font-bold tracking-widest">Spend</p>
-                <p className="text-sm font-bold text-on-surface">₹{(creative.spend / 1000).toFixed(1)}k</p>
+                <p className="text-[10px] text-[#FDA481]/40 uppercase font-bold tracking-widest">Spend</p>
+                <p className="text-sm font-bold text-white">₹{(creative.spend / 1000).toFixed(1)}k</p>
               </div>
               <div className="text-center">
-                <p className="text-[10px] text-stone-400 uppercase font-bold tracking-widest">ROAS</p>
-                <p className={`text-sm font-bold ${creative.roas >= 4 ? "text-primary" : creative.roas >= 3 ? "text-amber-600" : "text-red-500"}`}>
+                <p className="text-[10px] text-[#FDA481]/40 uppercase font-bold tracking-widest">ROAS</p>
+                <p className={`text-sm font-bold ${creative.roas >= 4 ? "text-[#FDA481]" : creative.roas >= 3 ? "text-[#FDA481]/70" : "text-[#B4182D]"}`}>
                   {creative.roas.toFixed(2)}x
                 </p>
               </div>
-              <span className="material-symbols-outlined text-stone-300 group-hover:text-primary transition-colors text-base">
+              <span className="material-symbols-outlined text-[#37415C] group-hover:text-[#FDA481] transition-colors text-base">
                 chevron_right
               </span>
             </div>
@@ -192,9 +192,9 @@ export function TopCreatives({ creatives = FALLBACK_CREATIVES }: Props) {
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-outline-variant/10 flex justify-between items-center">
-        <p className="text-[10px] text-stone-400 font-medium">Showing top {Math.min(5, sorted.length)} of {sorted.length} creatives</p>
-        <button className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-primary hover:underline">
+      <div className="p-4 border-t border-[#37415C]/10 flex justify-between items-center">
+        <p className="text-[10px] text-[#FDA481]/30 font-medium">Showing top {Math.min(5, sorted.length)} of {sorted.length} creatives</p>
+        <button className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#FDA481] hover:underline">
           View All
           <span className="material-symbols-outlined text-[12px]">arrow_forward</span>
         </button>

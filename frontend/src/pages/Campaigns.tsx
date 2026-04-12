@@ -5,7 +5,6 @@ import { Header } from "../components/shared/Header";
 import { useState } from "react";
 import type { Campaign, CampaignInsights } from "../types";
 import { formatCurrency, formatRoas } from "../lib/utils";
-import { motion } from "framer-motion";
 import { Reveal, Revealstagger } from "../components/shared/Reveal";
 
 function CampaignRow({ campaign, onSelect, selected }: {
@@ -20,60 +19,57 @@ function CampaignRow({ campaign, onSelect, selected }: {
   const ins: CampaignInsights | undefined = insRes?.data?.insights;
 
   const getStatusClass = (status: string) => {
-    if (status === "ACTIVE") return "bg-secondary-container/40 text-on-secondary-container";
-    if (status === "PAUSED") return "bg-surface-container-highest text-stone-500";
-    return "bg-error-container/40 text-on-error-container";
+    if (status === "ACTIVE") return "text-[#00F0FF] border border-[#00F0FF]/20 bg-[#00F0FF]/5";
+    if (status === "PAUSED") return "text-white/20 border border-white/10 bg-white/5";
+    return "text-[#FF0032] border border-[#FF0032]/20 bg-[#FF0032]/5";
   };
 
   return (
-    <motion.tr
-      initial={{ opacity: 0, x: -10 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
+    <tr
       onClick={() => onSelect(campaign)}
-      className={`group hover:bg-white/5 transition-colors cursor-pointer ${selected ? "bg-primary/10" : ""}`}
+      className={`group hover:bg-[#FF0032]/5 transition-colors cursor-pointer border-b border-white/5 ${selected ? "bg-[#FF0032]/10" : ""}`}
     >
       <td className="px-6 py-6">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center border border-outline-variant/10">
-            <span className="material-symbols-outlined text-primary text-[20px]">campaign</span>
+        <div className="flex items-center gap-5">
+          <div className="w-12 h-12 rounded-none bg-[#121214] flex items-center justify-center border border-white/10 shadow-[inner_0_0_10px_rgba(0,0,0,0.5)]">
+            <span className="material-symbols-outlined text-[#FF0032] text-2xl shadow-[0_0_10px_rgba(255,0,50,0.3)]">campaign</span>
           </div>
           <div>
-            <p className="text-sm font-medium text-on-surface">{campaign.name}</p>
-            <p className="text-[10px] text-stone-400 tracking-wide uppercase">{campaign.objective}</p>
+            <p className="text-sm font-black text-white uppercase italic tracking-tighter">{campaign.name}</p>
+            <p className="text-[10px] text-white/30 font-black uppercase tracking-[0.3em] mt-1 italic">{campaign.objective}</p>
           </div>
         </div>
       </td>
       <td className="px-6 py-6 text-center">
-        <span className={`px-3 py-1 text-[10px] font-bold uppercase rounded-full tracking-wider ${getStatusClass(campaign.status)}`}>
+        <span className={`px-4 py-1.5 text-[9px] font-black uppercase rounded-none tracking-[0.2em] italic ${getStatusClass(campaign.status)}`}>
           {campaign.status}
         </span>
       </td>
-      <td className="px-6 py-6">
-        <p className="text-sm text-on-surface">{ins ? formatCurrency(ins.spend) : "—"}</p>
-        <p className="text-[10px] text-stone-400">Total Spend</p>
+      <td className="px-6 py-6 font-mono">
+        <p className="text-sm font-black text-white">{ins ? formatCurrency(ins.spend) : "—"}</p>
+        <p className="text-[9px] text-[#00F0FF]/40 font-black uppercase tracking-widest mt-1">Velocity</p>
       </td>
       <td className="px-6 py-6">
-        <p className={`text-sm font-semibold ${ins && ins.roas >= 3 ? 'text-primary' : 'text-stone-400'}`}>
+        <p className={`text-sm font-black italic tracking-tighter ${ins && ins.roas >= 3 ? 'text-[#00F0FF]' : 'text-white/40'}`}>
           {ins ? formatRoas(ins.roas) : "—"}
         </p>
       </td>
       <td className="px-6 py-6">
-        <div className="flex items-center gap-1 text-primary">
-          <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
+        <div className="flex items-center gap-2">
+          <span className={`material-symbols-outlined text-lg ${ins?.trend === "improving" ? "text-[#00F0FF]" : ins?.trend === "declining" ? "text-[#FF0032]" : "text-white/20"}`} style={{ fontVariationSettings: "'FILL' 1" }}>
             {ins?.trend === "improving" ? "trending_up" : ins?.trend === "declining" ? "trending_down" : "horizontal_rule"}
           </span>
-          <span className="text-[10px] font-bold">
-            {ins?.trend === "improving" ? "+18%" : ins?.trend === "declining" ? "-8%" : "0%"}
+          <span className={`text-[10px] font-black uppercase tracking-widest ${ins?.trend === "improving" ? "text-[#00F0FF]" : ins?.trend === "declining" ? "text-[#FF0032]" : "text-white/20"}`}>
+            {ins?.trend === "improving" ? "Optimum" : ins?.trend === "declining" ? "Warning" : "Neutral"}
           </span>
         </div>
       </td>
       <td className="px-6 py-6 text-right">
-        <button className="p-2 text-stone-400 hover:text-primary transition-colors">
+        <button className="p-2 text-white/20 hover:text-[#FF0032] transition-colors rounded-none border border-white/5 hover:border-[#FF0032]/30">
           <span className="material-symbols-outlined text-xl">more_horiz</span>
         </button>
       </td>
-    </motion.tr>
+    </tr>
   );
 }
 
@@ -91,108 +87,134 @@ export function Campaigns() {
   if (isLoading) return <PageLoader />;
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-[#050505]">
       <Header title="Campaign Archives" subtitle="Inventory of Marketing Efforts" />
       
-      <main className="p-8 max-w-7xl mx-auto space-y-8 animate-fade-in w-full">
-        <Revealstagger>
-          {/* Bento Stats Header */}
-          <Reveal delay={0.1}>
-            <div className="grid grid-cols-12 gap-6 mb-12">
-              <div className="col-span-12 lg:col-span-7 glass-card p-8 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-20 -mt-20 blur-3xl group-hover:bg-primary/10 transition-colors duration-500"></div>
+      <main className="p-8 max-w-7xl mx-auto space-y-12 animate-fade-in w-full">
+        <Revealstagger delay={0.1}>
+          <Reveal y={40} delay={0.2}>
+            {/* Bento Stats Header */}
+            <div className="grid grid-cols-12 gap-8 mb-16">
+              <div className="col-span-12 lg:col-span-8 bg-[#121214] rounded-none p-12 border border-white/5 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF0032]/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-[#FF0032]/10 transition-colors duration-500"></div>
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#00F0FF]/5 rounded-full -ml-32 -mb-32 blur-3xl"></div>
                 <div className="relative z-10">
-                  <span className="label-md text-primary font-bold tracking-widest text-[10px] uppercase mb-4 block">Archive Efficiency</span>
-                  <h3 className="display-sm text-4xl font-serif text-white mb-2">3.4x ROAS</h3>
-                  <p className="text-stone-400 body-md max-w-md">Your active campaigns are outperforming the seasonal benchmark by 24%. Recommended: Scale active assets.</p>
-                  <div className="mt-8 flex gap-4">
-                    <button className="text-primary text-[12px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:translate-x-1 transition-transform">
-                      Explore Insights <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span className="text-[10px] font-black uppercase text-[#00F0FF] tracking-[.5em] mb-4 block italic">Archive Efficiency</span>
+                  <h3 className="text-6xl font-serif font-black text-white italic mb-2 uppercase tracking-tighter leading-none shadow-[0_0_20px_rgba(0,0,0,0.5)]">3.4x Average Pulse</h3>
+                  <p className="text-white/40 text-[11px] font-black uppercase tracking-[.2em] max-w-lg mt-6 leading-relaxed">Active assets outperforming seasonal benchmarks. Sync level: Optimal. Scale protocols active.</p>
+                  <div className="mt-10 flex gap-4">
+                    <button className="px-8 py-3 bg-[#FF0032] text-white text-[10px] font-black uppercase tracking-[.4em] italic rounded-none shadow-[0_0_30px_rgba(255,0,50,0.3)] hover-glitch transition-all flex items-center gap-3">
+                      Initiate Insights <span className="material-symbols-outlined text-sm">bolt</span>
                     </button>
                   </div>
                 </div>
               </div>
-              <div className="col-span-6 lg:col-span-2 bg-primary/10 backdrop-blur-md rounded-2xl p-6 border border-white/5 flex flex-col justify-between">
-                <span className="material-symbols-outlined text-primary mb-4">payments</span>
-                <div>
-                  <p className="text-stone-500 text-[10px] uppercase tracking-widest mb-1 font-bold">Total Spend</p>
-                  <p className="text-xl font-serif text-white">$12,480</p>
+              <div className="col-span-12 lg:col-span-4 grid grid-rows-2 gap-8">
+                <div className="bg-[#121214] rounded-none p-8 border border-white/5 flex flex-col justify-between relative group overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                    <span className="material-symbols-outlined text-6xl text-[#FF0032]">payments</span>
+                  </div>
+                  <p className="text-white/30 text-[9px] font-black uppercase tracking-[.5em] italic">Cumulative Velocity</p>
+                  <div>
+                    <p className="text-4xl font-serif font-black text-white italic tracking-tighter">₹12,480</p>
+                    <div className="flex items-center gap-2 mt-2">
+                        <span className="w-8 h-[2px] bg-[#FF0032]/40"></span>
+                        <p className="text-[10px] font-black uppercase text-[#FF0032] tracking-widest italic">Live Flux</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#121214] rounded-none p-8 border border-white/5 flex flex-col justify-between relative group overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                    <span className="material-symbols-outlined text-6xl text-[#00F0FF]">trending_up</span>
+                  </div>
+                  <p className="text-white/30 text-[9px] font-black uppercase tracking-[.5em] italic">Conversion Flux</p>
+                  <div className="flex items-end justify-between">
+                    <div>
+                      <p className="text-3xl font-serif font-black text-white italic tracking-tighter">+12% Area</p>
+                      <p className="text-[10px] font-black uppercase text-[#00F0FF] tracking-widest italic mt-2">Improving Frequency</p>
+                    </div>
+                    <div className="h-12 w-24 bg-[#00F0FF]/10 border border-[#00F0FF]/20 flex items-center justify-center">
+                        <span className="text-[10px] font-black text-[#00F0FF] italic tracking-widest">STABLE</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="col-span-6 lg:col-span-3 bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/5 relative">
-                <div className="flex items-start justify-between mb-8">
-                  <span className="material-symbols-outlined text-primary">trending_up</span>
-                  <div className="px-2 py-1 bg-primary/20 rounded-full text-[10px] text-primary font-bold">+12%</div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.3}>
+            {/* Control Cluster */}
+            <div className="flex flex-col md:flex-row items-end justify-between gap-6 border-b border-white/5 pb-8 mb-4">
+              <div className="space-y-1">
+                <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter leading-none mb-1">Active Archives</h2>
+                <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">Managing {campaigns.length} Neural Nodes across regions.</p>
+              </div>
+              <div className="flex gap-4">
+                <div className="relative group">
+                    <select 
+                      className="bg-[#121214] text-white/60 text-[10px] font-black uppercase tracking-[0.3em] pl-6 pr-12 py-4 border border-white/10 outline-none focus:border-[#FF0032] transition-all rounded-none appearance-none italic shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                    >
+                      <option value="ACTIVE">Status: Operational</option>
+                      <option value="PAUSED">Status: Standby</option>
+                    </select>
+                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none text-sm">stat_0</span>
                 </div>
-                <div>
-                  <p className="text-stone-500 text-[10px] uppercase tracking-widest mb-1 font-bold">Conversion Growth</p>
-                  <p className="text-xl font-serif text-white">Across 12 Active</p>
+                <button className="px-6 py-4 bg-white/5 text-white/50 text-[10px] font-black uppercase tracking-[0.3em] border border-white/10 hover:text-white hover:bg-white/10 transition-all rounded-none italic flex items-center gap-3">
+                  <span className="material-symbols-outlined text-lg">download</span>
+                  Export Dump
+                </button>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.4}>
+            {/* Data Reservoir Table */}
+            <div className="bg-[#0A0A0C] rounded-none border border-white/5 shadow-2xl overflow-hidden mb-12 relative">
+              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#FF0032]/40 to-transparent"></div>
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-white/5">
+                    <th className="px-8 py-6 text-[9px] uppercase tracking-[0.5em] text-white/30 font-black italic">Archive Identifier</th>
+                    <th className="px-8 py-6 text-[9px] uppercase tracking-[0.5em] text-white/30 font-black italic text-center">Protocol Status</th>
+                    <th className="px-8 py-6 text-[9px] uppercase tracking-[0.5em] text-white/30 font-black italic">Velocity</th>
+                    <th className="px-8 py-6 text-[9px] uppercase tracking-[0.5em] text-white/30 font-black italic">Pulse Index</th>
+                    <th className="px-8 py-6 text-[9px] uppercase tracking-[0.5em] text-white/30 font-black italic">Flux Trend</th>
+                    <th className="px-8 py-6 text-[9px] uppercase tracking-[0.5em] text-white/30 font-black italic text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {campaigns.map((c) => (
+                    <CampaignRow
+                      key={c.id}
+                      campaign={c}
+                      onSelect={setSelected}
+                      selected={selected?.id === c.id}
+                    />
+                  ))}
+                </tbody>
+              </table>
+              
+              {/* Footer Navigation */}
+              <div className="px-8 py-6 bg-white/5 flex justify-between items-center border-t border-white/5">
+                <p className="text-[9px] text-white/20 uppercase tracking-[0.5em] font-black italic">
+                    Reservoir Size: {campaigns.length} Entities Synchronized
+                </p>
+                <div className="flex gap-6">
+                  <button className="p-2 text-white/20 hover:text-[#00F0FF] transition-all flex items-center gap-2 group">
+                     <span className="text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Rewind</span>
+                     <span className="material-symbols-outlined text-xl">west</span>
+                  </button>
+                  <button className="p-2 text-white/20 hover:text-[#FF0032] transition-all flex items-center gap-2 group">
+                     <span className="material-symbols-outlined text-xl">east</span>
+                     <span className="text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Fast Fwd</span>
+                  </button>
                 </div>
               </div>
             </div>
           </Reveal>
         </Revealstagger>
-
-        {/* Filters */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="headline-md text-2xl font-serif text-on-surface">Active Archives</h2>
-            <p className="text-sm text-stone-500">Managing {campaigns.length} campaigns across current regions.</p>
-          </div>
-          <div className="flex gap-2">
-            <select 
-              className="bg-surface-container-low rounded-lg text-xs font-medium px-4 py-2 border-none outline-none focus:ring-1 focus:ring-primary/20"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="ACTIVE">Status: Active</option>
-              <option value="PAUSED">Status: Paused</option>
-            </select>
-            <button className="px-4 py-2 bg-surface-container-low rounded-lg text-xs font-medium text-on-surface border border-outline-variant/20 flex items-center gap-2 hover:bg-surface-container-highest transition-colors">
-              <span className="material-symbols-outlined text-sm">download</span>
-              Export CSV
-            </button>
-          </div>
-        </div>
-
-        {/* Table */}
-        <Reveal delay={0.4} y={40}>
-          <div className="glass-card overflow-hidden mb-12">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-surface-container-low/50">
-                <th className="px-6 py-4 text-[10px] uppercase tracking-[0.1em] text-stone-400 font-semibold">Campaign Name</th>
-                <th className="px-6 py-4 text-[10px] uppercase tracking-[0.1em] text-stone-400 font-semibold text-center">Status</th>
-                <th className="px-6 py-4 text-[10px] uppercase tracking-[0.1em] text-stone-400 font-semibold">Spend</th>
-                <th className="px-6 py-4 text-[10px] uppercase tracking-[0.1em] text-stone-400 font-semibold">ROAS</th>
-                <th className="px-6 py-4 text-[10px] uppercase tracking-[0.1em] text-stone-400 font-semibold">Trend</th>
-                <th className="px-6 py-4 text-[10px] uppercase tracking-[0.1em] text-stone-400 font-semibold text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant/10">
-              {campaigns.map((c) => (
-                <CampaignRow
-                  key={c.id}
-                  campaign={c}
-                  onSelect={setSelected}
-                  selected={selected?.id === c.id}
-                />
-              ))}
-            </tbody>
-          </table>
-          <div className="px-6 py-4 bg-surface-container-low/20 flex justify-between items-center">
-            <p className="text-[10px] text-stone-400 uppercase tracking-widest font-semibold">Showing {campaigns.length} campaigns</p>
-            <div className="flex gap-4">
-              <button className="text-stone-400 hover:text-primary transition-colors">
-                <span className="material-symbols-outlined">chevron_left</span>
-              </button>
-              <button className="text-stone-400 hover:text-primary transition-colors">
-                <span className="material-symbols-outlined">chevron_right</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        </Reveal>
       </main>
     </div>
   );

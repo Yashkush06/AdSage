@@ -4,43 +4,27 @@ export default {
   theme: {
     extend: {
       colors: {
-        "primary": "#FF3B3B",
-        "on-primary": "#FFFFFF",
-        "primary-container": "#4d0006",
-        "on-primary-container": "#ffdad6",
-        
-        "secondary": "#E5E7EB",
-        "on-secondary": "#11131A",
-        "secondary-container": "#374151",
-        "on-secondary-container": "#F3F4F6",
-
-        "surface": "#11131A",
+        "primary": "#FF0032",
+        "primary-container": "#1A1A1A",
+        "secondary": "#00F0FF",
+        "secondary-container": "#0B1E26",
+        "tertiary": "#00F0FF",
+        "tertiary-container": "#E60000",
+        "surface": "#050505",
+        "surface-variant": "#121214",
         "on-surface": "#FFFFFF",
-        "surface-variant": "#1f2937",
-        "on-surface-variant": "#E5E7EB",
-
-        "background": "#11131A",
-        "on-background": "#FFFFFF",
-
-        "outline": "#374151",
-        "outline-variant": "#4B5563",
-
-        "surface-container-lowest": "#0b0c11",
-        "surface-container-low": "#15171e",
-        "surface-container": "#1a1c24",
-        "surface-container-high": "#21232c",
-        "surface-container-highest": "#282a34",
-
-        "inverse-surface": "#E5E7EB",
-        "inverse-on-surface": "#11131A",
-        "inverse-primary": "#FF3B3B",
-
-        "error": "#ffb4ab",
-        "on-error": "#690005",
-        "error-container": "#93000a",
-        "on-error-container": "#ffdad6",
-
-        "loading": "#FF3B3B",
+        "on-surface-variant": "#FF0032",
+        "outline": "#FF0032",
+        "outline-variant": "#00F0FF",
+        "error": "#FF0032",
+        "error-container": "#1A0000",
+        "background": "#050505",
+        "on-background": "#FF0032",
+        "surface-container-low": "#0A0A0C",
+        "surface-container": "#121214",
+        "surface-container-high": "#1A1A1C",
+        "surface-container-highest": "#1E1E20",
+        "surface-container-lowest": "#000000",
       },
       borderRadius: {
         "DEFAULT": "0.125rem",
