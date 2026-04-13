@@ -14,37 +14,49 @@ api.interceptors.response.use(
     let data: any = { success: true };
 
     if (url.includes("/api/auth/me")) {
-      data = { id: 1, email: "demo@adsage.com", business_name: "Verse Demo" };
+      data = { success: true, id: 1, email: "demo@adsage.com", business_name: "Verse Demo" };
     } else if (url.includes("/api/analytics/overview")) {
-      data = { overview: { totalSpend: 18245, totalConversions: 892, avgCpa: 20.4, avgRoas: 4.1 } };
+      data = { success: true, overview: { 
+        total_spend: 18245, 
+        total_revenue: 74804, 
+        total_conversions: 892, 
+        total_clicks: 4500,
+        total_impressions: 120000,
+        avg_cpa: 20.4, 
+        avg_roas: 4.1,
+        avg_ctr: 0.0375,
+        active_campaigns: 5,
+        paused_campaigns: 2,
+        period_days: 30
+      } };
     } else if (url.includes("/api/analytics/trends")) {
-      data = { trends: [
-        { date: "Day 1", spend: 300, conversions: 20 },
-        { date: "Day 2", spend: 350, conversions: 28 },
-        { date: "Day 3", spend: 320, conversions: 24 },
-        { date: "Day 4", spend: 400, conversions: 35 },
-        { date: "Day 5", spend: 380, conversions: 31 },
-        { date: "Day 6", spend: 450, conversions: 42 },
+      data = { success: true, trends: [
+        { date: "2026-04-08", spend: 300, conversions: 20, revenue: 1200, roas: 4.0 },
+        { date: "2026-04-09", spend: 350, conversions: 28, revenue: 1600, roas: 4.5 },
+        { date: "2026-04-10", spend: 320, conversions: 24, revenue: 1300, roas: 4.0 },
+        { date: "2026-04-11", spend: 400, conversions: 35, revenue: 1900, roas: 4.7 },
+        { date: "2026-04-12", spend: 380, conversions: 31, revenue: 1500, roas: 3.9 },
+        { date: "2026-04-13", spend: 450, conversions: 42, revenue: 2100, roas: 4.6 },
       ] };
     } else if (url.includes("/api/analytics/agents/activity")) {
-      data = { activity: [
-        { id: 1, agent_name: "Budget Strategist", action_type: "REALLOCATE", timestamp: new Date().toISOString(), description: "Reallocated ₹500 to top performing campaign." },
-        { id: 2, agent_name: "Performance Detective", action_type: "FLAG", timestamp: new Date(Date.now() - 120000).toISOString(), description: "Identified ad fatigue in Spring Sale creatives." },
-        { id: 3, agent_name: "Growth Executor", action_type: "SCALE", timestamp: new Date(Date.now() - 360000).toISOString(), description: "Scaled Lookalike Beta audience by 15%." },
+      data = { success: true, activity: [
+        { id: 1, agent_name: "Budget Strategist", level: "info", created_at: new Date().toISOString(), message: "Reallocated ₹500 to top performing campaign Alpha." },
+        { id: 2, agent_name: "Performance Detective", level: "warning", created_at: new Date(Date.now() - 120000).toISOString(), message: "Identified high bounce rate in Landing Page B." },
+        { id: 3, agent_name: "Growth Executor", level: "info", created_at: new Date(Date.now() - 360000).toISOString(), message: "Scaled Lookalike Beta audience by 15% due to high ROAS." },
       ] };
     } else if (url.includes("/api/campaigns")) {
-      data = { campaigns: [
-        { id: "c1", name: "Retargeting Alpha", objective: "CONVERSIONS", status: "ACTIVE" },
-        { id: "c2", name: "Lookalike Beta", objective: "TRAFFIC", status: "PAUSED" },
-        { id: "c3", name: "Spring Sale 2026", objective: "CONVERSIONS", status: "ACTIVE" },
-        { id: "c4", name: "Video Views Q1", objective: "AWARENESS", status: "ACTIVE" },
-        { id: "c5", name: "Lead Gen Master", objective: "LEADS", status: "ACTIVE" },
+      data = { success: true, campaigns: [
+        { id: "c1", name: "Retargeting Alpha", objective: "CONVERSIONS", status: "ACTIVE", daily_budget_inr: 500 },
+        { id: "c2", name: "Lookalike Beta", objective: "TRAFFIC", status: "PAUSED", daily_budget_inr: 200 },
+        { id: "c3", name: "Spring Sale 2026", objective: "CONVERSIONS", status: "ACTIVE", daily_budget_inr: 1000 },
+        { id: "c4", name: "Video Views Q1", objective: "AWARENESS", status: "ACTIVE", daily_budget_inr: 300 },
+        { id: "c5", name: "Lead Gen Master", objective: "LEADS", status: "ACTIVE", daily_budget_inr: 450 },
       ] };
     } else if (url.includes("/api/approvals")) {
-      data = { approvals: [
-        { id: 1, type: "budget_increase", title: "Scale Retargeting Alpha", description: "This campaign is yielding a 4.1x ROAS. We recommend increasing budget by 20%.", status: "PENDING", priority: "high", confidence_score: 0.92, action_details: { campaign_name: "Retargeting Alpha" } },
-        { id: 2, type: "pause_campaign", title: "Pause Lookalike Beta", description: "CPA is 30% above the threshold you set. Pause immediately.", status: "PENDING", priority: "critical", confidence_score: 0.98, action_details: { campaign_name: "Lookalike Beta" } },
-        { id: 3, type: "bid_adjustment", title: "Adjust Bids for Spring Sale", description: "Current bidding strategy is losing impression share. Switch to cost cap.", status: "PENDING", priority: "medium", confidence_score: 0.75, action_details: { campaign_name: "Spring Sale 2026" } },
+      data = { success: true, approvals: [
+        { id: 1, type: "Budget Scale", title: "Increase Alpha Budget", description: "Campaign Alpha is at 4.1x ROAS. Scale budget by 20%.", status: "PENDING", priority: "high", confidence_score: 0.92, agent_name: "Budget Agent", action_details: { campaign_name: "Retargeting Alpha" } },
+        { id: 2, type: "Campaign Stop", title: "Pause Fatigue Creative", description: "CTR dropped 40% in last 24h for Creative V2.", status: "PENDING", priority: "critical", confidence_score: 0.98, agent_name: "Fatigue Agent", action_details: { campaign_name: "Spring Sale 2026" } },
+        { id: 3, type: "Bid Tuning", title: "Lower Target CPA", description: "Market signals indicate lower CPC availability.", status: "PENDING", priority: "medium", confidence_score: 0.75, agent_name: "Bid Agent", action_details: { campaign_name: "Lead Gen Master" } },
       ] };
     }
 
