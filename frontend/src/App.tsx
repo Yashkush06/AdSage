@@ -32,9 +32,10 @@ function AnimatedRoutes() {
   const location = useLocation();
   const { onboarded } = useAppStore();
   
-  if (!onboarded && location.pathname !== "/onboarding") {
-    return <Navigate to="/onboarding" replace />;
-  }
+  // Skip onboarding check for Vercel Demo Purposes
+  // if (!onboarded && location.pathname !== "/onboarding") {
+  //   return <Navigate to="/onboarding" replace />;
+  // }
 
   return (
     <AnimatePresence mode="wait">
