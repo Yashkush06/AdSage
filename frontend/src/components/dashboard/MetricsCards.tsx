@@ -45,23 +45,23 @@ export function MetricsCards({ metrics }: Props) {
   return (
     <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
       {cards.map((card) => (
-        <GlowCard key={card.label} accent={card.accent} noPadding>
-          <div className="p-6 h-full">
-            <p className="font-sans tracking-wide uppercase text-[10px] text-[#FDA481]/50 mb-2 font-bold">
+        <GlowCard key={card.label} accent={card.accent} noPadding className="group">
+          <div className="p-6 h-full relative overflow-hidden">
+            <p className="font-black tracking-[0.2em] italic uppercase text-[10px] text-white/40 mb-2">
               {card.label}
             </p>
             <div className="flex items-baseline gap-2">
-              <h3 className="text-2xl font-serif font-bold text-white">
+              <h3 className="text-3xl font-serif font-black text-white italic tracking-tighter">
                 {card.value}
               </h3>
-              <span className={`text-[10px] font-bold ${card.growth.startsWith('+') ? 'text-[#FF0032]' : 'text-[#FDA481]/40'}`}>
+              <span className={`text-[10px] font-black tracking-widest ${card.growth.startsWith('+') ? 'text-[#00FF94]' : 'text-[#FF0032]'}`}>
                 {card.growth}
               </span>
             </div>
-            <div className="mt-4 w-full h-1 bg-white/10 rounded-full overflow-hidden">
+            <div className="mt-6 w-full h-1 bg-white/5 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-1000 ease-out"
-                style={{ width: `${card.progress}%`, backgroundColor: card.barColor }}
+                style={{ width: `${card.progress}%`, backgroundColor: card.barColor, boxShadow: `0 0 10px ${card.barColor}` }}
               />
             </div>
           </div>

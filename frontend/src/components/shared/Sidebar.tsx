@@ -107,7 +107,7 @@ export function Sidebar() {
           </div>
           <div>
             <h2 className="font-serif text-2xl text-white font-black italic tracking-tighter leading-none uppercase">AdSage</h2>
-            <p className="font-sans tracking-[0.4em] uppercase text-[8px] text-[#00F0FF] font-bold">The Verse</p>
+            <p className="font-sans tracking-[0.4em] uppercase text-[8px] text-[#00F0FF] font-bold">Ad Manager</p>
           </div>
         </div>
       </div>

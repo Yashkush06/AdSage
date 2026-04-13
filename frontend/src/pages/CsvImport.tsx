@@ -79,7 +79,7 @@ export function CsvImport() {
         <section className="flex flex-col md:flex-row justify-between items-end gap-6">
           <div className="space-y-1">
             <h2 className="font-serif text-5xl font-black tracking-tighter text-white uppercase italic leading-none mb-2">Data Stream</h2>
-            <p className="text-[#00F0FF] font-bold uppercase tracking-[0.4em] text-[10px] opacity-60">Injest Meta Ads frequency data into the Verse.</p>
+            <p className="text-[#00F0FF] font-bold uppercase tracking-[0.4em] text-[10px] opacity-60">Ingest Meta Ads frequency data into the Ad Manager.</p>
           </div>
         </section>
 
@@ -115,7 +115,7 @@ export function CsvImport() {
                 className="px-6 py-3 bg-white/5 border border-white/10 text-white/50 text-[10px] font-black uppercase tracking-[0.3em] hover:text-white hover:bg-white/10 transition-all rounded-xl italic"
                 onClick={() => fileInputRef.current?.click()}
               >
-                Injest Artifacts
+                Ingest Artifacts
               </button>
               {file && (
                 <button
@@ -123,7 +123,7 @@ export function CsvImport() {
                   onClick={handleUpload}
                   disabled={isUploading}
                 >
-                  {isUploading ? `Injesting ${progress}%` : "Initiate Protocol"}
+                  {isUploading ? `Ingesting ${progress}%` : "Initiate Protocol"}
                 </button>
               )}
             </div>
@@ -147,7 +147,7 @@ export function CsvImport() {
                 <div className="flex items-center gap-5">
                     <span className="material-symbols-outlined text-[#FF0032] text-4xl shadow-[0_0_15px_rgba(255,0,50,0.3)]">bolt</span>
                     <div>
-                        <h3 className="text-xl font-black text-white uppercase italic tracking-tighter">Injest Complete</h3>
+                        <h3 className="text-xl font-black text-white uppercase italic tracking-tighter">Ingest Complete</h3>
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#00F0FF]">Decoded {result.total_rows} neural packets from {file?.name}</p>
                     </div>
                 </div>

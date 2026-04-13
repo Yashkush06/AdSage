@@ -154,7 +154,7 @@ export function Dashboard() {
         {overview && <MetricsCards metrics={overview} />}
 
         {/* ── CSV Import Widget ───────────────────────────────────────────── */}
-        <GlowCard accent="teal">
+        <GlowCard accent="teal" className="overflow-hidden">
           {/* Header bar */}
           <div
             className="flex items-center justify-between p-5 cursor-pointer hover:bg-white/3 transition-colors"
@@ -241,7 +241,7 @@ export function Dashboard() {
                 <div className="p-5 space-y-6 animate-fade-in">
 
                   {/* ── AI Agent Insights ── */}
-                  <div className="rounded-xl border border-white/5 bg-gradient-to-br from-white/5 to-transparent overflow-hidden">
+                  <GlowCard accent="teal" noPadding>
                     <div className="flex items-center justify-between px-5 py-3 border-b border-white/5">
                       <div className="flex items-center gap-2">
                         <span className="material-symbols-outlined text-[#00F0FF] text-[18px]" style={{fontVariationSettings:"'FILL' 1"}}>psychology</span>
@@ -331,7 +331,7 @@ export function Dashboard() {
                         )}
                       </div>
                     )}
-                  </div>
+                  </GlowCard>
 
                   {csvResult.missing_columns?.length > 0 && (
                     <div className="bg-error/10 text-error px-4 py-2 rounded-lg flex items-center gap-2 text-xs">
@@ -453,21 +453,23 @@ export function Dashboard() {
         {/* ── AI Suggestions ──────────────────────────────────────────────── */}
         <section className="space-y-5">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-amber-500 text-[22px]" style={{fontVariationSettings:"'FILL' 1"}}>auto_awesome</span>
-              <h4 className="font-serif text-2xl font-bold">AI Suggestions</h4>
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-[#00F0FF] text-[28px] drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]" style={{fontVariationSettings:"'FILL' 1"}}>auto_awesome</span>
+              <h4 className="font-serif text-3xl font-black text-white italic uppercase tracking-tighter">AI Suggestions</h4>
             </div>
-            <a href="/approvals" className="text-sm font-bold text-primary flex items-center gap-1 hover:underline">
+            <a href="/approvals" className="text-[10px] font-black uppercase tracking-[0.2em] italic text-[#00F0FF]/80 hover:text-[#00F0FF] flex items-center gap-1 transition-colors">
               View all <span className="material-symbols-outlined text-[18px]">arrow_right_alt</span>
             </a>
           </div>
 
           {aiSuggestions.length === 0 ? (
-            <div className="bg-gradient-to-br from-[#1a1f2e] to-[#0f1318] rounded-2xl p-10 flex flex-col items-center justify-center gap-3 text-center border border-white/5">
-              <span className="material-symbols-outlined text-4xl text-amber-400/40">lightbulb</span>
-              <p className="text-white/40 text-sm">No pending AI suggestions right now.</p>
-              <p className="text-white/20 text-xs">Run an agent cycle to generate new recommendations.</p>
-            </div>
+            <GlowCard accent="teal">
+              <div className="flex flex-col items-center justify-center gap-3 text-center">
+                <span className="material-symbols-outlined text-4xl text-[#00F0FF]/20">lightbulb</span>
+                <p className="text-white/40 text-sm font-bold italic">No pending AI suggestions right now.</p>
+                <p className="text-white/20 text-[10px] uppercase font-black tracking-widest">Run an agent cycle to generate new recommendations.</p>
+              </div>
+            </GlowCard>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {aiSuggestions.map((rec) => {
@@ -496,7 +498,7 @@ export function Dashboard() {
                   <GlowCard
                     key={rec.id}
                     accent={glowAccent}
-                    className="flex flex-col gap-4"
+                    className="flex flex-col gap-4 group transition-all"
                   >
                     {/* Top row: type chip + impact badge */}
                     <div className="flex items-center justify-between">
@@ -522,8 +524,8 @@ export function Dashboard() {
 
                     {/* Title + description */}
                     <div>
-                      <h5 className="font-bold text-white text-[11px] leading-snug mb-1">{rec.title}</h5>
-                      <p className="text-white/50 text-[10px] leading-relaxed line-clamp-2">{rec.description}</p>
+                      <h5 className="font-bold text-white text-sm leading-snug mb-1.5 group-hover:text-[#00F0FF] transition-colors">{rec.title}</h5>
+                      <p className="text-white/50 text-xs leading-relaxed line-clamp-3">{rec.description}</p>
                     </div>
 
                     {/* Campaign tag */}
@@ -559,16 +561,16 @@ export function Dashboard() {
         {/* ── Top Performing Campaigns ─────────────────────────────────────── */}
         <section className="space-y-5">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-emerald-500 text-[22px]" style={{fontVariationSettings:"'FILL' 1"}}>trending_up</span>
-              <h4 className="font-serif text-2xl font-bold">Top Performing Campaigns</h4>
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-[#00FF94] text-[28px] drop-shadow-[0_0_15px_rgba(0,255,148,0.4)]" style={{fontVariationSettings:"'FILL' 1"}}>trending_up</span>
+              <h4 className="font-serif text-3xl font-black text-white italic uppercase tracking-tighter">Top Performing Campaigns</h4>
             </div>
-            <a href="/campaigns" className="text-sm font-bold text-primary flex items-center gap-1 hover:underline">
+            <a href="/campaigns" className="text-[10px] font-black uppercase tracking-[0.2em] italic text-[#00FF94]/80 hover:text-[#00FF94] flex items-center gap-1 transition-colors">
               View all <span className="material-symbols-outlined text-[18px]">arrow_right_alt</span>
             </a>
           </div>
 
-          <GlowCard accent="teal" noPadding>
+          <GlowCard accent="teal" noPadding className="overflow-hidden">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/5">

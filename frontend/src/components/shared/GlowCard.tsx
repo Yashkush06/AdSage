@@ -1,17 +1,10 @@
 import React from "react";
-import styled from "styled-components";
 
 interface GlowCardProps {
   children?: React.ReactNode;
   className?: string;
   onClick?: () => void;
-  /** AdSage glow accent — "red" (default), "teal", "purple", "orange" */
   accent?: "red" | "teal" | "purple" | "orange";
-  /**
-   * Pass true when the children already supply their own padding
-   * (e.g. MetricsCards wraps content in p-6).
-   * Defaults to false — Inner adds p-4 automatically.
-   */
   noPadding?: boolean;
 }
 
@@ -22,36 +15,33 @@ const ACCENTS = {
   orange: { from: "#FF0032", to: "#ff4500", glow: "rgba(255,69,0,0.25)"  },
 };
 
-interface StyledProps {
-  $from: string;
-  $to: string;
-  $glow: string;
-}
-
-const Outer = styled.div<StyledProps>`
-  background-image: linear-gradient(163deg, ${({ $from }) => $from} 0%, ${({ $to }) => $to} 100%);
-  border-radius: 20px;
-  transition: box-shadow 0.3s, all 0.3s;
-  height: 100%;
-
-  &:hover {
-    box-shadow: 0px 0px 30px 1px ${({ $glow }) => $glow};
+const CSS = `
+  .ag-glow-card {
+    border-radius: 20px;
+    transition: box-shadow 0.3s, all 0.3s;
+    height: 100%;
   }
-`;
-
-const Inner = styled.div<{ $noPadding: boolean }>`
-  background-color: #0e0e10;
-  border-radius: 18px;
-  transition: transform 0.2s, border-radius 0.2s;
-  height: 100%;
-  overflow: hidden;
-  padding: ${({ $noPadding }) => ($noPadding ? "0" : "16px")};
-
-  ${Outer}:hover & {
+  .ag-glow-inner {
+    background-color: #0e0e10;
+    border-radius: 18px;
+    transition: transform 0.2s, border-radius 0.2s;
+    height: 100%;
+    overflow: hidden;
+  }
+  .ag-glow-card:hover .ag-glow-inner {
     transform: scale(0.985);
     border-radius: 20px;
   }
 `;
+
+let injected = false;
+function injectStyles() {
+  if (injected || typeof document === "undefined") return;
+  const style = document.createElement("style");
+  style.textContent = CSS;
+  document.head.appendChild(style);
+  injected = true;
+}
 
 export function GlowCard({
   children,
@@ -60,10 +50,32 @@ export function GlowCard({
   accent = "red",
   noPadding = false,
 }: GlowCardProps) {
+  injectStyles();
   const { from, to, glow } = ACCENTS[accent];
+  
+  const outerStyle = {
+    backgroundImage: `linear-gradient(163deg, ${from} 0%, ${to} 100%)`,
+  };
+  
+  const innerStyle = {
+    padding: noPadding ? "0" : "16px",
+  };
+  
   return (
-    <Outer $from={from} $to={to} $glow={glow} className={className} onClick={onClick}>
-      <Inner $noPadding={noPadding}>{children}</Inner>
-    </Outer>
+    <div 
+      className={`ag-glow-card ${className}`} 
+      style={outerStyle}
+      onClick={onClick}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.boxShadow = `0px 0px 30px 1px ${glow}`;
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.boxShadow = '';
+      }}
+    >
+      <div className="ag-glow-inner" style={innerStyle}>
+        {children}
+      </div>
+    </div>
   );
 }

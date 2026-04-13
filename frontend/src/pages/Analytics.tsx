@@ -129,7 +129,7 @@ export function Analytics() {
         <section className="flex flex-col md:flex-row justify-between items-end gap-6">
           <div className="space-y-1">
             <h2 className="font-serif text-4xl font-bold tracking-tight text-white uppercase italic">Intelligence</h2>
-            <p className="text-[#00F0FF]/60 font-medium">Synced with the Verse. Deep analytical pulse active.</p>
+            <p className="text-[#00F0FF]/60 font-medium">Synced with Ad Manager. Deep analytical pulse active.</p>
           </div>
           <div className="flex gap-3">
             <div className="flex items-center gap-2 px-6 py-2 bg-[#121214] border border-white/5 rounded-xl shadow-sm">

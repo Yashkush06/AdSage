@@ -1,21 +1,24 @@
 import React from "react";
-import styled from "styled-components";
 
 interface WaveButtonProps {
   label: string;
-  hoverLabel?: string;           // kept for API compat, not used in this design
+  hoverLabel?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
   className?: string;
   id?: string;
-  variant?: "default" | "light"; // kept for API compat, not used in this design
+  variant?: "default" | "light";
 }
 
-const StyledWrapper = styled.div<{ $fullWidth?: boolean }>`
-  display: ${({ $fullWidth }) => ($fullWidth ? "block" : "inline-block")};
-  width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
-
+const CSS = `
+  .ag-btn-wrapper {
+    display: inline-block;
+  }
+  .ag-btn-wrapper.ag-btn-full {
+    display: block;
+    width: 100%;
+  }
   .ag-btn {
     position: relative;
     display: inline-flex;
@@ -34,51 +37,55 @@ const StyledWrapper = styled.div<{ $fullWidth?: boolean }>`
     cursor: pointer;
     border: none;
     transition: 0.3s;
+    overflow: visible;
+    z-index: 0;
   }
-
   .ag-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-
   .ag-btn span {
     position: relative;
     z-index: 1;
   }
-
-  /* Dark inner panel */
   .ag-btn::before {
     content: "";
     position: absolute;
     inset: 2px;
     background: #0A0A0C;
     border-radius: 8px;
-    transition: 0.5s;
+    transition: opacity 0.5s;
+    z-index: 0;
   }
-
   .ag-btn:hover::before,
   .ag-btn:focus-visible::before {
     opacity: 0.65;
   }
-
-  /* Glow bloom on hover */
   .ag-btn::after {
     content: "";
     position: absolute;
     inset: 0px;
     background: linear-gradient(45deg, #FF0032, #7B00FF, #00F0FF);
     border-radius: 9px;
-    transition: 0.5s;
+    transition: opacity 0.5s;
     opacity: 0;
     filter: blur(20px);
     z-index: -1;
   }
-
   .ag-btn:hover::after,
   .ag-btn:focus-visible::after {
     opacity: 1;
   }
 `;
+
+let injected = false;
+function injectStyles() {
+  if (injected || typeof document === "undefined") return;
+  const style = document.createElement("style");
+  style.textContent = CSS;
+  document.head.appendChild(style);
+  injected = true;
+}
 
 export function WaveButton({
   label,
@@ -88,10 +95,12 @@ export function WaveButton({
   className = "",
   id,
 }: WaveButtonProps) {
+  injectStyles();
   const isFullWidth = className.includes("w-full");
+  const wrapperClass = `ag-btn-wrapper${isFullWidth ? " ag-btn-full" : ""} ${className}`.trim();
 
   return (
-    <StyledWrapper $fullWidth={isFullWidth} className={className}>
+    <div className={wrapperClass}>
       <button
         id={id}
         type={type}
@@ -101,6 +110,6 @@ export function WaveButton({
       >
         <span>{label}</span>
       </button>
-    </StyledWrapper>
+    </div>
   );
 }
